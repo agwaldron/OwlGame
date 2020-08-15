@@ -8,11 +8,13 @@ export var MAX_RUN_SPEED = 300
 export var FRICTION = 700
 export var DASH_SPEED = 800
 export var DASH_DURATION = 25
+export var CAST_DURATION = 20
 
 enum {
 	RUN,
 	DASH,
-	JUMP
+	JUMP,
+	CAST
 }
 
 const UP = Vector2(0, -1)
@@ -21,6 +23,7 @@ var state = RUN
 var velocity = Vector2.ZERO
 var dash_vector = Vector2.RIGHT
 var dash_timer = 0
+var cast_timer = 0
 
 func _physics_process(delta):
 	match state:
@@ -30,6 +33,8 @@ func _physics_process(delta):
 			dash_state(delta)
 		JUMP:
 			jump_state(delta)
+		CAST:
+			cast_state(delta)
 
 func run_state(delta):
 	var input_vector = Vector2.ZERO
@@ -53,6 +58,11 @@ func run_state(delta):
 		velocity.x = dash_vector.x * DASH_SPEED
 		state = DASH
 
+	if Input.is_action_just_pressed("cast"):
+		cast_timer = CAST_DURATION
+		velocity = Vector2.ZERO
+		state = CAST
+
 func dash_state(delta):
 	dash_timer -= (delta * 100)
 	if dash_timer <= 0:
@@ -65,6 +75,11 @@ func dash_state(delta):
 
 func jump_state(delta):
 	velocity.y = JUMP_SPEED
+	state = RUN
+
+func cast_state(delta):
+	velocity.x = 0
+	print("cast")
 	state = RUN
 
 func move():
