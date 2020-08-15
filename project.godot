@@ -19,6 +19,11 @@ config/name="OwlGame"
 run/main_scene="res://src/Levels/LevelTemplate.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/size/width=1280
+window/size/height=750
+
 [input]
 
 ui_left={

@@ -3,9 +3,11 @@ extends KinematicBody2D
 export var GRAVITY_ACCELERATION = 3000
 export var MAX_FALL_SPEED = 1000
 export var JUMP_SPEED = -1000
-export var RUN_ACCELERATION = 300
+export var RUN_ACCELERATION = 600
 export var MAX_RUN_SPEED = 300
-export var FRICTION = 500
+export var FRICTION = 700
+export var DASH_SPEED = 800
+export var DASH_DURATION = 25
 
 enum {
 	RUN,
@@ -17,7 +19,8 @@ const UP = Vector2(0, -1)
 
 var state = RUN
 var velocity = Vector2.ZERO
-var dash_vector = Vector2.ZERO
+var dash_vector = Vector2.RIGHT
+var dash_timer = 0
 
 func _physics_process(delta):
 	match state:
@@ -34,6 +37,7 @@ func run_state(delta):
 	input_vector = input_vector.normalized()
 
 	if input_vector != Vector2.ZERO:
+		dash_vector.x = input_vector.x
 		velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
@@ -45,10 +49,19 @@ func run_state(delta):
 		state = JUMP
 
 	if Input.is_action_just_pressed("dash"):
+		dash_timer = DASH_DURATION
+		velocity.x = dash_vector.x * DASH_SPEED
 		state = DASH
 
 func dash_state(delta):
-	state = RUN
+	dash_timer -= (delta * 100)
+	if dash_timer <= 0:
+		dash_timer = 0
+		velocity.x = velocity.x * 0.35
+		state = RUN
+	else:
+		velocity.y += GRAVITY_ACCELERATION * delta
+		move()
 
 func jump_state(delta):
 	velocity.y = JUMP_SPEED
