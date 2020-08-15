@@ -18,10 +18,11 @@ enum {
 }
 
 const UP = Vector2(0, -1)
+const FireBall = preload("res://src/Player/FireBall.tscn")
 
 var state = RUN
 var velocity = Vector2.ZERO
-var dash_vector = Vector2.RIGHT
+var direction_vector = Vector2.RIGHT
 var dash_timer = 0
 var cast_timer = 0
 
@@ -42,26 +43,21 @@ func run_state(delta):
 	input_vector = input_vector.normalized()
 
 	if input_vector != Vector2.ZERO:
-		dash_vector.x = input_vector.x
+		direction_vector.x = input_vector.x
 		velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
 
-	velocity.y += GRAVITY_ACCELERATION * delta
-	move()
-
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		state = JUMP
+	move(delta)
 
 	if Input.is_action_just_pressed("dash"):
-		dash_timer = DASH_DURATION
-		velocity.x = dash_vector.x * DASH_SPEED
-		state = DASH
+		dash_action()
+
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		jump_action()
 
 	if Input.is_action_just_pressed("cast"):
-		cast_timer = CAST_DURATION
-		velocity = Vector2.ZERO
-		state = CAST
+		cast_action()
 
 func dash_state(delta):
 	dash_timer -= (delta * 100)
@@ -70,17 +66,40 @@ func dash_state(delta):
 		velocity.x = velocity.x * 0.35
 		state = RUN
 	else:
-		velocity.y += GRAVITY_ACCELERATION * delta
-		move()
+		move(delta)
 
 func jump_state(delta):
 	velocity.y = JUMP_SPEED
 	state = RUN
 
 func cast_state(delta):
-	velocity.x = 0
-	print("cast")
-	state = RUN
+	cast_timer -= (delta * 100)
+	if cast_timer <= 0:
+		cast_timer = 0
+		state = RUN
+	else:
+		move(delta)
 
-func move():
+func dash_action():
+	dash_timer = DASH_DURATION
+	velocity.x = direction_vector.x * DASH_SPEED
+	state = DASH
+
+func jump_action():
+	state = JUMP
+
+func cast_action():
+	velocity = Vector2.ZERO
+	cast_timer = CAST_DURATION
+	var fireBall = FireBall.instance()
+	get_parent().add_child(fireBall)
+	fireBall.global_position = global_position
+	fireBall.global_position.y -= 30
+	if direction_vector.x < 0:
+		fireBall.velocity.x = direction_vector.x * fireBall.SPEED
+		fireBall.sprite.set_flip_h(true)
+	state = CAST
+
+func move(delta):
+	velocity.y += GRAVITY_ACCELERATION * delta
 	velocity = move_and_slide(velocity, UP)
