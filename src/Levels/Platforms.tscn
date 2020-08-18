@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Assets/TileSets/Floor.png" type="Texture" id=1]
 [ext_resource path="res://Assets/TileSets/BigBrick.png" type="Texture" id=2]
@@ -46,10 +46,6 @@ points = PoolVector2Array( 0, 0, 60, 0, 60, 60, 0, 60 )
 } ]
 0/z_index = 0
 
-[sub_resource type="Animation" id=4]
-resource_name = "RunRight"
-length = 0.6
-
 [node name="Platforms" type="Node2D"]
 
 [node name="Bricks" type="TileMap" parent="."]
@@ -69,6 +65,3 @@ tile_data = PoolIntArray( 0, 0, 0, 20, 0, 0, 21, 0, 0, 65536, 0, 0, 65556, 0, 0,
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 162.798, 422.577 )
 JUMP_SPEED = -1200
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/RunRight = SubResource( 4 )
