@@ -17,8 +17,9 @@ enum {
 	CAST
 }
 
-const UP = Vector2(0, -1)
 const FireBall = preload("res://src/Player/FireBall.tscn")
+
+onready var animatedSprite = $AnimatedSprite
 
 var state = RUN
 var velocity = Vector2.ZERO
@@ -45,8 +46,10 @@ func run_state(delta):
 	if input_vector != Vector2.ZERO:
 		direction_vector.x = input_vector.x
 		velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
+		play_running_animation();
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+		play_idle_animation();
 
 	move(delta)
 
@@ -100,6 +103,18 @@ func cast_action():
 		fireBall.sprite.set_flip_h(true)
 	state = CAST
 
+func play_running_animation():
+	if direction_vector.x < 0:
+		animatedSprite.play("RunLeft")
+	else:
+		animatedSprite.play("RunRight")
+
+func play_idle_animation():
+	if direction_vector.x < 0:
+		animatedSprite.play("IdleLeft")
+	else:
+		animatedSprite.play("IdleRight")
+
 func move(delta):
 	velocity.y += GRAVITY_ACCELERATION * delta
-	velocity = move_and_slide(velocity, UP)
+	velocity = move_and_slide(velocity, Vector2.UP)
