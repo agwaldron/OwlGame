@@ -8,16 +8,17 @@ export var MAX_RUN_SPEED = 300
 export var FRICTION = 700
 export var DASH_SPEED = 800
 export var DASH_DURATION = 25
-export var CAST_DURATION = 20
 
 enum {
 	RUN,
 	DASH,
 	JUMP,
-	CAST
+	CAST_FIRE,
+	CAST_ICE
 }
 
-const FireBall = preload("res://src/Player/FireBall.tscn")
+const FireBall = preload("res://src/Player/Spells/FireBall.tscn")
+const IceSpike = preload("res://src/Player/Spells/IceSpike.tscn")
 
 onready var animatedSprite = $AnimatedSprite
 onready var idleLeftHurtBox = $IdleLeftHurtBox/CollisionShape2D
@@ -39,7 +40,6 @@ var hurtBoxes
 var colBoxes
 
 func _ready():
-	print("hi")
 	hurtBoxes = [idleLeftHurtBox, idleRightHurtBox, runLeftHurtBox, runRightHurtBox]
 	colBoxes = [idleLeftColBox, idleRightColBox, runLeftColBox, runRightColBox]
 	idleRightHurtBox.disabled = false
@@ -53,8 +53,10 @@ func _physics_process(delta):
 			dash_state(delta)
 		JUMP:
 			jump_state(delta)
-		CAST:
-			cast_state(delta)
+		CAST_FIRE:
+			cast_fire_state(delta)
+		CAST_ICE:
+			cast_ice_state(delta)
 
 func run_state(delta):
 	var input_vector = Vector2.ZERO
@@ -77,8 +79,11 @@ func run_state(delta):
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		jump_action()
 
-	if Input.is_action_just_pressed("cast"):
-		cast_action()
+	if Input.is_action_just_pressed("fireball"):
+		cast_fire()
+
+	if Input.is_action_just_pressed("icespike") and is_on_floor():
+		cast_ice()
 
 func dash_state(delta):
 	dash_timer -= (delta * 100)
@@ -93,13 +98,18 @@ func jump_state(delta):
 	velocity.y = JUMP_SPEED
 	state = RUN
 
-func cast_state(delta):
+func cast_fire_state(delta):
 	cast_timer -= (delta * 100)
 	if cast_timer <= 0:
 		cast_timer = 0
 		state = RUN
 	else:
 		move(delta)
+
+func cast_ice_state(delta):
+	cast_timer -= (delta * 100)
+	if cast_timer <= 0:
+		state = RUN
 
 func dash_action():
 	dash_timer = DASH_DURATION
@@ -109,17 +119,26 @@ func dash_action():
 func jump_action():
 	state = JUMP
 
-func cast_action():
+func cast_fire():
 	velocity = Vector2.ZERO
-	cast_timer = CAST_DURATION
 	var fireBall = FireBall.instance()
 	get_parent().add_child(fireBall)
 	fireBall.global_position = global_position
 	fireBall.global_position.y -= 30
+	cast_timer = fireBall.CAST_DURATION
 	if direction_vector.x < 0:
 		fireBall.velocity.x = direction_vector.x * fireBall.SPEED
 		fireBall.sprite.set_flip_h(true)
-	state = CAST
+	state = CAST_FIRE
+
+func cast_ice():
+	velocity = Vector2.ZERO
+	var iceSpike = IceSpike.instance()
+	get_parent().add_child(iceSpike)
+	cast_timer = iceSpike.CAST_DURATION
+	iceSpike.global_position = global_position
+	iceSpike.global_position.x += 50
+	state = CAST_ICE
 
 func disable_hurt_boxes():
 	for x in hurtBoxes:

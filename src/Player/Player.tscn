@@ -93,25 +93,25 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=14]
 extents = Vector2( 20.4697, 31.3799 )
 
-[sub_resource type="RectangleShape2D" id=16]
-extents = Vector2( 20.47, 31.38 )
-
-[sub_resource type="RectangleShape2D" id=19]
-extents = Vector2( 22.3142, 29.6416 )
-
-[sub_resource type="RectangleShape2D" id=18]
-extents = Vector2( 22.314, 29.642 )
-
 [sub_resource type="RectangleShape2D" id=15]
 extents = Vector2( 20.47, 31.38 )
 
-[sub_resource type="RectangleShape2D" id=17]
-extents = Vector2( 20.47, 31.38 )
+[sub_resource type="RectangleShape2D" id=16]
+extents = Vector2( 22.3142, 29.6416 )
 
-[sub_resource type="RectangleShape2D" id=21]
+[sub_resource type="RectangleShape2D" id=17]
 extents = Vector2( 22.314, 29.642 )
 
+[sub_resource type="RectangleShape2D" id=18]
+extents = Vector2( 20.47, 31.38 )
+
+[sub_resource type="RectangleShape2D" id=19]
+extents = Vector2( 20.47, 31.38 )
+
 [sub_resource type="RectangleShape2D" id=20]
+extents = Vector2( 22.314, 29.642 )
+
+[sub_resource type="RectangleShape2D" id=21]
 extents = Vector2( 22.314, 29.642 )
 
 [node name="Player" type="KinematicBody2D"]
@@ -141,7 +141,7 @@ collision_layer = 2
 
 [node name="CollisionShape2D" parent="IdleRightHurtBox" index="0"]
 position = Vector2( 2.816, -31.5862 )
-shape = SubResource( 16 )
+shape = SubResource( 15 )
 disabled = true
 
 [node name="RunLeftHurtBox" parent="." instance=ExtResource( 3 )]
@@ -149,7 +149,7 @@ visible = false
 
 [node name="CollisionShape2D" parent="RunLeftHurtBox" index="0"]
 position = Vector2( 0, -29.6736 )
-shape = SubResource( 19 )
+shape = SubResource( 16 )
 disabled = true
 
 [node name="RunRightHurtBox" parent="." instance=ExtResource( 3 )]
@@ -157,31 +157,31 @@ visible = false
 
 [node name="CollisionShape2D" parent="RunRightHurtBox" index="0"]
 position = Vector2( 0, -29.674 )
-shape = SubResource( 18 )
+shape = SubResource( 17 )
 disabled = true
 
 [node name="IdelLeftCollisionShape" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( -2.562, -31.586 )
-shape = SubResource( 15 )
+shape = SubResource( 18 )
 disabled = true
 
 [node name="IdleRightCollisionShape" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( 2.816, -31.586 )
-shape = SubResource( 17 )
+shape = SubResource( 19 )
 disabled = true
 
 [node name="RunLeftCollisionShape" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( 0, -29.674 )
-shape = SubResource( 21 )
+shape = SubResource( 20 )
 disabled = true
 
 [node name="RunRightCollisionShape" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( 0, -29.674 )
-shape = SubResource( 20 )
+shape = SubResource( 21 )
 disabled = true
 
 [editable path="IdleLeftHurtBox"]

@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 export var SPEED = 1000
+export var CAST_DURATION = 20
 
 onready var sprite = $Sprite
 
