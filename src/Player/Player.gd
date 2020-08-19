@@ -20,12 +20,30 @@ enum {
 const FireBall = preload("res://src/Player/FireBall.tscn")
 
 onready var animatedSprite = $AnimatedSprite
+onready var idleLeftHurtBox = $IdleLeftHurtBox/CollisionShape2D
+onready var idleLeftColBox = $IdelLeftCollisionShape
+onready var idleRightHurtBox = $IdleRightHurtBox/CollisionShape2D
+onready var idleRightColBox = $IdleRightCollisionShape
+onready var runLeftHurtBox = $RunLeftHurtBox/CollisionShape2D
+onready var runLeftColBox = $RunLeftCollisionShape
+onready var runRightHurtBox = $RunRightHurtBox/CollisionShape2D
+onready var runRightColBox = $RunRightCollisionShape
 
 var state = RUN
 var velocity = Vector2.ZERO
 var direction_vector = Vector2.RIGHT
 var dash_timer = 0
 var cast_timer = 0
+
+var hurtBoxes
+var colBoxes
+
+func _ready():
+	print("hi")
+	hurtBoxes = [idleLeftHurtBox, idleRightHurtBox, runLeftHurtBox, runRightHurtBox]
+	colBoxes = [idleLeftColBox, idleRightColBox, runLeftColBox, runRightColBox]
+	idleRightHurtBox.disabled = false
+	idleRightColBox.disabled = false
 
 func _physics_process(delta):
 	match state:
@@ -103,16 +121,38 @@ func cast_action():
 		fireBall.sprite.set_flip_h(true)
 	state = CAST
 
+func disable_hurt_boxes():
+	for x in hurtBoxes:
+		x.disabled = true
+
+func disable_col_boxes():
+	for x in colBoxes:
+		x.disabled = true
+
 func play_running_animation():
+	disable_hurt_boxes()
+	disable_col_boxes()
+
 	if direction_vector.x < 0:
+		runLeftHurtBox.disabled = false
+		runLeftColBox.disabled = false
 		animatedSprite.play("RunLeft")
 	else:
+		runRightHurtBox.disabled = false
+		runRightColBox.disabled = false
 		animatedSprite.play("RunRight")
 
 func play_idle_animation():
+	disable_hurt_boxes()
+	disable_col_boxes()
+
 	if direction_vector.x < 0:
+		idleLeftHurtBox.disabled = false
+		idleLeftColBox.disabled = false
 		animatedSprite.play("IdleLeft")
 	else:
+		idleRightHurtBox.disabled = false
+		idleRightColBox.disabled = false
 		animatedSprite.play("IdleRight")
 
 func move(delta):
