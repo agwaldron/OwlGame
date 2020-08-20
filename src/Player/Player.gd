@@ -23,16 +23,18 @@ const FireBall = preload("res://src/Player/Spells/FireBall.tscn")
 const IceSpike = preload("res://src/Player/Spells/IceSpike.tscn")
 
 onready var animatedSprite = $AnimatedSprite
+onready var airColBox = $AirCollisionShape
+onready var airHurtBox = $AirHurtBox/CollisionShape2D
 onready var castLeftColBox = $CastLeftCollisionShape
 onready var castLeftHurtBox = $CastLeftHurtBox/CollisionShape2D
 onready var castRightColBox = $CastRightCollisionShape
 onready var castRightHurtBox = $CastRightHurtBox/CollisionShape2D
+onready var dashHurtBox = $DashHurtBox/CollisionShape2D
+onready var dashColBox = $DashCollisionShape
 onready var idleLeftColBox = $IdelLeftCollisionShape
 onready var idleLeftHurtBox = $IdleLeftHurtBox/CollisionShape2D
 onready var idleRightColBox = $IdleRightCollisionShape
 onready var idleRightHurtBox = $IdleRightHurtBox/CollisionShape2D
-onready var airColBox = $AirCollisionShape
-onready var airHurtBox = $AirHurtBox/CollisionShape2D
 onready var runLeftColBox = $RunLeftCollisionShape
 onready var runLeftHurtBox = $RunLeftHurtBox/CollisionShape2D
 onready var runRightColBox = $RunRightCollisionShape
@@ -48,10 +50,10 @@ var hurtBoxes
 var colBoxes
 
 func _ready():
-	colBoxes = [castLeftColBox, castRightColBox, idleLeftColBox, idleRightColBox, 
-				airColBox, runLeftColBox, runRightColBox]
-	hurtBoxes = [castLeftHurtBox, castRightHurtBox, idleLeftHurtBox, idleRightHurtBox, 
-				airHurtBox, runLeftHurtBox, runRightHurtBox]
+	colBoxes = [airColBox, castLeftColBox, castRightColBox, dashColBox, 
+				idleLeftColBox, idleRightColBox, runLeftColBox, runRightColBox]
+	hurtBoxes = [airHurtBox, castLeftHurtBox, castRightHurtBox, dashHurtBox, 
+				idleLeftHurtBox, idleRightHurtBox, runLeftHurtBox, runRightHurtBox]
 	idleRightColBox.disabled = false
 	idleRightHurtBox.disabled = false
 
@@ -135,8 +137,10 @@ func cast_fire_state(delta):
 	cast_timer -= (delta * 100)
 	if cast_timer <= 0:
 		cast_timer = 0
-		play_idle_animation()
-		state = RUN
+		if is_on_floor():
+			state = RUN
+		else:
+			state = AIR
 	else:
 		move(delta, true)
 
@@ -144,12 +148,12 @@ func cast_ice_state(delta):
 	cast_timer -= (delta * 100)
 	if cast_timer <= 0:
 		cast_timer = 0
-		play_idle_animation()
 		state = RUN
 
 func dash_action():
 	dash_timer = DASH_DURATION
 	velocity.x = direction_vector.x * DASH_SPEED
+	play_dash_animation()
 	state = DASH
 
 func jump_action():
@@ -247,6 +251,17 @@ func play_cast_animation():
 		castRightColBox.disabled = false;
 		castRightHurtBox.disabled = false;
 		animatedSprite.play("CastRight")
+
+func play_dash_animation():
+	disable_hurt_boxes()
+	disable_col_boxes()
+
+	dashColBox.disabled = false
+	dashHurtBox.disabled = false
+	if direction_vector.x < 0:
+		animatedSprite.play("DashLeft")
+	else:
+		animatedSprite.play("DashRight")
 
 func move(delta, grav):
 	if grav:
