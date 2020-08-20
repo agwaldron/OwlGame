@@ -31,8 +31,8 @@ onready var idleLeftColBox = $IdelLeftCollisionShape
 onready var idleLeftHurtBox = $IdleLeftHurtBox/CollisionShape2D
 onready var idleRightColBox = $IdleRightCollisionShape
 onready var idleRightHurtBox = $IdleRightHurtBox/CollisionShape2D
-onready var jumpColBox = $JumpCollisionShape
-onready var jumpHurtBox = $JumpHurtBox/CollisionShape2D
+onready var airColBox = $AirCollisionShape
+onready var airHurtBox = $AirHurtBox/CollisionShape2D
 onready var runLeftColBox = $RunLeftCollisionShape
 onready var runLeftHurtBox = $RunLeftHurtBox/CollisionShape2D
 onready var runRightColBox = $RunRightCollisionShape
@@ -49,9 +49,9 @@ var colBoxes
 
 func _ready():
 	colBoxes = [castLeftColBox, castRightColBox, idleLeftColBox, idleRightColBox, 
-				jumpColBox, runLeftColBox, runRightColBox]
+				airColBox, runLeftColBox, runRightColBox]
 	hurtBoxes = [castLeftHurtBox, castRightHurtBox, idleLeftHurtBox, idleRightHurtBox, 
-				jumpHurtBox, runLeftHurtBox, runRightHurtBox]
+				airHurtBox, runLeftHurtBox, runRightHurtBox]
 	idleRightColBox.disabled = false
 	idleRightHurtBox.disabled = false
 
@@ -224,12 +224,16 @@ func play_air_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
 
-	jumpColBox.disabled = false
-	jumpHurtBox.disabled = false
-	if direction_vector.x < 0:
+	airColBox.disabled = false
+	airHurtBox.disabled = false
+	if direction_vector.x < 0 and velocity.y < 0:
 		animatedSprite.play("JumpLeft")
-	else:
+	elif direction_vector.x < 0 and velocity.y > 0:
+		animatedSprite.play("FallLeft")
+	elif direction_vector.x > 0 and velocity.y < 0:
 		animatedSprite.play("JumpRight")
+	else:
+		animatedSprite.play("FallRight")
 
 func play_cast_animation():
 	disable_hurt_boxes()
