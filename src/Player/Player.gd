@@ -3,6 +3,8 @@ extends KinematicBody2D
 export var GRAVITY_ACCELERATION = 3000
 export var MAX_FALL_SPEED = 1000
 export var JUMP_SPEED = -1250
+export var AIR_ACCELERATION = 600
+export var MAX_AIR_SPEED = 250
 export var RUN_ACCELERATION = 600
 export var MAX_RUN_SPEED = 300
 export var FRICTION = 700
@@ -12,7 +14,7 @@ export var DASH_DURATION = 25
 enum {
 	RUN,
 	DASH,
-	JUMP,
+	AIR,
 	CAST_FIRE,
 	CAST_ICE
 }
@@ -29,6 +31,8 @@ onready var idleLeftColBox = $IdelLeftCollisionShape
 onready var idleLeftHurtBox = $IdleLeftHurtBox/CollisionShape2D
 onready var idleRightColBox = $IdleRightCollisionShape
 onready var idleRightHurtBox = $IdleRightHurtBox/CollisionShape2D
+onready var jumpRightColBox = $JumpRightCollisionShape
+onready var jumpRightHurtBox = $JumpRightHurtBox/CollisionShape2D
 onready var runLeftColBox = $RunLeftCollisionShape
 onready var runLeftHurtBox = $RunLeftHurtBox/CollisionShape2D
 onready var runRightColBox = $RunRightCollisionShape
@@ -44,8 +48,10 @@ var hurtBoxes
 var colBoxes
 
 func _ready():
-	colBoxes = [castLeftColBox, castRightColBox, idleLeftColBox, idleRightColBox, runLeftColBox, runRightColBox]
-	hurtBoxes = [castLeftHurtBox, castRightHurtBox, idleLeftHurtBox, idleRightHurtBox, runLeftHurtBox, runRightHurtBox]
+	colBoxes = [castLeftColBox, castRightColBox, idleLeftColBox, idleRightColBox, 
+				jumpRightColBox, runLeftColBox, runRightColBox]
+	hurtBoxes = [castLeftHurtBox, castRightHurtBox, idleLeftHurtBox, idleRightHurtBox, 
+				jumpRightHurtBox, runLeftHurtBox, runRightHurtBox]
 	idleRightColBox.disabled = false
 	idleRightHurtBox.disabled = false
 
@@ -55,8 +61,8 @@ func _physics_process(delta):
 			run_state(delta)
 		DASH:
 			dash_state(delta)
-		JUMP:
-			jump_state(delta)
+		AIR:
+			air_state(delta)
 		CAST_FIRE:
 			cast_fire_state(delta)
 		CAST_ICE:
@@ -94,13 +100,36 @@ func dash_state(delta):
 	if dash_timer <= 0:
 		dash_timer = 0
 		velocity.x = velocity.x * 0.35
-		state = RUN
+		if is_on_floor():
+			state = RUN
+		else:
+			state = AIR
 	else:
 		move(delta, false)
 
-func jump_state(delta):
-	velocity.y = JUMP_SPEED
-	state = RUN
+func air_state(delta):
+	var input_vector = Vector2.ZERO
+	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	input_vector = input_vector.normalized()
+
+	if input_vector != Vector2.ZERO:
+		direction_vector.x = input_vector.x
+		velocity = velocity.move_toward(input_vector * MAX_AIR_SPEED, AIR_ACCELERATION * delta)
+		play_air_animation();
+	else:
+		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+		play_air_animation();
+
+	move(delta, true)
+	
+	if Input.is_action_just_pressed("dash"):
+		dash_action()
+
+	if Input.is_action_just_pressed("fireball"):
+		cast_fire()
+
+	if is_on_floor():
+		state = RUN
 
 func cast_fire_state(delta):
 	cast_timer -= (delta * 100)
@@ -124,7 +153,8 @@ func dash_action():
 	state = DASH
 
 func jump_action():
-	state = JUMP
+	velocity.y = JUMP_SPEED
+	state = AIR
 
 func cast_fire():
 	velocity = Vector2.ZERO #feels clunky, needs work
@@ -164,19 +194,6 @@ func disable_col_boxes():
 	for x in colBoxes:
 		x.disabled = true
 
-func play_cast_animation():
-	disable_hurt_boxes()
-	disable_col_boxes()
-
-	if direction_vector.x < 0:
-		castLeftColBox.disabled = false;
-		castLeftHurtBox.disabled = false;
-		animatedSprite.play("CastLeft")
-	else:
-		castRightColBox.disabled = false;
-		castRightHurtBox.disabled = false;
-		animatedSprite.play("CastRight")
-
 func play_idle_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
@@ -202,6 +219,27 @@ func play_running_animation():
 		runRightColBox.disabled = false
 		runRightHurtBox.disabled = false
 		animatedSprite.play("RunRight")
+
+func play_air_animation():
+	disable_hurt_boxes()
+	disable_col_boxes()
+
+	jumpRightColBox.disabled = false
+	jumpRightHurtBox.disabled = false
+	animatedSprite.play("JumpRight")
+
+func play_cast_animation():
+	disable_hurt_boxes()
+	disable_col_boxes()
+
+	if direction_vector.x < 0:
+		castLeftColBox.disabled = false;
+		castLeftHurtBox.disabled = false;
+		animatedSprite.play("CastLeft")
+	else:
+		castRightColBox.disabled = false;
+		castRightHurtBox.disabled = false;
+		animatedSprite.play("CastRight")
 
 func move(delta, grav):
 	if grav:
