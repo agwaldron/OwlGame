@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 export var GRAVITY_ACCELERATION = 3000
 export var MAX_FALL_SPEED = 1000
-export var JUMP_SPEED = -1000
+export var JUMP_SPEED = -1250
 export var RUN_ACCELERATION = 600
 export var MAX_RUN_SPEED = 300
 export var FRICTION = 700
