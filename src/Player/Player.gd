@@ -132,11 +132,14 @@ func cast_fire():
 	var fireBall = FireBall.instance()
 	get_parent().add_child(fireBall)
 	fireBall.global_position = global_position
-	fireBall.global_position.y -= 60
+	fireBall.global_position.y -= fireBall.sprite_vertical_offset
 	cast_timer = fireBall.CAST_DURATION
 	if direction_vector.x < 0:
+		fireBall.global_position.x -= fireBall.sprite_horizontal_offset
 		fireBall.velocity.x = direction_vector.x * fireBall.SPEED
 		fireBall.sprite.set_flip_h(true)
+	else:
+		fireBall.global_position.x += fireBall.sprite_horizontal_offset
 	state = CAST_FIRE
 
 func cast_ice():
@@ -146,7 +149,11 @@ func cast_ice():
 	get_parent().add_child(iceSpike)
 	cast_timer = iceSpike.CAST_DURATION
 	iceSpike.global_position = global_position
-	iceSpike.global_position.x += 50
+	if direction_vector.x < 0:
+		iceSpike.global_position.x -= iceSpike.sprite_horizontal_offset
+		iceSpike.sprite.set_flip_h(true)
+	else:
+		iceSpike.global_position.x += iceSpike.sprite_horizontal_offset
 	state = CAST_ICE
 
 func disable_hurt_boxes():

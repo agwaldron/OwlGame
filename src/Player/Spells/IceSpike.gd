@@ -2,6 +2,8 @@ extends KinematicBody2D
 
 export var CAST_DURATION = 30
 
+onready var sprite = $Sprite
+onready var sprite_horizontal_offset = 50
 onready var cast_timer = CAST_DURATION
 
 func _process(delta):
