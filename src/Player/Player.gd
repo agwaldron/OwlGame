@@ -75,7 +75,7 @@ func run_state(delta):
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
 		play_idle_animation();
 
-	move(delta)
+	move(delta, true)
 
 	if Input.is_action_just_pressed("dash"):
 		dash_action()
@@ -96,7 +96,7 @@ func dash_state(delta):
 		velocity.x = velocity.x * 0.35
 		state = RUN
 	else:
-		move(delta)
+		move(delta, false)
 
 func jump_state(delta):
 	velocity.y = JUMP_SPEED
@@ -109,7 +109,7 @@ func cast_fire_state(delta):
 		play_idle_animation()
 		state = RUN
 	else:
-		move(delta)
+		move(delta, true)
 
 func cast_ice_state(delta):
 	cast_timer -= (delta * 100)
@@ -127,7 +127,7 @@ func jump_action():
 	state = JUMP
 
 func cast_fire():
-	velocity = Vector2.ZERO
+	velocity = Vector2.ZERO #feels clunky, needs work
 	play_cast_animation()
 	var fireBall = FireBall.instance()
 	get_parent().add_child(fireBall)
@@ -203,6 +203,9 @@ func play_running_animation():
 		runRightHurtBox.disabled = false
 		animatedSprite.play("RunRight")
 
-func move(delta):
-	velocity.y += GRAVITY_ACCELERATION * delta
+func move(delta, grav):
+	if grav:
+		velocity.y += GRAVITY_ACCELERATION * delta
+	else:
+		velocity.y = 0
 	velocity = move_and_slide(velocity, Vector2.UP)
