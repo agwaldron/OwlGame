@@ -8,7 +8,7 @@ enum{
 	CAST
 }
 
-const FireBall = preload("res://src/Player/Spells/FireBall.tscn")
+const WitchFire = preload("res://src/Enemies/WitchFire.tscn")
 
 onready var stats = $EnemyStats
 onready var animatedSprite = $AnimatedSprite
@@ -31,7 +31,7 @@ func _process(delta):
 func idle_state(delta):
 	cast_cool_down -= (delta * 100)
 	if cast_cool_down <= 0:
-		cast_fire_ball()
+		cast_witch_fire()
 
 func cast_state(delta):
 	cast_timer -= (delta * 100)
@@ -40,15 +40,15 @@ func cast_state(delta):
 		cast_cool_down = CAST_FREQ
 		state = IDLE
 
-func cast_fire_ball():
+func cast_witch_fire():
 	animatedSprite.play("Cast")
-	var fireBall = FireBall.instance()
-	get_parent().add_child(fireBall)
-	fireBall.global_position = global_position
-	fireBall.global_position.y -= 50
-	fireBall.global_position.x -= 40
-	fireBall.velocity.x = fireBall.SPEED * -1
-	fireBall.sprite.set_flip_h(true)
+	var witchFire = WitchFire.instance()
+	get_parent().add_child(witchFire)
+	witchFire.global_position = global_position
+	witchFire.global_position.y -= witchFire.sprite_vertical_offset
+	witchFire.global_position.x -= witchFire.sprite_horizontal_offset
+	witchFire.velocity.x = witchFire.SPEED * -1
+	witchFire.animatedSprite.play("Left")
 	cast_timer = CAST_DURATION
 	state = CAST
 

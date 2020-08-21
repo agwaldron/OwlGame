@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/FireBall.png-77a391838cefbf53b1d8fe5711b880dd.stex"
+path="res://.import/WitchFireSpriteSheetLeft.png-9baba9fc7818a2691733de128b7e5507.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Player/FireBall.png"
-dest_files=[ "res://.import/FireBall.png-77a391838cefbf53b1d8fe5711b880dd.stex" ]
+source_file="res://Assets/Enemies/WitchEnemy/WitchFireSpriteSheetLeft.png"
+dest_files=[ "res://.import/WitchFireSpriteSheetLeft.png-9baba9fc7818a2691733de128b7e5507.stex" ]
 
 [params]
 
