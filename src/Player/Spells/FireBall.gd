@@ -3,7 +3,7 @@ extends KinematicBody2D
 export var SPEED = 1000
 export var CAST_DURATION = 20
 
-onready var sprite = $Sprite
+onready var animatedSprite = $AnimatedSprite
 onready var sprite_vertical_offset = 40
 onready var sprite_horizontal_offset = 20
 

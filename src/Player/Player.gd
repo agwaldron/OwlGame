@@ -171,7 +171,7 @@ func cast_fire():
 	if direction_vector.x < 0:
 		fireBall.global_position.x -= fireBall.sprite_horizontal_offset
 		fireBall.velocity.x = direction_vector.x * fireBall.SPEED
-		fireBall.sprite.set_flip_h(true)
+		fireBall.animatedSprite.play("Left")
 	else:
 		fireBall.global_position.x += fireBall.sprite_horizontal_offset
 	state = CAST_FIRE
