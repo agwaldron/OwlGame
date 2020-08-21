@@ -3,7 +3,7 @@
 [ext_resource path="res://Assets/TileSets/BigBrick.png" type="Texture" id=1]
 [ext_resource path="res://Assets/TileSets/Floor.png" type="Texture" id=2]
 [ext_resource path="res://src/Player/Player.tscn" type="PackedScene" id=3]
-[ext_resource path="res://src/Enemies/BasicEnemy.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/Enemies/WitchEnemy.tscn" type="PackedScene" id=4]
 
 [sub_resource type="TileSet" id=1]
 0/name = "BigBrick.png 0"
@@ -63,11 +63,11 @@ tile_data = PoolIntArray( 0, 0, 0, 19, 0, 0, 65536, 0, 0, 65555, 0, 0, 131072, 0
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 151.034, 703.763 )
 
-[node name="BasicEnemy" parent="." instance=ExtResource( 4 )]
-position = Vector2( 859.946, 572.036 )
+[node name="WitchEnemy" parent="." instance=ExtResource( 4 )]
+position = Vector2( 808.11, 574.91 )
 
-[node name="BasicEnemy2" parent="." instance=ExtResource( 4 )]
-position = Vector2( 1126.53, 443.698 )
+[node name="WitchEnemy2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 1103.99, 445.997 )
 
-[node name="BasicEnemy3" parent="." instance=ExtResource( 4 )]
-position = Vector2( 778.385, 254.142 )
+[node name="WitchEnemy3" parent="." instance=ExtResource( 4 )]
+position = Vector2( 777.417, 254.47 )
