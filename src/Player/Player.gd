@@ -185,9 +185,10 @@ func cast_ice():
 	iceSpike.global_position = global_position
 	if direction_vector.x < 0:
 		iceSpike.global_position.x -= iceSpike.sprite_horizontal_offset
-		iceSpike.sprite.set_flip_h(true)
+		iceSpike.play("Left")
 	else:
 		iceSpike.global_position.x += iceSpike.sprite_horizontal_offset
+		iceSpike.play("Right")
 	state = CAST_ICE
 
 func disable_hurt_boxes():
