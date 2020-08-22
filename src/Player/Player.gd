@@ -40,6 +40,7 @@ onready var runLeftHurtBox = $RunLeftHurtBox/CollisionShape2D
 onready var runRightColBox = $RunRightCollisionShape
 onready var runRightHurtBox = $RunRightHurtBox/CollisionShape2D
 
+var health = 3
 var state = RUN
 var velocity = Vector2.ZERO
 var direction_vector = Vector2.RIGHT
@@ -272,3 +273,9 @@ func move(delta, grav):
 	else:
 		velocity.y = 0
 	velocity = move_and_slide(velocity, Vector2.UP)
+
+
+func _on_HurtBox_area_entered(area):
+	health -= 1
+	if health <= 0:
+		queue_free()
