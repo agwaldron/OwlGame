@@ -58,7 +58,7 @@ func _ready():
 	idleRightColBox.disabled = false
 	idleRightHurtBox.disabled = false
 
-	get_tree().call_group("health_bar", "set_health", health)
+	get_tree().call_group("health_bar", "set_max", health)
 
 func _physics_process(delta):
 	match state:

@@ -70,6 +70,7 @@ script = ExtResource( 2 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 9 )
 animation = "Right"
+frame = 2
 playing = true
 
 [node name="HitBox" parent="." instance=ExtResource( 1 )]

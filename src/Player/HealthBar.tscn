@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/Player/HealthBar.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Player/Heart.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Player/HeartEmpty.png" type="Texture" id=3]
 
 [node name="HealthBar" type="Control" groups=[
 "health_bar",
@@ -11,8 +12,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="EmptyHeartDisplay" type="TextureRect" parent="."]
+margin_left = 64.0
+margin_right = 128.0
+margin_bottom = 64.0
+texture = ExtResource( 3 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="FullHeartDisplay" type="TextureRect" parent="."]
-margin_right = 64.0
+margin_left = 64.0
+margin_right = 128.0
 margin_bottom = 64.0
 texture = ExtResource( 2 )
 stretch_mode = 2
