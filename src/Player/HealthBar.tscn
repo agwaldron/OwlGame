@@ -3,7 +3,9 @@
 [ext_resource path="res://src/Player/HealthBar.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Player/Heart.png" type="Texture" id=2]
 
-[node name="HealthBar" type="Control"]
+[node name="HealthBar" type="Control" groups=[
+"health_bar",
+]]
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false

@@ -58,6 +58,8 @@ func _ready():
 	idleRightColBox.disabled = false
 	idleRightHurtBox.disabled = false
 
+	get_tree().call_group("health_bar", "set_health", health)
+
 func _physics_process(delta):
 	match state:
 		RUN:
@@ -277,5 +279,6 @@ func move(delta, grav):
 
 func _on_HurtBox_area_entered(area):
 	health -= 1
+	get_tree().call_group("health_bar", "set_health", health)
 	if health <= 0:
 		queue_free()
