@@ -16,11 +16,13 @@ enum {
 	DASH,
 	AIR,
 	CAST_FIRE,
-	CAST_ICE
+	CAST_ICE,
+	CAST_LIGHTENING
 }
 
 const FireBall = preload("res://src/Player/Spells/FireBall.tscn")
 const IceSpike = preload("res://src/Player/Spells/IceSpike.tscn")
+const Lightening = preload("res://src/Player/Spells/LighteningBolt.tscn")
 
 onready var animatedSprite = $AnimatedSprite
 onready var airColBox = $AirCollisionShape
@@ -72,6 +74,8 @@ func _physics_process(delta):
 			cast_fire_state(delta)
 		CAST_ICE:
 			cast_ice_state(delta)
+		CAST_LIGHTENING:
+			cast_lightening_state(delta)
 
 func run_state(delta):
 	var input_vector = Vector2.ZERO
@@ -99,6 +103,9 @@ func run_state(delta):
 
 	if Input.is_action_just_pressed("icespike") and is_on_floor():
 		cast_ice()
+
+	if Input.is_action_just_pressed("lightening") and is_on_floor():
+		cast_lightening()
 
 func dash_state(delta):
 	dash_timer -= (delta * 100)
@@ -153,6 +160,12 @@ func cast_ice_state(delta):
 		cast_timer = 0
 		state = RUN
 
+func cast_lightening_state(delta):
+	cast_timer -= (delta * 100)
+	if cast_timer <= 0:
+		cast_timer = 0
+		state = RUN
+
 func dash_action():
 	dash_timer = DASH_DURATION
 	velocity.x = direction_vector.x * DASH_SPEED
@@ -195,6 +208,23 @@ func cast_ice():
 		iceSpike.animatedSprite.set_frame(0)
 		iceSpike.animatedSprite.play("Right")
 	state = CAST_ICE
+
+func cast_lightening():
+	velocity = Vector2.ZERO
+	play_cast_animation()
+	var lightening = Lightening.instance()
+	get_parent().add_child(lightening)
+	cast_timer = lightening.CAST_DURATION
+	lightening.global_position = global_position
+	if direction_vector.x < 0:
+		lightening.global_position.x -= lightening.sprite_horizontal_offset
+		lightening.animatedSprite.set_frame(0)
+		lightening.animatedSprite.play("Left")
+	else:
+		lightening.global_position.x += lightening.sprite_horizontal_offset
+		lightening.animatedSprite.set_frame(0)
+		lightening.animatedSprite.play("Right")
+	state = CAST_LIGHTENING
 
 func disable_hurt_boxes():
 	for x in hurtBoxes:
