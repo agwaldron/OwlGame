@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/LighteningSpriteSheetRight.png-5dea558f475f03d019c6996f47f16132.stex"
+path="res://.import/TheMusician.png-a584b8d5156ed105b1508c4dd877a751.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Player/LighteningSpriteSheetRight.png"
-dest_files=[ "res://.import/LighteningSpriteSheetRight.png-5dea558f475f03d019c6996f47f16132.stex" ]
+source_file="res://Assets/Enemies/TheMusician/TheMusician.png"
+dest_files=[ "res://.import/TheMusician.png-a584b8d5156ed105b1508c4dd877a751.stex" ]
 
 [params]
 

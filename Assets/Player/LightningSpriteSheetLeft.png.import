@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/LighteningSpriteSheetLeft.png-170514151d19245921cb30f9ddd919e1.stex"
+path="res://.import/LightningSpriteSheetLeft.png-b153028d1be776f1b6936a5d5349a05c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Player/LighteningSpriteSheetLeft.png"
-dest_files=[ "res://.import/LighteningSpriteSheetLeft.png-170514151d19245921cb30f9ddd919e1.stex" ]
+source_file="res://Assets/Player/LightningSpriteSheetLeft.png"
+dest_files=[ "res://.import/LightningSpriteSheetLeft.png-b153028d1be776f1b6936a5d5349a05c.stex" ]
 
 [params]
 

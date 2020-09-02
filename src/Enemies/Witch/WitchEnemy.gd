@@ -8,7 +8,7 @@ enum{
 	CAST
 }
 
-const WitchFire = preload("res://src/Enemies/WitchFire.tscn")
+const WitchFire = preload("res://src/Enemies/Witch/WitchFire.tscn")
 
 onready var stats = $EnemyStats
 onready var animatedSprite = $AnimatedSprite
