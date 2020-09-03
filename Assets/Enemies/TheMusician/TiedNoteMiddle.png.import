@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/TheMusicianWholeNoteSpriteSheet.png-01a6b00a0ad10d8d7ce0e0e0079e992e.stex"
+path="res://.import/TiedNoteMiddle.png-fa70c04de46db5c8bc3fa09009e42f9f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemies/TheMusician/TheMusicianWholeNoteSpriteSheet.png"
-dest_files=[ "res://.import/TheMusicianWholeNoteSpriteSheet.png-01a6b00a0ad10d8d7ce0e0e0079e992e.stex" ]
+source_file="res://Assets/Enemies/TheMusician/TiedNoteMiddle.png"
+dest_files=[ "res://.import/TiedNoteMiddle.png-fa70c04de46db5c8bc3fa09009e42f9f.stex" ]
 
 [params]
 
