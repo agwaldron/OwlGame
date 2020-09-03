@@ -18,6 +18,7 @@ var play_cool_down
 func _ready():
 	stats.health = 30
 	play_cool_down = PLAY_FREQ
+	animatedSprite.play("PlayEighth")
 
 func _process(delta):
 	match state:
