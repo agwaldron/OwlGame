@@ -42,7 +42,10 @@ onready var runLeftHurtBox = $RunLeftHurtBox/CollisionShape2D
 onready var runRightColBox = $RunRightCollisionShape
 onready var runRightHurtBox = $RunRightHurtBox/CollisionShape2D
 
-var health = 3
+var health = 5
+var immune = false
+var immune_duration = 75
+var immune_timer
 var state = RUN
 var velocity = Vector2.ZERO
 var direction_vector = Vector2.RIGHT
@@ -63,6 +66,12 @@ func _ready():
 	get_tree().call_group("health_bar", "set_max", health)
 
 func _physics_process(delta):
+	if immune:
+		immune_timer -= (delta * 100)
+		if immune_timer <= 0:
+			print("not immune")
+			immune = false
+
 	match state:
 		RUN:
 			run_state(delta)
@@ -306,9 +315,12 @@ func move(delta, grav):
 		velocity.y = 0
 	velocity = move_and_slide(velocity, Vector2.UP)
 
-
 func _on_HurtBox_area_entered(area):
-	health -= 1
-	get_tree().call_group("health_bar", "set_health", health)
-	if health <= 0:
-		queue_free()
+	if not immune:
+		health -= 1
+		get_tree().call_group("health_bar", "set_health", health)
+		print("immune")
+		immune = true
+		immune_timer = immune_duration
+		if health <= 0:
+			queue_free()

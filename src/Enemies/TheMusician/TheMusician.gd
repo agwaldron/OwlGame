@@ -119,7 +119,6 @@ func eighth_state(delta):
 
 func _on_HurtBox_area_entered(area):
 	stats.health -= area.damage
-	print(stats.health)
 
 func _on_EnemyStats_no_health():
 	queue_free()
