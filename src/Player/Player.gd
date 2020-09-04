@@ -69,7 +69,6 @@ func _physics_process(delta):
 	if immune:
 		immune_timer -= (delta * 100)
 		if immune_timer <= 0:
-			print("not immune")
 			immune = false
 
 	match state:
@@ -319,7 +318,6 @@ func _on_HurtBox_area_entered(area):
 	if not immune:
 		health -= 1
 		get_tree().call_group("health_bar", "set_health", health)
-		print("immune")
 		immune = true
 		immune_timer = immune_duration
 		if health <= 0:
