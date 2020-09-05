@@ -4,24 +4,28 @@ export var SPEED = 600
 export var POS_TURN_BACK_POINT = 1500
 export var NEG_TURN_BACK_POINT = -300
 export var FLY_BY_HEIGHT = 675
+export var BOMB_DROP_HEIGHT = 100
 export var FLY_BACK_LOW_HEIGHT = 500
+export var FLY_BACK_HIGH_HEIGHT = 200
 
 enum {
 	FLYBY,
-	FLYBACKLOW
+	BOMBDROP,
+	FLYBACKLOW,
+	FLYBACKHIGH
 }
 
-onready var stats = $EnemyStats
 onready var animatedSprite = $AnimatedSprite
+onready var stats = $EnemyStats
+onready var hurtBox = $HurtBox/CollisionShape2D
 
 var state
 var velocity = Vector2.ZERO
 
-
 func _ready():
-	print(global_position)
 	stats.health = 15
 	state = FLYBY
+	animatedSprite.play("PlaneClose")
 	global_position.x = POS_TURN_BACK_POINT
 	global_position.y = FLY_BY_HEIGHT
 	velocity.x = SPEED * -1
@@ -30,16 +34,30 @@ func _process(delta):
 	match state:
 		FLYBY:
 			flyBy(delta)
+		BOMBDROP:
+			bombDrop(delta)
 		FLYBACKLOW:
 			flyBackLow(delta)
+		FLYBACKHIGH:
+			flyBackHigh(delta)
 
 func flyBy(delta):
 	velocity = move_and_slide(velocity)
 	if global_position.x < NEG_TURN_BACK_POINT:
 		animatedSprite.play("PlaneFar")
 		velocity.x = SPEED
+		global_position.y = FLY_BACK_HIGH_HEIGHT
+		state = FLYBACKHIGH
+		hurtBox.disabled = true
+
+func bombDrop(delta):
+	velocity = move_and_slide(velocity)
+	if global_position.x < NEG_TURN_BACK_POINT:
+		animatedSprite.play("PlaneFar")
+		velocity.x = SPEED
 		global_position.y = FLY_BACK_LOW_HEIGHT
 		state = FLYBACKLOW
+		hurtBox.disabled = true
 
 func flyBackLow(delta):
 	velocity = move_and_slide(velocity)
@@ -48,6 +66,16 @@ func flyBackLow(delta):
 		velocity.x = SPEED * -1
 		global_position.y = FLY_BY_HEIGHT
 		state = FLYBY
+		hurtBox.disabled = false
+
+func flyBackHigh(delta):
+	velocity = move_and_slide(velocity)
+	if global_position.x > POS_TURN_BACK_POINT:
+		animatedSprite.play("PlaneClose")
+		velocity.x = SPEED * -1
+		global_position.y = BOMB_DROP_HEIGHT
+		state = BOMBDROP
+		hurtBox.disabled = false
 
 func _on_HurtBox_area_entered(area):
 	var area_groups = area.get_groups()

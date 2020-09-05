@@ -6,30 +6,30 @@
 [ext_resource path="res://src/CollisionTemplates/HurtBox.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/Enemies/ThePilot/ThePilot.gd" type="Script" id=5]
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=1]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 256, 256 )
 
-[sub_resource type="AtlasTexture" id=5]
+[sub_resource type="AtlasTexture" id=2]
 flags = 4
 atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 192, 192 )
+region = Rect2( 0, 0, 128, 128 )
 
-[sub_resource type="SpriteFrames" id=2]
+[sub_resource type="SpriteFrames" id=3]
 animations = [ {
-"frames": [ SubResource( 4 ) ],
+"frames": [ SubResource( 1 ) ],
 "loop": true,
 "name": "PlaneClose",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 5 ) ],
+"frames": [ SubResource( 2 ) ],
 "loop": true,
 "name": "PlaneFar",
 "speed": 5.0
 } ]
 
-[sub_resource type="CapsuleShape2D" id=3]
+[sub_resource type="CapsuleShape2D" id=4]
 radius = 24.0673
 height = 203.999
 
@@ -39,7 +39,7 @@ collision_mask = 4
 script = ExtResource( 5 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-frames = SubResource( 2 )
+frames = SubResource( 3 )
 animation = "PlaneClose"
 
 [node name="HurtBox" parent="." instance=ExtResource( 4 )]
@@ -49,7 +49,7 @@ collision_mask = 4
 [node name="CollisionShape2D" parent="HurtBox" index="0"]
 position = Vector2( 5.28149, -10.28 )
 rotation = 1.5708
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="EnemyStats" parent="." instance=ExtResource( 3 )]
 [connection signal="area_entered" from="HurtBox" to="." method="_on_HurtBox_area_entered"]
