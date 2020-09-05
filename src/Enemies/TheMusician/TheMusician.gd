@@ -8,10 +8,10 @@ enum{
 	EIGHTH
 }
 
-const EighthNote = preload("res://src/Enemies/TheMusician/EighthNote.tscn")
-const TiedNoteStart = preload("res://src/Enemies/TheMusician/TiedNoteStart.tscn")
-const TiedNoteMiddle = preload("res://src/Enemies/TheMusician/TiedNoteMiddle.tscn")
-const TiedNoteEnd = preload("res://src/Enemies/TheMusician/TiedNoteEnd.tscn")
+const EighthNote = preload("res://src/Enemies/TheMusician/Notes/EighthNote.tscn")
+const TiedNoteStart = preload("res://src/Enemies/TheMusician/Notes/TiedNoteStart.tscn")
+const TiedNoteMiddle = preload("res://src/Enemies/TheMusician/Notes/TiedNoteMiddle.tscn")
+const TiedNoteEnd = preload("res://src/Enemies/TheMusician/Notes/TiedNoteEnd.tscn")
 
 onready var stats = $EnemyStats
 onready var animatedSprite = $AnimatedSprite

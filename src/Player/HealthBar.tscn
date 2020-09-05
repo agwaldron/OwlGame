@@ -13,7 +13,8 @@ __meta__ = {
 }
 
 [node name="EmptyHeartDisplay" type="TextureRect" parent="."]
-margin_right = 64.0
+margin_left = 60.0
+margin_right = 124.0
 margin_bottom = 64.0
 texture = ExtResource( 3 )
 stretch_mode = 2
@@ -22,7 +23,8 @@ __meta__ = {
 }
 
 [node name="FullHeartDisplay" type="TextureRect" parent="."]
-margin_right = 64.0
+margin_left = 60.0
+margin_right = 124.0
 margin_bottom = 64.0
 texture = ExtResource( 2 )
 stretch_mode = 2

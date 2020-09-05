@@ -1,23 +1,28 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://TiedNoteEnd.gd" type="Script" id=1]
+[ext_resource path="res://src/CollisionTemplates/HitBox.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Enemies/TheMusician/TiedNoteEnd.png" type="Texture" id=2]
-[ext_resource path="res://src/CollisionTemplates/HitBox.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/Enemies/TheMusician/Notes/TiedNoteEnd.gd" type="Script" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 20.0749
 height = 12.1266
 
 [node name="TiedNoteEnd" type="KinematicBody2D"]
-script = ExtResource( 1 )
+collision_layer = 16
+collision_mask = 3
+script = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
 
-[node name="HitBox" parent="." instance=ExtResource( 3 )]
+[node name="HitBox" parent="." instance=ExtResource( 1 )]
+collision_layer = 16
+collision_mask = 3
 
 [node name="CollisionShape2D" parent="HitBox" index="0"]
 position = Vector2( -16.7324, 2.79022 )
 shape = SubResource( 1 )
+[connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]
 
 [editable path="HitBox"]
