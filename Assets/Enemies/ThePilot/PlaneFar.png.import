@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/SidePlaneView.png-1be9a0ebc66df50329c6d64e92337916.stex"
+path="res://.import/PlaneFar.png-361543a7a5249ef59c04c24813faec03.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemies/ThePilot/SidePlaneView.png"
-dest_files=[ "res://.import/SidePlaneView.png-1be9a0ebc66df50329c6d64e92337916.stex" ]
+source_file="res://Assets/Enemies/ThePilot/PlaneFar.png"
+dest_files=[ "res://.import/PlaneFar.png-361543a7a5249ef59c04c24813faec03.stex" ]
 
 [params]
 
