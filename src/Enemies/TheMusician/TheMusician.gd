@@ -118,7 +118,10 @@ func eighth_state(delta):
 		state = CHOOSE
 
 func _on_HurtBox_area_entered(area):
-	stats.health -= area.damage
+	var area_groups = area.get_groups()
+	for x in area_groups:
+		if x == "PlayerSpell":
+			stats.health -= area.damage
 
 func _on_EnemyStats_no_health():
 	queue_free()

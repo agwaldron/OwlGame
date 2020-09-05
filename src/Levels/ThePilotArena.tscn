@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/Environment/FloorTileSet.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Environment/BricksTileSet.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/Player/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/Enemies/ThePilot/ThePilot.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/Player/HealthBar.tscn" type="PackedScene" id=5]
 
 [node name="Node2D" type="Node2D"]
 
@@ -15,6 +16,8 @@ tile_data = PoolIntArray( 0, 0, 0, 19, 0, 0, 65536, 0, 0, 65555, 0, 0, 131072, 0
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 150.5, 703.524 )
+
+[node name="HealthBar" parent="." instance=ExtResource( 5 )]
 
 [node name="ThePilot" parent="." instance=ExtResource( 4 )]
 position = Vector2( 1038.42, 673.873 )
