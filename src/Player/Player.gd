@@ -313,6 +313,7 @@ func move(delta, grav):
 	else:
 		velocity.y = 0
 	velocity = move_and_slide(velocity, Vector2.UP)
+	get_tree().call_group("Enemies", "updatePlayerLocation", global_position)
 
 func _on_HurtBox_area_entered(area):
 	if not immune:

@@ -15,12 +15,16 @@ enum {
 	FLYBACKHIGH
 }
 
+const Bomb = preload("res://src/Enemies/ThePilot/Bomb.tscn")
+
 onready var animatedSprite = $AnimatedSprite
 onready var stats = $EnemyStats
 onready var hurtBox = $HurtBox/CollisionShape2D
 
 var state
 var velocity = Vector2.ZERO
+var playerLocation
+var bombReady
 
 func _ready():
 	stats.health = 15
@@ -29,6 +33,7 @@ func _ready():
 	global_position.x = POS_TURN_BACK_POINT
 	global_position.y = FLY_BY_HEIGHT
 	velocity.x = SPEED * -1
+	bombReady = false
 
 func _process(delta):
 	match state:
@@ -52,12 +57,15 @@ func flyBy(delta):
 
 func bombDrop(delta):
 	velocity = move_and_slide(velocity)
+	if bombReady:
+		checkForPlayer()
 	if global_position.x < NEG_TURN_BACK_POINT:
 		animatedSprite.play("PlaneFar")
 		velocity.x = SPEED
 		global_position.y = FLY_BACK_LOW_HEIGHT
 		state = FLYBACKLOW
 		hurtBox.disabled = true
+		bombReady = false
 
 func flyBackLow(delta):
 	velocity = move_and_slide(velocity)
@@ -76,6 +84,17 @@ func flyBackHigh(delta):
 		global_position.y = BOMB_DROP_HEIGHT
 		state = BOMBDROP
 		hurtBox.disabled = false
+		bombReady = true
+
+func updatePlayerLocation(loc):
+	playerLocation = loc
+
+func checkForPlayer():
+	if abs(playerLocation[0] - global_position.x) < 10:
+		var bomb = Bomb.instance()
+		get_parent().add_child(bomb)
+		bomb.global_position = global_position
+		bombReady = false
 
 func _on_HurtBox_area_entered(area):
 	var area_groups = area.get_groups()
