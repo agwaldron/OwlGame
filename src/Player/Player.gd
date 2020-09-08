@@ -209,11 +209,9 @@ func cast_ice():
 	iceSpike.global_position = global_position
 	if direction_vector.x < 0:
 		iceSpike.global_position.x -= iceSpike.sprite_horizontal_offset
-		iceSpike.animatedSprite.set_frame(0)
 		iceSpike.animatedSprite.play("Left")
 	else:
 		iceSpike.global_position.x += iceSpike.sprite_horizontal_offset
-		iceSpike.animatedSprite.set_frame(0)
 		iceSpike.animatedSprite.play("Right")
 	state = CAST_ICE
 
@@ -226,11 +224,9 @@ func cast_lightning():
 	lightning.global_position = global_position
 	if direction_vector.x < 0:
 		lightning.global_position.x -= lightning.sprite_horizontal_offset
-		lightning.animatedSprite.set_frame(0)
 		lightning.animatedSprite.play("Left")
 	else:
 		lightning.global_position.x += lightning.sprite_horizontal_offset
-		lightning.animatedSprite.set_frame(0)
 		lightning.animatedSprite.play("Right")
 	state = CAST_LIGHTNING
 
