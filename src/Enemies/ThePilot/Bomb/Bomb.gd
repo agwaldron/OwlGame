@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 export var SPEED = 600
 
-const BombExplsion = preload("res://src/Enemies/ThePilot/BombExplosion.tscn")
+const BombExplsion = preload("res://src/Enemies/ThePilot/Bomb/BombExplosion.tscn")
 
 var velocity = Vector2(0, SPEED)
 

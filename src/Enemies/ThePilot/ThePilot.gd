@@ -15,7 +15,7 @@ enum {
 	FLYBACKHIGH
 }
 
-const Bomb = preload("res://src/Enemies/ThePilot/Bomb.tscn")
+const Bomb = preload("res://src/Enemies/ThePilot/Bomb/Bomb.tscn")
 
 onready var animatedSprite = $AnimatedSprite
 onready var stats = $EnemyStats
