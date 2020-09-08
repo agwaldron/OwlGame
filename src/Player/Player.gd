@@ -185,7 +185,7 @@ func jump_action():
 	state = AIR
 
 func cast_fire():
-	velocity = Vector2.ZERO #feels clunky, needs work
+	velocity[0] = 0
 	play_cast_animation()
 	var fireBall = FireBall.instance()
 	get_parent().add_child(fireBall)

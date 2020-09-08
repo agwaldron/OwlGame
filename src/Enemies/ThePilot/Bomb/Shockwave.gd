@@ -4,7 +4,7 @@ export var SPEED = 800
 
 onready var sprite = $Sprite
 onready var sprite_vertical_offset = 40
-onready var sprite_horizontal_offset = 40
+onready var sprite_horizontal_offset = 30
 
 var velocity = Vector2.ZERO
 
