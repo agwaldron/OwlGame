@@ -10,6 +10,7 @@ func _process(delta):
 	velocity = move_and_slide(velocity)
 
 func explode():
+	get_tree().call_group("camera", "bomb_explode")
 	var bombExplosion = BombExplsion.instance()
 	get_parent().add_child(bombExplosion)
 	bombExplosion.global_position = global_position
