@@ -15,6 +15,7 @@ enum {
 	RUN,
 	DASH,
 	AIR,
+	FREEFALL,
 	CAST_FIRE,
 	CAST_ICE,
 	CAST_LIGHTNING
@@ -33,6 +34,7 @@ onready var castRightColBox = $CastRightCollisionShape
 onready var castRightHurtBox = $CastRightHurtBox/CollisionShape2D
 onready var dashHurtBox = $DashHurtBox/CollisionShape2D
 onready var dashColBox = $DashCollisionShape
+onready var freeFallColBox = $FreeFallCollisionShape
 onready var idleLeftColBox = $IdelLeftCollisionShape
 onready var idleLeftHurtBox = $IdleLeftHurtBox/CollisionShape2D
 onready var idleRightColBox = $IdleRightCollisionShape
@@ -56,7 +58,7 @@ var hurtBoxes
 var colBoxes
 
 func _ready():
-	colBoxes = [airColBox, castLeftColBox, castRightColBox, dashColBox, 
+	colBoxes = [airColBox, castLeftColBox, castRightColBox, dashColBox, freeFallColBox,
 				idleLeftColBox, idleRightColBox, runLeftColBox, runRightColBox]
 	hurtBoxes = [airHurtBox, castLeftHurtBox, castRightHurtBox, dashHurtBox, 
 				idleLeftHurtBox, idleRightHurtBox, runLeftHurtBox, runRightHurtBox]
@@ -78,6 +80,8 @@ func _physics_process(delta):
 			dash_state(delta)
 		AIR:
 			air_state(delta)
+		FREEFALL:
+			free_fall_state(delta)
 		CAST_FIRE:
 			cast_fire_state(delta)
 		CAST_ICE:
@@ -151,6 +155,13 @@ func air_state(delta):
 	if is_on_floor():
 		state = RUN
 
+func free_fall_state(delta):
+	if is_on_floor():
+		immune_timer = immune_duration
+		state = RUN
+	else:
+		move(delta, true)
+
 func cast_fire_state(delta):
 	cast_timer -= (delta * 100)
 	if cast_timer <= 0:
@@ -184,8 +195,14 @@ func jump_action():
 	velocity.y = JUMP_SPEED
 	state = AIR
 
+func start_free_fall():
+	velocity = Vector2.ZERO
+	play_free_fall_animation()
+	state = FREEFALL
+	immune_timer = immune_duration
+
 func cast_fire():
-	velocity[0] = 0
+	velocity.x = 0
 	play_cast_animation()
 	var fireBall = FireBall.instance()
 	get_parent().add_child(fireBall)
@@ -279,6 +296,16 @@ func play_air_animation():
 	else:
 		animatedSprite.play("FallRight")
 
+func play_free_fall_animation():
+	disable_col_boxes()
+	disable_hurt_boxes()
+
+	freeFallColBox.disabled = false
+	if direction_vector.x < 0:
+		animatedSprite.play("FreeFallLeft")
+	else:
+		animatedSprite.play("FreeFallRight")
+
 func play_cast_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
@@ -315,7 +342,11 @@ func _on_HurtBox_area_entered(area):
 	if not immune:
 		health -= 1
 		get_tree().call_group("health_bar", "set_health", health)
-		immune = true
-		immune_timer = immune_duration
 		if health <= 0:
 			queue_free()
+		immune = true
+		immune_timer = immune_duration
+		if is_on_floor():
+			pass
+		else:
+			call_deferred("start_free_fall")

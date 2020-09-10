@@ -16,4 +16,4 @@ func explode():
 	queue_free()
 
 func _on_HitBox_body_entered(body):
-	explode()
+	call_deferred("explode")
