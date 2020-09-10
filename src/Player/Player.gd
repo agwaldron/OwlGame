@@ -16,6 +16,7 @@ enum {
 	DASH,
 	AIR,
 	FREEFALL,
+	GETUP,
 	CAST_FIRE,
 	CAST_ICE,
 	CAST_LIGHTNING
@@ -53,6 +54,7 @@ var velocity = Vector2.ZERO
 var direction_vector = Vector2.RIGHT
 var dash_timer = 0
 var cast_timer = 0
+var animFinished = false
 
 var hurtBoxes
 var colBoxes
@@ -82,6 +84,8 @@ func _physics_process(delta):
 			air_state(delta)
 		FREEFALL:
 			free_fall_state(delta)
+		GETUP:
+			get_up_state(delta)
 		CAST_FIRE:
 			cast_fire_state(delta)
 		CAST_ICE:
@@ -157,10 +161,15 @@ func air_state(delta):
 
 func free_fall_state(delta):
 	if is_on_floor():
-		immune_timer = immune_duration
-		state = RUN
+		start_getting_up()
 	else:
 		move(delta, true)
+
+func get_up_state(delta):
+	if animFinished:
+		play_idle_animation()
+		immune_timer = immune_duration
+		state = RUN
 
 func cast_fire_state(delta):
 	cast_timer -= (delta * 100)
@@ -196,10 +205,18 @@ func jump_action():
 	state = AIR
 
 func start_free_fall():
+	immune = true
+	immune_timer = immune_duration
 	velocity = Vector2.ZERO
 	play_free_fall_animation()
 	state = FREEFALL
+
+func start_getting_up():
+	immune = true
 	immune_timer = immune_duration
+	velocity = Vector2.ZERO
+	play_getting_up_animation()
+	state = GETUP
 
 func cast_fire():
 	velocity.x = 0
@@ -306,6 +323,18 @@ func play_free_fall_animation():
 	else:
 		animatedSprite.play("FreeFallRight")
 
+func play_getting_up_animation():
+	disable_col_boxes()
+	disable_hurt_boxes()
+
+	animFinished = false
+	if direction_vector.x < 0:
+		idleRightColBox.disabled = false
+		animatedSprite.play("GetUpLeft")
+	else:
+		idleRightColBox.disabled = false
+		animatedSprite.play("GetUpRight")
+
 func play_cast_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
@@ -344,9 +373,10 @@ func _on_HurtBox_area_entered(area):
 		get_tree().call_group("health_bar", "set_health", health)
 		if health <= 0:
 			queue_free()
-		immune = true
-		immune_timer = immune_duration
 		if is_on_floor():
-			pass
+			call_deferred("start_getting_up")
 		else:
 			call_deferred("start_free_fall")
+
+func _on_AnimatedSprite_animation_finished():
+	animFinished = true
