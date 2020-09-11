@@ -4,7 +4,7 @@ var playerHitShake = 5.0
 var playerHitTimer = 20
 
 var bombDropShake = 15.0
-var bombDropTimer = 40
+var bombDropTimer = 35
 
 var shakeAmount
 var shakeTimer = 0

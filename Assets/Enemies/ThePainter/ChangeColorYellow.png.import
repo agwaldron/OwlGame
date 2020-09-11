@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/FirstAttempt.png-f69303631eddf80ebe74f4963e15f6d1.stex"
+path="res://.import/ChangeColorYellow.png-d97132a1f2dfba0ed86e2f1fc9b38715.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemies/ThePainter/FirstAttempt.png"
-dest_files=[ "res://.import/FirstAttempt.png-f69303631eddf80ebe74f4963e15f6d1.stex" ]
+source_file="res://Assets/Enemies/ThePainter/ChangeColorYellow.png"
+dest_files=[ "res://.import/ChangeColorYellow.png-d97132a1f2dfba0ed86e2f1fc9b38715.stex" ]
 
 [params]
 
