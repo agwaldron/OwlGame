@@ -1,0 +1,62 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://src/CollisionTemplates/HitBox.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Enemies/ThePainter/RedBall.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Enemies/ThePainter/BlueBall.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Enemies/ThePainter/YellowBall.png" type="Texture" id=4]
+[ext_resource path="res://src/Enemies/ThePainter/Paints/PaintBall.gd" type="Script" id=5]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 1 ) ],
+"loop": true,
+"name": "Yellow",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 2 ) ],
+"loop": true,
+"name": "Blue",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 3 ) ],
+"loop": true,
+"name": "Red",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=5]
+radius = 14.8487
+
+[node name="PaintBall" type="KinematicBody2D"]
+collision_layer = 16
+collision_mask = 3
+script = ExtResource( 5 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 4 )
+animation = "Yellow"
+
+[node name="HitBox" parent="." instance=ExtResource( 1 )]
+collision_layer = 16
+collision_mask = 3
+
+[node name="CollisionShape2D" parent="HitBox" index="0"]
+shape = SubResource( 5 )
+[connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]
+
+[editable path="HitBox"]

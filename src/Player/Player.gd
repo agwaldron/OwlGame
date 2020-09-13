@@ -362,6 +362,7 @@ func play_dash_animation():
 func move(delta, grav):
 	if grav:
 		velocity.y += GRAVITY_ACCELERATION * delta
+		velocity.y = min(velocity.y, MAX_FALL_SPEED)
 	else:
 		velocity.y = 0
 	velocity = move_and_slide(velocity, Vector2.UP)

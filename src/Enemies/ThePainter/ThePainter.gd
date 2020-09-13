@@ -9,6 +9,9 @@ enum {
 	YELLOW
 }
 
+const PaitBall = preload("res://src/Enemies/ThePainter/Paints/PaintBall.tscn")
+const PaitBlob = preload("res://src/Enemies/ThePainter/Paints/PaintBlob.tscn")
+
 onready var animatedSprite = $AnimatedSprite
 onready var stats = $EnemyStats
 
@@ -17,9 +20,24 @@ var changeTimer
 var attackTimer
 var attackFlag
 
+var blue_horizontal_speed0 = -200
+var blue_horizontal_speed1 = -400
+var blue_horizontal_speed2 = -600
+var blue_horizontal_speed3 = -800
+var blue_vertical_speed0 = -900
+var blue_vertical_speed1 = -1100
+var blue_vertical_speed2 = -1300
+var blue_vertical_speed3 = -1500
+var blue_offset_x = 50
+var blue_offset_y = 50
+var red_offset_x = 50
+var red_offset_y = 50
+var yellow_offset_x = 50
+var yellow_offset_y = 50
+
 func _ready():
 	stats.health = 15
-	state = RED
+	state = BLUE
 	attackFlag = true
 	changeTimer = CHANGE_COOLDOWN
 	attackTimer = ATTACK_COOLDOWN
@@ -42,16 +60,58 @@ func attack():
 	match state:
 		BLUE:
 			animatedSprite.play("AttackBlue")
+			blue_attack()
 		RED:
 			animatedSprite.play("AttackRed")
+			red_attack()
 		YELLOW:
 			animatedSprite.play("AttackYellow")
+			yellow_attack()
+
+func blue_attack():
+	var paintBall = PaitBall.instance()
+	get_parent().add_child(paintBall)
+	paintBall.global_position = global_position
+	paintBall.global_position.x -= blue_offset_x
+	paintBall.global_position.y -= blue_offset_y
+	paintBall.set_color("blue")
+	paintBall.velocity = Vector2(blue_horizontal_speed0, blue_vertical_speed0)
+
+	paintBall = PaitBall.instance()
+	get_parent().add_child(paintBall)
+	paintBall.global_position = global_position
+	paintBall.global_position.x -= blue_offset_x
+	paintBall.global_position.y -= blue_offset_y
+	paintBall.set_color("blue")
+	paintBall.velocity = Vector2(blue_horizontal_speed1, blue_vertical_speed1)
+
+	paintBall = PaitBall.instance()
+	get_parent().add_child(paintBall)
+	paintBall.global_position = global_position
+	paintBall.global_position.x -= blue_offset_x
+	paintBall.global_position.y -= blue_offset_y
+	paintBall.set_color("blue")
+	paintBall.velocity = Vector2(blue_horizontal_speed2, blue_vertical_speed2)
+
+	paintBall = PaitBall.instance()
+	get_parent().add_child(paintBall)
+	paintBall.global_position = global_position
+	paintBall.global_position.x -= blue_offset_x
+	paintBall.global_position.y -= blue_offset_y
+	paintBall.set_color("blue")
+	paintBall.velocity = Vector2(blue_horizontal_speed3, blue_vertical_speed3)
+
+func red_attack():
+	pass
+
+func yellow_attack():
+	pass
 
 func change_color():
 	match state:
 		BLUE:
 			animatedSprite.play("ChangeRed")
-			state = RED
+			state = BLUE
 		RED:
 			animatedSprite.play("ChangeYellow")
 			state = YELLOW
