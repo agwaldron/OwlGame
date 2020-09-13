@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/CollisionTemplates/HitBox.tscn" type="PackedScene" id=1]
+
+[node name="PaintBall" type="KinematicBody2D"]
+collision_layer = 16
+collision_mask = 3
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+
+[node name="HitBox" parent="." instance=ExtResource( 1 )]
+collision_layer = 16
+collision_mask = 3
+
+[editable path="HitBox"]

@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
-export var CHANGE_DURATION = 200
+export var CHANGE_COOLDOWN = 150
+export var ATTACK_COOLDOWN = 200
 
 enum {
 	BLUE,
@@ -11,18 +12,40 @@ enum {
 onready var animatedSprite = $AnimatedSprite
 onready var stats = $EnemyStats
 
-var state = RED
+var state
 var changeTimer
+var attackTimer
+var attackFlag
 
 func _ready():
 	stats.health = 15
-	changeTimer = CHANGE_DURATION
+	state = RED
+	attackFlag = true
+	changeTimer = CHANGE_COOLDOWN
+	attackTimer = ATTACK_COOLDOWN
 
 func _process(delta):
-	changeTimer -= (delta * 100)
-	if changeTimer <= 0:
-		change_color()
-		changeTimer = CHANGE_DURATION
+	if attackFlag:
+		attackTimer -= (delta * 100)
+		if attackTimer <= 0:
+			attack()
+			changeTimer = CHANGE_COOLDOWN
+			attackFlag = false
+	else:
+		changeTimer -= (delta * 100)
+		if changeTimer <= 0:
+			change_color()
+			attackTimer = ATTACK_COOLDOWN
+			attackFlag = true
+
+func attack():
+	match state:
+		BLUE:
+			animatedSprite.play("AttackBlue")
+		RED:
+			animatedSprite.play("AttackRed")
+		YELLOW:
+			animatedSprite.play("AttackYellow")
 
 func change_color():
 	match state:
