@@ -3,13 +3,16 @@ extends KinematicBody2D
 onready var animatedSprite = $AnimatedSprite
 
 var velocity = Vector2.ZERO
-var gravityAcceleration = 2500
-var maxFallSpeed = 1500
+var gravityAcceleration = 0
+var maxFallSpeed = 1000
 
 func _process(delta):
-	velocity.y += gravityAcceleration * delta
-	velocity.y = min(velocity.y, maxFallSpeed)
-	velocity = move_and_slide(velocity)
+	if gravityAcceleration == 0:
+		velocity = move_and_slide(velocity)
+	else:
+		velocity.y += gravityAcceleration * delta
+		velocity.y = min(velocity.y, maxFallSpeed)
+		velocity = move_and_slide(velocity)
 
 func set_color(col):
 	match col:
