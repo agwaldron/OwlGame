@@ -24,7 +24,10 @@ onready var hurtBox = $HurtBox/CollisionShape2D
 var state
 var velocity = Vector2.ZERO
 var playerLocation
-var bombReady
+var bombOneReady
+var bombTwoReady
+var bombThreeReady
+var width
 
 func _ready():
 	stats.health = 15
@@ -33,7 +36,10 @@ func _ready():
 	global_position.x = POS_TURN_BACK_POINT
 	global_position.y = FLY_BY_HEIGHT
 	velocity.x = SPEED * -1
-	bombReady = false
+	bombOneReady = false
+	bombTwoReady = false
+	bombThreeReady = false
+	width = get_viewport().size.x
 
 func _process(delta):
 	match state:
@@ -57,15 +63,15 @@ func flyBy(delta):
 
 func bombDrop(delta):
 	velocity = move_and_slide(velocity)
-	if bombReady:
-		checkForPlayer()
+	#if bombReady:
+		#checkForPlayer()
+	checkForDropSite()
 	if global_position.x < NEG_TURN_BACK_POINT:
 		animatedSprite.play("PlaneFar")
 		velocity.x = SPEED
 		global_position.y = FLY_BACK_LOW_HEIGHT
 		state = FLYBACKLOW
 		hurtBox.disabled = true
-		bombReady = false
 
 func flyBackLow(delta):
 	velocity = move_and_slide(velocity)
@@ -84,7 +90,9 @@ func flyBackHigh(delta):
 		global_position.y = BOMB_DROP_HEIGHT
 		state = BOMBDROP
 		hurtBox.disabled = false
-		bombReady = true
+		bombOneReady = true
+		bombTwoReady = true
+		bombThreeReady = true
 
 func updatePlayerLocation(loc):
 	playerLocation = loc
@@ -94,7 +102,26 @@ func checkForPlayer():
 		var bomb = Bomb.instance()
 		get_parent().add_child(bomb)
 		bomb.global_position = global_position
-		bombReady = false
+		#bombReady = false
+
+func checkForDropSite():
+	if abs(global_position.x - width*3/4) < 10 and bombOneReady:
+		var bomb = Bomb.instance()
+		get_parent().add_child(bomb)
+		bomb.global_position = global_position
+		bombOneReady = false
+
+	if abs(global_position.x - width/2) < 10 and bombTwoReady:
+		var bomb = Bomb.instance()
+		get_parent().add_child(bomb)
+		bomb.global_position = global_position
+		bombTwoReady = false
+
+	if abs(global_position.x - width/4) < 10 and bombThreeReady:
+		var bomb = Bomb.instance()
+		get_parent().add_child(bomb)
+		bomb.global_position = global_position
+		bombThreeReady = false
 
 func _on_HurtBox_area_entered(area):
 	var area_groups = area.get_groups()
