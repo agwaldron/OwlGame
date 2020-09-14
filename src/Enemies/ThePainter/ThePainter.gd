@@ -1,9 +1,9 @@
 extends KinematicBody2D
 
 export var CHANGE_DURATION = 100
-export var BLUE_ATTACK_DURATION = 125
-export var RED_ATTACK_DURATION = 225
-export var YELLOW_ATTACK_DURATION = 150
+export var BLUE_ATTACK_DURATION = 160
+export var RED_ATTACK_DURATION = 275
+export var YELLOW_ATTACK_DURATION = 250
 
 enum {
 	BLUE,
@@ -21,6 +21,7 @@ var state
 var attackTimer
 var changeTimer
 var attackFlag
+var attackReady
 
 var blue_horizontal_speed0 = -200
 var blue_horizontal_speed1 = -400
@@ -38,7 +39,7 @@ var red_vertical_speed = -1500
 var red_offset_x = 10
 var red_offset_y = 150
 
-var yellow_horizontal_speed = -700
+var yellow_horizontal_speed = -600
 var yellow_vertical_speed = -500
 var yellow_offset_x = 50
 var yellow_offset_y = 75
@@ -46,35 +47,35 @@ var yellow_offset_y = 75
 func _ready():
 	stats.health = 15
 	state = BLUE
-	attackFlag = true
+	attackFlag = false
+	attackReady = false
 	changeTimer = CHANGE_DURATION
 
 func _process(delta):
 	if attackFlag:
+		attackTimer -= (delta * 100)
+		if attackReady and animatedSprite.frame == 3:
+			attack()
+		if attackTimer <= 0:
+			attackFlag = false
+			changeTimer = CHANGE_DURATION
+			change_color()
+	else:
 		changeTimer -= (delta * 100)
 		if changeTimer <= 0:
-			attack()
-			attackFlag = false
-	else:
-		attackTimer -= (delta * 100)
-		if attackTimer <= 0:
-			change_color()
 			attackFlag = true
+			attackReady = true
+			play_attack_animation()
 
 func attack():
+	attackReady = false
 	match state:
 		BLUE:
-			animatedSprite.play("AttackBlue")
 			blue_attack()
-			attackTimer = BLUE_ATTACK_DURATION
 		RED:
-			animatedSprite.play("AttackRed")
 			red_attack()
-			attackTimer = RED_ATTACK_DURATION
 		YELLOW:
-			animatedSprite.play("AttackYellow")
 			yellow_attack()
-			attackTimer = YELLOW_ATTACK_DURATION
 
 func blue_attack():
 	var paintBall = PaitBall.instance()
@@ -146,6 +147,18 @@ func change_color():
 			state = BLUE
 			changeTimer = CHANGE_DURATION
 
+func play_attack_animation():
+	match state:
+		BLUE:
+			animatedSprite.play("AttackBlue")
+			attackTimer = BLUE_ATTACK_DURATION
+		RED:
+			animatedSprite.play("AttackRed")
+			attackTimer = RED_ATTACK_DURATION
+		YELLOW:
+			animatedSprite.play("AttackYellow")
+			attackTimer = YELLOW_ATTACK_DURATION
+
 func play_idle_animation():
 	match state:
 		BLUE:
@@ -163,7 +176,6 @@ func _on_HurtBox_area_entered(area):
 
 func _on_EnemyStats_no_health():
 	queue_free()
-
 
 func _on_AnimatedSprite_animation_finished():
 	play_idle_animation()

@@ -41,16 +41,27 @@ var redRowFive = [
 
 var horizontalCenter
 var yellow_rad_offset = 25
-var yellow_speed = 800
-var yellowBlobs = [
-	[0, -1, 0, -1],
-	[sqrt(2.0)/2.0, -sqrt(2.0)/2.0, sqrt(2.0)/2.0, -sqrt(2.0)/2.0],
-	[1, 0, 1, 0],
-	[sqrt(2.0)/2.0, sqrt(2.0)/2.0, sqrt(2.0)/2.0, sqrt(2.0)/2.0],
-	[0, 1, 0, 1],
-	[-sqrt(2.0)/2.0, sqrt(2.0)/2.0, -sqrt(2.0)/2.0, sqrt(2.0)/2.0],
-	[-1, 0, -1, 0],
-	[-sqrt(2.0)/2.0, -sqrt(2.0)/2.0, -sqrt(2.0)/2.0, -sqrt(2.0)/2.0]
+var yellow_outer_speed = 800
+var yellow_inner_speed = 400
+var yellowBlobsOuter = [
+	[0.0, -1.0],
+	[sqrt(2.0)/2.0, -sqrt(2.0)/2.0],
+	[1.0, 0.0],
+	[sqrt(2.0)/2.0, sqrt(2.0)/2.0],
+	[0.0, 1.0],
+	[-sqrt(2.0)/2.0, sqrt(2.0)/2.0],
+	[-1.0, 0.0],
+	[-sqrt(2.0)/2.0, -sqrt(2.0)/2.0]
+]
+var yellowBlobsInner = [
+	[0.5, -sqrt(3.0)/2.0],
+	[sqrt(3.0)/2.0, -0.5],
+	[0.5, sqrt(3.0)/2.0],
+	[sqrt(3.0)/2.0, 0.5],
+	[-0.5, sqrt(3.0)/2.0],
+	[-sqrt(3.0)/2.0, 0.5],
+	[-0.5, -sqrt(3.0)/2.0],
+	[-sqrt(3.0)/2.0, -0.5]
 ]
 
 func _ready():
@@ -111,14 +122,22 @@ func create_red_blobs():
 
 func create_yellow_blobs():
 	var paintBall
-	for pb in yellowBlobs:
+	for pb in yellowBlobsOuter:
 		paintBall = PaintBall.instance()
 		get_parent().add_child(paintBall)
 		paintBall.global_position.x = global_position.x + (pb[0] * yellow_rad_offset)
 		paintBall.global_position.y = global_position.y + (pb[1] * yellow_rad_offset)
 		paintBall.set_color("yellow")
-		paintBall.velocity = Vector2(pb[2]*yellow_speed, pb[3]*yellow_speed)
-	
+		paintBall.velocity = Vector2(pb[0]*yellow_outer_speed, pb[1]*yellow_outer_speed)
+
+	for pb in yellowBlobsInner:
+		paintBall = PaintBall.instance()
+		get_parent().add_child(paintBall)
+		paintBall.global_position.x = global_position.x + (pb[0] * yellow_rad_offset)
+		paintBall.global_position.y = global_position.y + (pb[1] * yellow_rad_offset)
+		paintBall.set_color("yellow")
+		paintBall.velocity = Vector2(pb[0]*yellow_inner_speed, pb[1]*yellow_inner_speed)
+
 	queue_free()
 
 func set_color(col):
