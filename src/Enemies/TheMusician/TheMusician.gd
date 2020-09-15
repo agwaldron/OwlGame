@@ -22,13 +22,13 @@ var rngen = RandomNumberGenerator.new()
 
 var start_tied_delay = 100
 var tied_middles_played = 0
-var max_tied_middles = 4
+var max_tied_middles = 5
 var time_between_tieds = 7
 var tied_place_marker = 0
 
 var eighths_played = 0
-var max_eighths = 3
-var time_between_eighths = 100
+var max_eighths = 5
+var time_between_eighths = 125
 
 var note_timer = 0
 
@@ -106,10 +106,9 @@ func eighth_state(delta):
 		if note_timer <= 0:
 			var eighthNote = EighthNote.instance()
 			get_parent().add_child(eighthNote)
-			eighthNote.global_position = global_position
-			eighthNote.global_position.x -= eighthNote.sprite_horizontal_offset
-			eighthNote.global_position.y -= eighthNote.sprite_vertical_offset
-			eighthNote.velocity.x = eighthNote.SPEED * -1
+			eighthNote.global_position.x = global_position.x - eighthNote.sprite_horizontal_offset
+			eighthNote.global_position.y = rand_range(eighthNote.max_height, eighthNote.min_height)
+			eighthNote.velocity = Vector2(eighthNote.HORIZONTAL_SPEED, eighthNote.VERTICAL_SPEED)
 			eighths_played += 1
 			note_timer = time_between_eighths
 	else:
