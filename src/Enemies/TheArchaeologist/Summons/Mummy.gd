@@ -1,19 +1,22 @@
 extends KinematicBody2D
 
-export var SHUFFLE_SPEED = 100
+export var SHUFFLE_SPEED = 200
 
 onready var animatedSprite = $AnimatedSprite
 onready var stats = $EnemyStats
 
 var velocity = Vector2.ZERO
 var movingLeft
+var turning
 var turnAroundLeft = 200
-var turnAroundRight = 1400
+var turnAroundRight = 1000
 
 func _ready():
 	stats.health = 2
 	movingLeft = true
+	turning = false
 	velocity.x = -SHUFFLE_SPEED
+	animatedSprite.play("ShuffleLeft")
 
 func _process(delta):
 	if global_position.x < turnAroundLeft or global_position.x > turnAroundRight:
@@ -21,14 +24,15 @@ func _process(delta):
 	velocity = move_and_slide(velocity)
 
 func turn_around():
+	turning = true
 	if movingLeft:
-		animatedSprite.play("ShuffleRight")
-		velocity.x = SHUFFLE_SPEED
-		movingLeft = false
+		animatedSprite.play("TurnLeft")
+		animatedSprite.set_frame(0)
+		global_position.x = turnAroundLeft + 5
 	else:
-		animatedSprite.play("ShuffleLeft")
-		velocity.x = -SHUFFLE_SPEED
-		movingLeft = true
+		animatedSprite.play("TurnRight")
+		animatedSprite.set_frame(0)
+		global_position.x = turnAroundRight - 5
 
 func _on_HurtBox_area_entered(area):
 	var areaGroups = area.get_groups()
@@ -38,3 +42,24 @@ func _on_HurtBox_area_entered(area):
 
 func _on_EnemyStats_no_health():
 	queue_free()
+
+func _on_AnimatedSprite_frame_changed():
+	if animatedSprite.get_frame() == 0:
+		velocity.x = 0
+	elif animatedSprite.get_frame() == 4:
+		if movingLeft:
+			velocity.x = -SHUFFLE_SPEED
+		else:
+			velocity.x = SHUFFLE_SPEED
+
+func _on_AnimatedSprite_animation_finished():
+	if turning:
+		turning = false
+		if movingLeft:
+			animatedSprite.play("ShuffleRight")
+			animatedSprite.set_frame(0)
+			movingLeft = false
+		else:
+			animatedSprite.play("ShuffleLeft")
+			animatedSprite.set_frame(0)
+			movingLeft = true
