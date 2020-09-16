@@ -175,6 +175,7 @@ script = ExtResource( 5 )
 position = Vector2( 0, 13.6225 )
 shape = SubResource( 25 )
 disabled = true
+[connection signal="frame_changed" from="AnimatedSprite" to="." method="_on_AnimatedSprite_frame_changed"]
 
 [editable path="Cloud"]
 

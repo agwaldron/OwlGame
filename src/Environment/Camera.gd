@@ -10,7 +10,7 @@ var lightningBoltShake = 7.0
 var lightningBoltTimer = 30
 
 var bombDropShake = 15.0
-var bombDropTimer = 35
+var bombDropTimer = 30
 
 var shakeAmount
 var shakeTimer = 0

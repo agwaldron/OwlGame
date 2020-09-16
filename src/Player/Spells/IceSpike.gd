@@ -15,9 +15,6 @@ func _ready():
 
 func _process(delta):
 	cast_timer -= (delta * 100)
-	if animatedSprite.get_frame() == 3 and not shtr:
-		get_tree().call_group("camera", "ice_spike")
-		hitBox.disabled = false
 	if cast_timer <= 0:
 		shatter()
 
@@ -35,3 +32,8 @@ func shatter():
 func _on_AnimatedSprite_animation_finished():
 	if shtr:
 		queue_free()
+
+func _on_AnimatedSprite_frame_changed():
+	if animatedSprite.get_frame() == 3 and not shtr:
+		get_tree().call_group("camera", "ice_spike")
+		hitBox.disabled = false

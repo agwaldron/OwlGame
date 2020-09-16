@@ -14,22 +14,6 @@ func _ready():
 	animatedSprite.play("Explode")
 	animatedSprite.set_frame(0)
 
-func _process(delta):
-	if animatedSprite.get_frame() == 1 and smallHitBox.disabled:
-		smallHitBox.disabled = false
-	elif animatedSprite.get_frame() == 2 and mediumHitBox.disabled:
-		mediumHitBox.disabled = false
-	elif animatedSprite.get_frame() == 3 and largeHitBox.disabled:
-		createShockwaves()
-		largeHitBox.disabled = false
-	elif animatedSprite.get_frame() == 7 and not largeHitBox.disabled:
-		get_tree().call_group("Shockwave", "fire")
-		largeHitBox.disabled = true
-	elif animatedSprite.get_frame() == 8 and not mediumHitBox.disabled:
-		mediumHitBox.disabled = true
-	elif animatedSprite.get_frame() == 9 and not smallHitBox.disabled:
-		smallHitBox.disabled = true
-
 func createShockwaves():
 	leftShockwave = Shockwave.instance()
 	get_parent().add_child(leftShockwave)
@@ -47,3 +31,19 @@ func createShockwaves():
 
 func _on_AnimatedSprite_animation_finished():
 	queue_free()
+
+func _on_AnimatedSprite_frame_changed():
+	if animatedSprite.get_frame() == 1:
+		smallHitBox.disabled = false
+	elif animatedSprite.get_frame() == 2:
+		mediumHitBox.disabled = false
+	elif animatedSprite.get_frame() == 3:
+		createShockwaves()
+		largeHitBox.disabled = false
+	elif animatedSprite.get_frame() == 7:
+		get_tree().call_group("Shockwave", "fire")
+		largeHitBox.disabled = true
+	elif animatedSprite.get_frame() == 8:
+		mediumHitBox.disabled = true
+	elif animatedSprite.get_frame() == 9:
+		smallHitBox.disabled = true
