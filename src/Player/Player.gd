@@ -372,7 +372,7 @@ func move(delta, grav):
 
 func _on_HurtBox_area_entered(area):
 	if not immune:
-		get_tree().call_group("concentration_spell", "spell_interrupt")
+		get_tree().call_group("ConcentrationSpell", "spell_interrupt")
 		get_tree().call_group("camera", "player_hit")
 		health -= 1
 		get_tree().call_group("health_bar", "set_health", health)

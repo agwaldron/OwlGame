@@ -15,7 +15,6 @@ func _process(delta):
 	velocity = move_and_slide(velocity)
 
 func explode():
-	col = true
 	if velocity.x < 0:
 		animatedSprite.play("ExplodeLeft")
 		animatedSprite.set_frame(0)

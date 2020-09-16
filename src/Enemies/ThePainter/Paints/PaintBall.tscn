@@ -8,12 +8,12 @@
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
-atlas = ExtResource( 4 )
+atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
-atlas = ExtResource( 3 )
+atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=3]
@@ -25,12 +25,12 @@ region = Rect2( 0, 0, 32, 32 )
 animations = [ {
 "frames": [ SubResource( 1 ) ],
 "loop": true,
-"name": "Yellow",
+"name": "Blue",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 2 ) ],
 "loop": true,
-"name": "Blue",
+"name": "Yellow",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 3 ) ],
@@ -57,6 +57,7 @@ collision_mask = 3
 
 [node name="CollisionShape2D" parent="HitBox" index="0"]
 shape = SubResource( 5 )
+[connection signal="area_entered" from="HitBox" to="." method="_on_HitBox_area_entered"]
 [connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]
 
 [editable path="HitBox"]
