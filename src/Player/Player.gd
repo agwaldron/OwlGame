@@ -232,6 +232,7 @@ func cast_fire():
 		fireBall.animatedSprite.play("Left")
 	else:
 		fireBall.global_position.x += fireBall.sprite_horizontal_offset
+		fireBall.animatedSprite.play("Right")
 	state = CAST_FIRE
 
 func cast_ice():
@@ -247,6 +248,7 @@ func cast_ice():
 	else:
 		iceSpike.global_position.x += iceSpike.sprite_horizontal_offset
 		iceSpike.animatedSprite.play("Right")
+		iceSpike.left = false
 	state = CAST_ICE
 
 func cast_lightning():
@@ -370,6 +372,7 @@ func move(delta, grav):
 
 func _on_HurtBox_area_entered(area):
 	if not immune:
+		get_tree().call_group("concentration_spell", "spell_interrupt")
 		get_tree().call_group("camera", "player_hit")
 		health -= 1
 		get_tree().call_group("health_bar", "set_health", health)

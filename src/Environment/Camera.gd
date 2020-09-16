@@ -3,6 +3,12 @@ extends Camera2D
 var playerHitShake = 5.0
 var playerHitTimer = 20
 
+var iceSpikeShake = 3.0
+var iceSpikeTimer = 20
+
+var lightningBoltShake = 7.0
+var lightningBoltTimer = 30
+
 var bombDropShake = 15.0
 var bombDropTimer = 35
 
@@ -22,6 +28,14 @@ func _process(delta):
 func player_hit():
 	shakeAmount = playerHitShake
 	shakeTimer = playerHitTimer
+
+func ice_spike():
+	shakeAmount = iceSpikeShake
+	shakeTimer = iceSpikeTimer
+
+func lightning_strike():
+	shakeAmount = lightningBoltShake
+	shakeTimer = lightningBoltTimer
 
 func bomb_explode():
 	shakeAmount = bombDropShake

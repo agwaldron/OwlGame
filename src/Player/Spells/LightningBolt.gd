@@ -13,6 +13,10 @@ func _ready():
 func _process(delta):
 	cast_timer -= (delta * 100)
 	if animatedSprite.get_frame() == 5:
+		get_tree().call_group("camera", "lightning_strike")
 		boltHitBox.disabled = false
 	if cast_timer <= 0:
 		queue_free()
+
+func spell_interrupt():
+	queue_free()
