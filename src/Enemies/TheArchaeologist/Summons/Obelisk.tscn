@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=36 format=2]
 
 [ext_resource path="res://Assets/Enemies/TheArchaeologist/Obelisk.png" type="Texture" id=1]
 [ext_resource path="res://src/CollisionTemplates/HitBox.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/Enemies/TheArchaeologist/ObeliskCrumble.png" type="Texture" id=3]
 [ext_resource path="res://src/Enemies/TheArchaeologist/Summons/Obelisk.gd" type="Script" id=4]
+[ext_resource path="res://Assets/Enemies/TheArchaeologist/ObeliskGrowing.png" type="Texture" id=5]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -40,7 +41,92 @@ flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 1280, 0, 256, 256 )
 
-[sub_resource type="SpriteFrames" id=8]
+[sub_resource type="AtlasTexture" id=27]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=28]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 256, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=29]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 512, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=30]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 768, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=31]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 1024, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=32]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 1280, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=33]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 1536, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=34]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 1792, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=35]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 2048, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=36]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 2304, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=37]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 2560, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=38]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 2816, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=39]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 3072, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=40]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 3328, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=41]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 3584, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=42]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 3840, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=43]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 4096, 0, 256, 256 )
+
+[sub_resource type="SpriteFrames" id=21]
 animations = [ {
 "frames": [ SubResource( 1 ) ],
 "loop": true,
@@ -51,12 +137,26 @@ animations = [ {
 "loop": false,
 "name": "Crumble",
 "speed": 10.0
+}, {
+"frames": [ SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ), SubResource( 35 ), SubResource( 36 ), SubResource( 37 ), SubResource( 38 ), SubResource( 39 ), SubResource( 40 ), SubResource( 41 ), SubResource( 42 ), SubResource( 43 ) ],
+"loop": false,
+"name": "Summon",
+"speed": 10.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=9]
+[sub_resource type="RectangleShape2D" id=22]
 extents = Vector2( 58.5695, 13.0654 )
 
-[sub_resource type="RectangleShape2D" id=10]
+[sub_resource type="RectangleShape2D" id=24]
+extents = Vector2( 24.9735, 42.4069 )
+
+[sub_resource type="RectangleShape2D" id=25]
+extents = Vector2( 25.667, 67.928 )
+
+[sub_resource type="RectangleShape2D" id=26]
+extents = Vector2( 25.2193, 91.5409 )
+
+[sub_resource type="RectangleShape2D" id=23]
 extents = Vector2( 24.9846, 109.737 )
 
 [node name="Obelisk" type="KinematicBody2D" groups=[
@@ -68,9 +168,9 @@ script = ExtResource( 4 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -127.368 )
-frames = SubResource( 8 )
-animation = "Obelisk"
-playing = true
+frames = SubResource( 21 )
+animation = "Summon"
+frame = 13
 
 [node name="Base" parent="." instance=ExtResource( 2 )]
 collision_layer = 16
@@ -78,16 +178,53 @@ collision_mask = 0
 
 [node name="CollisionShape2D" parent="Base" index="0"]
 position = Vector2( 0, -12.2635 )
-shape = SubResource( 9 )
+shape = SubResource( 22 )
+disabled = true
 
-[node name="Pillar" parent="." instance=ExtResource( 2 )]
+[node name="QuarterPillar" parent="." instance=ExtResource( 2 )]
 collision_layer = 16
 collision_mask = 0
 
-[node name="CollisionShape2D" parent="Pillar" index="0"]
+[node name="CollisionShape2D" parent="QuarterPillar" index="0"]
+position = Vector2( 0, -43.0664 )
+shape = SubResource( 24 )
+disabled = true
+
+[node name="HalfPillar" parent="." instance=ExtResource( 2 )]
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape2D" parent="HalfPillar" index="0"]
+position = Vector2( 0, -68.3047 )
+shape = SubResource( 25 )
+disabled = true
+
+[node name="ThreeFourPillar" parent="." instance=ExtResource( 2 )]
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape2D" parent="ThreeFourPillar" index="0"]
+position = Vector2( 0, -91.6829 )
+shape = SubResource( 26 )
+disabled = true
+
+[node name="FullPillar" parent="." instance=ExtResource( 2 )]
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape2D" parent="FullPillar" index="0"]
 position = Vector2( 0, -137.33 )
-shape = SubResource( 10 )
+shape = SubResource( 23 )
+disabled = true
+[connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
+[connection signal="frame_changed" from="AnimatedSprite" to="." method="_on_AnimatedSprite_frame_changed"]
 
 [editable path="Base"]
 
-[editable path="Pillar"]
+[editable path="QuarterPillar"]
+
+[editable path="HalfPillar"]
+
+[editable path="ThreeFourPillar"]
+
+[editable path="FullPillar"]

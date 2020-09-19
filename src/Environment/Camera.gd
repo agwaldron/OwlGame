@@ -12,6 +12,11 @@ var lightningBoltTimer = 30
 var bombDropShake = 15.0
 var bombDropTimer = 30
 
+var obeliskGrowingShake = 8.0
+var obeliskGrowingTimer = 1000
+var obeliskDoneShake = 5.5
+var obeliskDoneTimer = 20
+
 var shakeAmount
 var shakeTimer = 0
 
@@ -40,3 +45,11 @@ func lightning_strike():
 func bomb_explode():
 	shakeAmount = bombDropShake
 	shakeTimer = bombDropTimer
+
+func obelisk_growing():
+	shakeAmount = obeliskGrowingShake
+	shakeTimer = obeliskGrowingTimer
+
+func obelisk_stop():
+	shakeAmount = obeliskDoneShake
+	shakeTimer = obeliskDoneTimer
