@@ -1,3 +1,110 @@
-[gd_scene format=2]
+[gd_scene load_steps=20 format=2]
+
+[ext_resource path="res://src/Enemies/EnemyStats.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Enemies/TheArchaeologist/ArchaeologistIdle.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Enemies/TheArchaeologist/ArchaeologistSummon.png" type="Texture" id=3]
+[ext_resource path="res://src/Enemies/TheArchaeologist/The Archaeologist.gd" type="Script" id=4]
+[ext_resource path="res://src/CollisionTemplates/HurtBox.tscn" type="PackedScene" id=5]
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=4]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=5]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=6]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=7]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=8]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=9]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 768, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=10]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 896, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=11]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 1024, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=12]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 1152, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=13]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 1280, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ) ],
+"loop": false,
+"name": "Summon",
+"speed": 12.0
+}, {
+"frames": [ SubResource( 1 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=14]
+extents = Vector2( 39.4432, 54.1167 )
 
 [node name="The Archaeologist" type="KinematicBody2D"]
+collision_layer = 8
+collision_mask = 4
+script = ExtResource( 4 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0, -64.1902 )
+frames = SubResource( 2 )
+animation = "Summon"
+frame = 10
+playing = true
+
+[node name="HurtBox" parent="." instance=ExtResource( 5 )]
+collision_layer = 8
+collision_mask = 4
+
+[node name="CollisionShape2D" parent="HurtBox" index="0"]
+position = Vector2( 0, -54.6769 )
+shape = SubResource( 14 )
+
+[node name="EnemyStats" parent="." instance=ExtResource( 1 )]
+[connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
+[connection signal="area_entered" from="HurtBox" to="." method="_on_HurtBox_area_entered"]
+[connection signal="no_health" from="EnemyStats" to="." method="_on_EnemyStats_no_health"]
+
+[editable path="HurtBox"]
