@@ -5,6 +5,7 @@ export var SPEED = -600
 onready var animatedSprite = $AnimatedSprite
 onready var hitBox = $HitBox/CollisionShape2D
 
+var sprite_horizontal_offset = 100
 var velocity
 var moving
 
@@ -24,4 +25,5 @@ func _on_AnimatedSprite_animation_finished():
 		animatedSprite.play("Moving")
 
 func _on_HitBox_body_entered(body):
+	get_tree().call_group("archaeologist", "summon_complete")
 	queue_free()
