@@ -16,17 +16,20 @@ onready var animatedSprite = $AnimatedSprite
 onready var stats = $EnemyStats
 
 var state
-var width
 var horizontalCenter
 var summoningTimer
 var rngen = RandomNumberGenerator.new()
+
+var obeliskxpos1 = 150
+var obeliskxpos2 = 425
+var obeliskxpos3 = 700
+var obeliskxpos4 = 975
 
 func _ready():
 	animatedSprite.play("Idle")
 	stats.health = 15
 	state = PREP
-	width = get_viewport().size.x
-	horizontalCenter = width/2
+	horizontalCenter = get_viewport().size.x/2
 	summoningTimer = SUMMONING_COOLDOWN
 	rngen.randomize()
 
@@ -53,33 +56,33 @@ func summon_mummies():
 	var circle = SummoningCircle.instance()
 	get_parent().add_child(circle)
 	circle.global_position = global_position
-	circle.global_position.x = rngen.randf_range(horizontalCenter/2, horizontalCenter)
+	circle.global_position.x = rand_range(obeliskxpos1, obeliskxpos2)
 
 	circle = SummoningCircle.instance()
 	get_parent().add_child(circle)
 	circle.global_position = global_position
-	circle.global_position.x = rngen.randf_range(horizontalCenter, (horizontalCenter*3)/4)
+	circle.global_position.x = rand_range(obeliskxpos3, obeliskxpos4)
 
 func summon_obelisks():
 	var obelisk = Obelisk.instance()
 	get_parent().add_child(obelisk)
 	obelisk.global_position = global_position
-	obelisk.global_position.x = width/8
+	obelisk.global_position.x = obeliskxpos1
 
 	obelisk = Obelisk.instance()
 	get_parent().add_child(obelisk)
 	obelisk.global_position = global_position
-	obelisk.global_position.x = (width*3)/8
+	obelisk.global_position.x = obeliskxpos2
 
 	obelisk = Obelisk.instance()
 	get_parent().add_child(obelisk)
 	obelisk.global_position = global_position
-	obelisk.global_position.x = (width*5)/8
+	obelisk.global_position.x = obeliskxpos3
 
 	obelisk = Obelisk.instance()
 	get_parent().add_child(obelisk)
 	obelisk.global_position = global_position
-	obelisk.global_position.x = (width*6)/8
+	obelisk.global_position.x = obeliskxpos4
 
 func summon_sandnado():
 	var sandnado = Sandnado.instance()
