@@ -19,12 +19,14 @@ enum {
 	FREEFALL,
 	GETUP,
 	CAST_FIRE,
-	CAST_ICE,
+	CAST_ICE_SPIKE,
+	CAST_ICE_ARROW,
 	CAST_LIGHTNING
 }
 
 const FireBall = preload("res://src/Player/Spells/FireBall.tscn")
 const IceSpike = preload("res://src/Player/Spells/IceSpike.tscn")
+const IceBow = preload("res://src/Player/Spells/IceBow.tscn")
 const Lightning = preload("res://src/Player/Spells/LightningBolt.tscn")
 
 onready var animatedSprite = $AnimatedSprite
@@ -91,8 +93,10 @@ func _physics_process(delta):
 			get_up_state(delta)
 		CAST_FIRE:
 			cast_fire_state(delta)
-		CAST_ICE:
-			cast_ice_state(delta)
+		CAST_ICE_SPIKE:
+			cast_ice_spike_state(delta)
+		CAST_ICE_ARROW:
+			cast_ice_arrow_state(delta)
 		CAST_LIGHTNING:
 			cast_lightning_state(delta)
 
@@ -121,7 +125,10 @@ func run_state(delta):
 		cast_fire()
 
 	if Input.is_action_just_pressed("icespike") and is_on_floor():
-		cast_ice()
+		cast_ice_spike()
+
+	if Input.is_action_just_pressed("icearrow") and is_on_floor():
+		cast_ice_arrow()
 
 	if Input.is_action_just_pressed("lightning") and is_on_floor():
 		cast_lightning()
@@ -186,10 +193,18 @@ func cast_fire_state(delta):
 	else:
 		move(delta, true)
 
-func cast_ice_state(delta):
+func cast_ice_spike_state(delta):
 	cast_timer -= (delta * 100)
 	if cast_timer <= 0:
 		cast_timer = 0
+		state = RUN
+
+func ice_arrow_released():
+	state = RUN
+
+func cast_ice_arrow_state(delta):
+	if Input.is_action_just_released("icearrow"):
+		get_tree().call_group("ConcentrationSpell", "spell_interrupt")
 		state = RUN
 
 func cast_lightning_state(delta):
@@ -240,7 +255,7 @@ func cast_fire():
 		fireBall.animatedSprite.play("Right")
 	state = CAST_FIRE
 
-func cast_ice():
+func cast_ice_spike():
 	velocity = Vector2.ZERO
 	play_cast_animation()
 	var iceSpike = IceSpike.instance()
@@ -254,7 +269,22 @@ func cast_ice():
 		iceSpike.global_position.x += iceSpike.sprite_horizontal_offset
 		iceSpike.animatedSprite.play("Right")
 		iceSpike.left = false
-	state = CAST_ICE
+	state = CAST_ICE_SPIKE
+
+func cast_ice_arrow():
+	velocity = Vector2.ZERO
+	play_cast_animation()
+	var iceBow = IceBow.instance()
+	get_parent().add_child(iceBow)
+	iceBow.global_position = global_position
+	iceBow.global_position.y -= iceBow.sprite_vertical_offset
+	if direction_vector.x < 0:
+		iceBow.global_position.x -= iceBow.sprite_horizontal_offset
+		iceBow.face_left()
+	else:
+		iceBow.global_position.x += iceBow.sprite_horizontal_offset
+		iceBow.face_right()
+	state = CAST_ICE_ARROW
 
 func cast_lightning():
 	velocity = Vector2.ZERO
