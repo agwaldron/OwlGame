@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/PlayerSpriteBackup.png-31a09bc5b15aca9cd8451cf3ca5e5857.stex"
+path="res://.import/IceArrow.png-387d172bf6cd33703a080e06d22553bc.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Player/PlayerSpriteBackup.png"
-dest_files=[ "res://.import/PlayerSpriteBackup.png-31a09bc5b15aca9cd8451cf3ca5e5857.stex" ]
+source_file="res://Assets/Player/IceArrow.png"
+dest_files=[ "res://.import/IceArrow.png-387d172bf6cd33703a080e06d22553bc.stex" ]
 
 [params]
 

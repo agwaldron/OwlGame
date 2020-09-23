@@ -10,6 +10,7 @@ export var MAX_RUN_SPEED = 300
 export var FRICTION = 700
 export var DASH_SPEED = 800
 export var DASH_DURATION = 25
+export var DASH_COOLDOWN = 35
 
 enum {
 	RUN,
@@ -53,6 +54,7 @@ var state = RUN
 var velocity = Vector2.ZERO
 var direction_vector = Vector2.RIGHT
 var dash_timer = 0
+var dash_cool_down_timer = 0
 var cast_timer = 0
 var animFinished = false
 
@@ -70,6 +72,7 @@ func _ready():
 	get_tree().call_group("health_bar", "set_max", health)
 
 func _physics_process(delta):
+	dash_cool_down_timer -= (delta * 100)
 	if immune:
 		immune_timer -= (delta * 100)
 		if immune_timer <= 0:
@@ -126,6 +129,7 @@ func run_state(delta):
 func dash_state(delta):
 	dash_timer -= (delta * 100)
 	if dash_timer <= 0:
+		dash_cool_down_timer = DASH_COOLDOWN
 		dash_timer = 0
 		velocity.x = velocity.x * 0.35
 		if is_on_floor():
@@ -195,10 +199,11 @@ func cast_lightning_state(delta):
 		state = RUN
 
 func dash_action():
-	dash_timer = DASH_DURATION
-	velocity.x = direction_vector.x * DASH_SPEED
-	play_dash_animation()
-	state = DASH
+	if dash_cool_down_timer <= 0:
+		dash_timer = DASH_DURATION
+		velocity.x = direction_vector.x * DASH_SPEED
+		play_dash_animation()
+		state = DASH
 
 func jump_action():
 	velocity.y = JUMP_SPEED
