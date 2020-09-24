@@ -41,8 +41,6 @@ func _process(delta):
 			state = SUMMONING
 
 func summon():
-	animatedSprite.play("Idle")
-	state = IDLE
 	var randNum = rngen.randi_range(0, 2)
 	match randNum:
 		0:
@@ -96,6 +94,11 @@ func summon_complete():
 
 func _on_AnimatedSprite_animation_finished():
 	if state == SUMMONING:
+		animatedSprite.play("Idle")
+		state = IDLE
+
+func _on_AnimatedSprite_frame_changed():
+	if state == SUMMONING and animatedSprite.get_frame() == 9:
 		summon()
 
 func _on_HurtBox_area_entered(area):
