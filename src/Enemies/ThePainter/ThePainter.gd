@@ -45,7 +45,7 @@ var yellow_offset_x = 50
 var yellow_offset_y = 75
 
 func _ready():
-	stats.health = 15
+	stats.health = 20
 	state = BLUE
 	attackFlag = false
 	attackReady = false

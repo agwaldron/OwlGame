@@ -30,7 +30,7 @@ var bombThreeReady
 var width
 
 func _ready():
-	stats.health = 15
+	stats.health = 20
 	state = FLYBY
 	animatedSprite.play("PlaneClose")
 	global_position.x = POS_TURN_BACK_POINT

@@ -27,7 +27,7 @@ var obeliskxpos4 = 975
 
 func _ready():
 	animatedSprite.play("Idle")
-	stats.health = 15
+	stats.health = 20
 	state = PREP
 	horizontalCenter = get_viewport().size.x/2
 	summoningTimer = SUMMONING_COOLDOWN
