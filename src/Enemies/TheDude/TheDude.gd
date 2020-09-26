@@ -5,6 +5,7 @@ onready var stats = $EnemyStats
 
 func _ready():
 	stats.health = 15
+	animatedSprite.play("Idle")
 
 func _on_TheDude_area_entered(area):
 	var area_groups = area.get_groups()
