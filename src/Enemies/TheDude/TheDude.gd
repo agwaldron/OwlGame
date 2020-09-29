@@ -40,7 +40,7 @@ func start_attack():
 	animatedSprite.set_frame(0)
 
 func blow_smoke():
-	print("smoke")
+	pass
 
 func throw_lemon():
 	var lemon = Lemon.instance()
