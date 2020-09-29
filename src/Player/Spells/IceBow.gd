@@ -28,6 +28,8 @@ func _on_AnimatedSprite_frame_changed():
 		iceArrow.global_position = global_position
 		if leftDir:
 			iceArrow.velocity.x = iceArrow.SPEED * -1
+			iceArrow.leftDir = true
+			iceArrow.animatedSprite.play("FlyLeft")
 		get_tree().call_group("player", "ice_arrow_released")
 
 func _on_AnimatedSprite_animation_finished():
