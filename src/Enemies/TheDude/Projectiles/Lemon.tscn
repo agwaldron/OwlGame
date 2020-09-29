@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Assets/Enemies/TheDude/Lemon.png" type="Texture" id=1]
+[ext_resource path="res://src/CollisionTemplates/HitBox.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/Enemies/TheDude/Projectiles/Lemon.gd" type="Script" id=3]
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=4]
+flags = 4
+atlas = ExtResource( 1 )
+region = Rect2( 256, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=5]
+flags = 4
+atlas = ExtResource( 1 )
+region = Rect2( 512, 0, 256, 256 )
+
+[sub_resource type="AtlasTexture" id=6]
+flags = 4
+atlas = ExtResource( 1 )
+region = Rect2( 768, 0, 256, 256 )
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"loop": true,
+"name": "Turn",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=7]
+radius = 8.6945
+
+[node name="Lemon" type="KinematicBody2D"]
+collision_layer = 16
+collision_mask = 3
+script = ExtResource( 3 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 2 )
+animation = "Turn"
+frame = 2
+playing = true
+
+[node name="HitBox" parent="." instance=ExtResource( 2 )]
+collision_layer = 16
+collision_mask = 3
+
+[node name="CollisionShape2D" parent="HitBox" index="0"]
+shape = SubResource( 7 )
+[connection signal="area_entered" from="HitBox" to="." method="_on_HitBox_area_entered"]
+[connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]
+
+[editable path="HitBox"]
