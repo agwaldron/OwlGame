@@ -1,14 +1,46 @@
 extends KinematicBody2D
 
+enum {
+	IDLE,
+	LEMON,
+	SMOKE
+}
+
 const Lemon = preload("res://src/Enemies/TheDude/Projectiles/Lemon.tscn")
 
 onready var animatedSprite = $AnimatedSprite
 onready var stats = $EnemyStats
 
+var lemonNext
+var abilityCoolDown = 150
+var abilityTimer
+var state
+
 func _ready():
 	stats.health = 15
-	animatedSprite.play("GrabLemon")
+	lemonNext = true
+	abilityTimer = abilityCoolDown
+	state = IDLE
+	animatedSprite.play("Idle")
 	animatedSprite.set_frame(0)
+
+func _process(delta):
+	if state == IDLE:
+		abilityTimer -= (delta * 100)
+		if abilityTimer <= 0:
+			start_attack()
+
+func start_attack():
+	if lemonNext:
+		animatedSprite.play("GrabLemon")
+		state = LEMON
+	else:
+		animatedSprite.play("BlowSmoke")
+		state = SMOKE
+	animatedSprite.set_frame(0)
+
+func blow_smoke():
+	print("smoke")
 
 func throw_lemon():
 	var lemon = Lemon.instance()
@@ -19,8 +51,22 @@ func throw_lemon():
 	lemon.velocity.x = lemon.HORIZONTAL_SPEED
 
 func _on_AnimatedSprite_frame_changed():
-	if animatedSprite.get_frame() == 14:
+	if state == LEMON and animatedSprite.get_frame() == 14:
 		call_deferred("throw_lemon")
+	elif state == SMOKE and animatedSprite.get_frame() == 12:
+		call_deferred("blow_smoke")
+
+func _on_AnimatedSprite_animation_finished():
+	if state == LEMON:
+		lemonNext = false
+		abilityTimer = abilityCoolDown
+		state = IDLE
+		animatedSprite.play("Idle")
+	elif state == SMOKE:
+		lemonNext = true
+		abilityTimer = abilityCoolDown
+		state = IDLE
+		animatedSprite.play("Idle")
 
 func _on_TheDude_area_entered(area):
 	var area_groups = area.get_groups()
