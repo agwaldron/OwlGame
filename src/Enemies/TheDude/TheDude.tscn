@@ -205,14 +205,16 @@ height = 82.7621
 [sub_resource type="RectangleShape2D" id=38]
 extents = Vector2( 53.7196, 68.3712 )
 
-[node name="TheDude" type="KinematicBody2D"]
+[node name="TheDude" type="KinematicBody2D" groups=[
+"dude",
+]]
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -129.412 )
 frames = SubResource( 35 )
 animation = "BlowSmoke"
-frame = 3
+frame = 15
 playing = true
 
 [node name="TheDude" parent="." instance=ExtResource( 4 )]
