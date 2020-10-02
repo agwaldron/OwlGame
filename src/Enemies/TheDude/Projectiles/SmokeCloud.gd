@@ -15,8 +15,8 @@ onready var fullHitBox = $FullHitBox/CollisionShape2D
 
 var state
 var velocity = Vector2.ZERO
-var sprite_vertical_offset = 140
-var sprite_horizontal_offset = 50
+var sprite_vertical_offset = 150
+var sprite_horizontal_offset = 60
 
 func _ready():
 	animatedSprite.play("Grow")

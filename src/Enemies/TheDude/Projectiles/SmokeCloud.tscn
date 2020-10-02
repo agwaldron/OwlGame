@@ -6,109 +6,109 @@
 [ext_resource path="res://src/CollisionTemplates/HitBox.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/Enemies/TheDude/Projectiles/SmokeCloud.gd" type="Script" id=5]
 
-[sub_resource type="AtlasTexture" id=1]
+[sub_resource type="AtlasTexture" id=20]
 flags = 4
 atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 64, 64 )
+region = Rect2( 0, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=21]
 flags = 4
 atlas = ExtResource( 1 )
-region = Rect2( 64, 0, 64, 64 )
+region = Rect2( 96, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=22]
 flags = 4
 atlas = ExtResource( 1 )
-region = Rect2( 128, 0, 64, 64 )
+region = Rect2( 192, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=23]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 64, 64 )
+region = Rect2( 0, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=5]
+[sub_resource type="AtlasTexture" id=24]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 64, 0, 64, 64 )
+region = Rect2( 96, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=6]
+[sub_resource type="AtlasTexture" id=25]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 128, 0, 64, 64 )
+region = Rect2( 192, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=7]
+[sub_resource type="AtlasTexture" id=26]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 192, 0, 64, 64 )
+region = Rect2( 288, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=8]
+[sub_resource type="AtlasTexture" id=27]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 256, 0, 64, 64 )
+region = Rect2( 384, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=9]
+[sub_resource type="AtlasTexture" id=28]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 320, 0, 64, 64 )
+region = Rect2( 480, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=10]
+[sub_resource type="AtlasTexture" id=29]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 384, 0, 64, 64 )
+region = Rect2( 576, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=11]
+[sub_resource type="AtlasTexture" id=30]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 448, 0, 64, 64 )
+region = Rect2( 672, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=12]
+[sub_resource type="AtlasTexture" id=31]
 flags = 4
 atlas = ExtResource( 3 )
-region = Rect2( 0, 0, 64, 64 )
+region = Rect2( 0, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=13]
+[sub_resource type="AtlasTexture" id=32]
 flags = 4
 atlas = ExtResource( 3 )
-region = Rect2( 64, 0, 64, 64 )
+region = Rect2( 96, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=14]
+[sub_resource type="AtlasTexture" id=33]
 flags = 4
 atlas = ExtResource( 3 )
-region = Rect2( 128, 0, 64, 64 )
+region = Rect2( 192, 0, 96, 96 )
 
-[sub_resource type="AtlasTexture" id=15]
+[sub_resource type="AtlasTexture" id=34]
 flags = 4
 atlas = ExtResource( 3 )
-region = Rect2( 192, 0, 64, 64 )
+region = Rect2( 288, 0, 96, 96 )
 
 [sub_resource type="SpriteFrames" id=16]
 animations = [ {
-"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ) ],
+"frames": [ SubResource( 20 ), SubResource( 21 ), SubResource( 22 ) ],
 "loop": true,
 "name": "Move",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
+"frames": [ SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ) ],
 "loop": false,
 "name": "Grow",
 "speed": 8.0
 }, {
-"frames": [ SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ) ],
+"frames": [ SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ) ],
 "loop": false,
 "name": "Disperse",
 "speed": 10.0
 } ]
 
-[sub_resource type="CircleShape2D" id=18]
-radius = 12.6115
+[sub_resource type="CircleShape2D" id=17]
+radius = 11.5762
+
+[sub_resource type="CapsuleShape2D" id=18]
+radius = 18.4899
+height = 17.1446
 
 [sub_resource type="CapsuleShape2D" id=19]
-radius = 15.1009
-height = 12.1733
-
-[sub_resource type="CapsuleShape2D" id=17]
-radius = 12.2051
-height = 39.4319
+radius = 18.0955
+height = 50.9199
 
 [node name="SmokeCloud" type="KinematicBody2D"]
 collision_layer = 16
@@ -125,8 +125,8 @@ collision_layer = 16
 collision_mask = 3
 
 [node name="CollisionShape2D" parent="SmallHitBox" index="0"]
-position = Vector2( 14.9117, 11.9745 )
-shape = SubResource( 18 )
+position = Vector2( 32.9865, 30.953 )
+shape = SubResource( 17 )
 disabled = true
 
 [node name="MediumHitBox" parent="." instance=ExtResource( 4 )]
@@ -134,9 +134,9 @@ collision_layer = 16
 collision_mask = 3
 
 [node name="CollisionShape2D" parent="MediumHitBox" index="0"]
-position = Vector2( 5.64836, 0 )
+position = Vector2( 23.0453, 16.0414 )
 rotation = 1.5708
-shape = SubResource( 19 )
+shape = SubResource( 18 )
 disabled = true
 
 [node name="FullHitBox" parent="." instance=ExtResource( 4 )]
@@ -146,7 +146,7 @@ collision_mask = 3
 [node name="CollisionShape2D" parent="FullHitBox" index="0"]
 position = Vector2( 0, -2.31689 )
 rotation = 1.5708
-shape = SubResource( 17 )
+shape = SubResource( 19 )
 disabled = true
 [connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
 [connection signal="frame_changed" from="AnimatedSprite" to="." method="_on_AnimatedSprite_frame_changed"]
