@@ -20,7 +20,7 @@ onready var stats = $EnemyStats
 
 var minLeftPos = 250
 var maxLeftPos = 975
-var leapCoolDown = 250
+var leapCoolDown = 200
 var leapTimer = 0
 var state
 var velocity = Vector2.ZERO
@@ -54,33 +54,36 @@ func leap():
 
 func land():
 	if state == LEAPINGLEFT:
-		animatedSprite.play("IdleRight")
-		state = IDLEMIN
+		animatedSprite.play("LandLeft")
+		state = LANDMIN
 	else:
-		animatedSprite.play("IdleLeft")
-		state = IDLEMAX
+		animatedSprite.play("LandRight")
+		state = LANDMAX
 	leapingHitBox.disabled = true
 	standingHitBox.disabled = false
 	velocity.x = 0
-	leapTimer = leapCoolDown
 
 func _on_AnimatedSprite_animation_finished():
 	if state == LEAPOFFMIN:
-		animatedSprite.play("LeapRight")
+		animatedSprite.play("LeapingRight")
 		standingHitBox.disabled = true
 		leapingHitBox.disabled = false
 		velocity.x = SPEED
 		state = LEAPINGRIGHT
 	elif state == LEAPOFFMAX:
-		animatedSprite.play("LeapLeft")
+		animatedSprite.play("LeapingLeft")
 		standingHitBox.disabled = true
 		leapingHitBox.disabled = false
 		velocity.x = SPEED * -1
 		state = LEAPINGLEFT
 	elif state == LANDMIN:
-		pass
+		animatedSprite.play("IdleRight")
+		state = IDLEMIN
+		leapTimer = leapCoolDown
 	elif state == LANDMAX:
-		pass
+		animatedSprite.play("IdleLeft")
+		state = IDLEMAX
+		leapTimer = leapCoolDown
 
 func _on_HurtBox_area_entered(area):
 	var area_groups = area.get_groups()
