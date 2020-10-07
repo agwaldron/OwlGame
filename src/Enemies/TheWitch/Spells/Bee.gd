@@ -32,9 +32,13 @@ func checkTurn():
 		turn()
 
 func turn():
-	facingLeft = not facingLeft
-	animatedSprite.play("Turn")
 	turning = true
+	if facingLeft:
+		facingLeft = false
+		animatedSprite.play("TurnRight")
+	else:
+		facingLeft = true
+		animatedSprite.play("TurnLeft")
 
 func updatePlayerLocation(pos):
 	target = pos
