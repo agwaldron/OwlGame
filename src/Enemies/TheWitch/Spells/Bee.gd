@@ -3,9 +3,11 @@ extends KinematicBody2D
 export var SPEED = 150
 
 onready var animatedSprite = $AnimatedSprite
+onready var hurtBox = $HurtBox/CollisionShape2D
 onready var stats = $EnemyStats
 
 var turning
+var vanishing
 var facingLeft
 var  minHeight = 660
 var target = Vector2.ZERO
@@ -15,15 +17,17 @@ func _ready():
 	stats.health = 1
 	animatedSprite.play("FlyLeft")
 	turning = false
+	vanishing = false
 	facingLeft = true
 
 func _process(delta):
-	velocity = position.direction_to(target) * SPEED
-	if velocity.y > 0 and global_position.y >= minHeight:
-		velocity.y = 0
-	if position.distance_to(target) > 5:
-		velocity = move_and_slide(velocity)
-	checkTurn()
+	if not vanishing:
+		velocity = position.direction_to(target) * SPEED
+		if velocity.y > 0 and global_position.y >= minHeight:
+			velocity.y = 0
+		if position.distance_to(target) > 5:
+			velocity = move_and_slide(velocity)
+		checkTurn()
 
 func checkTurn():
 	if facingLeft and velocity.x > 0:
@@ -43,6 +47,15 @@ func turn():
 func updatePlayerLocation(pos):
 	target = pos
 
+func vanish():
+	vanishing = true
+	if facingLeft:
+		animatedSprite.play("VanishLeft")
+	else:
+		animatedSprite.play("VanishRight")
+	animatedSprite.set_frame(0)
+	hurtBox.disabled = true
+
 func _on_AnimatedSprite_animation_finished():
 	if turning:
 		turning = false
@@ -52,6 +65,8 @@ func _on_AnimatedSprite_animation_finished():
 		else:
 			animatedSprite.play("FlyRight")
 			facingLeft = false
+	elif vanishing:
+		queue_free()
 
 func _on_HurtBox_area_entered(area):
 	var areaGroups = area.get_groups()
@@ -60,4 +75,4 @@ func _on_HurtBox_area_entered(area):
 			stats.health -= area.damage
 
 func _on_EnemyStats_no_health():
-	queue_free()
+	call_deferred("vanish")
