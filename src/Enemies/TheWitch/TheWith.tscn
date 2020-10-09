@@ -1,0 +1,46 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://src/CollisionTemplates/HurtBox.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/Enemies/EnemyStats.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Assets/Enemies/TheWitch/FirstAttempt.png" type="Texture" id=3]
+[ext_resource path="res://src/Enemies/TheWitch/TheWith.gd" type="Script" id=4]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ SubResource( 1 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 62.1571, 74.6544 )
+
+[node name="TheWith" type="KinematicBody2D"]
+collision_layer = 8
+collision_mask = 5
+script = ExtResource( 4 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0, -67.9997 )
+frames = SubResource( 2 )
+animation = "Idle"
+
+[node name="HurtBox" parent="." instance=ExtResource( 1 )]
+collision_layer = 8
+collision_mask = 5
+
+[node name="CollisionShape2D" parent="HurtBox" index="0"]
+position = Vector2( 0, -70.6507 )
+shape = SubResource( 3 )
+
+[node name="EnemyStats" parent="." instance=ExtResource( 2 )]
+[connection signal="area_entered" from="HurtBox" to="." method="_on_HurtBox_area_entered"]
+[connection signal="no_health" from="EnemyStats" to="." method="_on_EnemyStats_no_health"]
+
+[editable path="HurtBox"]
