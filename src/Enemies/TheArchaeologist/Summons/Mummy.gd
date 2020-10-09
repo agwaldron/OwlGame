@@ -3,11 +3,13 @@ extends KinematicBody2D
 export var SHUFFLE_SPEED = 200
 
 onready var animatedSprite = $AnimatedSprite
+onready var hurtBox = $HurtBox/CollisionShape2D
 onready var stats = $EnemyStats
 
 var velocity = Vector2.ZERO
 var movingLeft
 var turning
+var crumbling
 var turnAroundLeft = 200
 var turnAroundRight = 1000
 
@@ -15,6 +17,7 @@ func _ready():
 	stats.health = 2
 	movingLeft = true
 	turning = false
+	crumbling = false
 	velocity.x = -SHUFFLE_SPEED
 	animatedSprite.play("ShuffleLeft")
 
@@ -34,6 +37,16 @@ func turn_around():
 		animatedSprite.set_frame(0)
 		global_position.x = turnAroundRight - 5
 
+func crumble():
+	velocity.x = 0
+	hurtBox.disabled = true
+	if movingLeft:
+		animatedSprite.play("CrumbleLeft")
+	else:
+		animatedSprite.play("CrumbleRight")
+	animatedSprite.set_frame(0)
+	crumbling = true
+
 func _on_HurtBox_area_entered(area):
 	var areaGroups = area.get_groups()
 	for x in areaGroups:
@@ -41,16 +54,17 @@ func _on_HurtBox_area_entered(area):
 			stats.health -= area.damage
 
 func _on_EnemyStats_no_health():
-	queue_free()
+	call_deferred("crumble")
 
 func _on_AnimatedSprite_frame_changed():
-	if animatedSprite.get_frame() == 0:
-		velocity.x = 0
-	elif animatedSprite.get_frame() == 4:
-		if movingLeft:
-			velocity.x = -SHUFFLE_SPEED
-		else:
-			velocity.x = SHUFFLE_SPEED
+	if not crumbling:
+		if animatedSprite.get_frame() == 0:
+			velocity.x = 0
+		elif animatedSprite.get_frame() == 4:
+			if movingLeft:
+				velocity.x = -SHUFFLE_SPEED
+			else:
+				velocity.x = SHUFFLE_SPEED
 
 func _on_AnimatedSprite_animation_finished():
 	if turning:
@@ -63,3 +77,5 @@ func _on_AnimatedSprite_animation_finished():
 			animatedSprite.play("ShuffleLeft")
 			animatedSprite.set_frame(0)
 			movingLeft = true
+	elif crumbling:
+		queue_free()
