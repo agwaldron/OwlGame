@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/FirstAttempt.png-47233d685fd07f997d9ab04c61f6b365.stex"
+path="res://.import/Idle.png-6be168580ee15be34b01ed944c094c4c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemies/TheWitch/FirstAttempt.png"
-dest_files=[ "res://.import/FirstAttempt.png-47233d685fd07f997d9ab04c61f6b365.stex" ]
+source_file="res://Assets/Enemies/TheWitch/Idle.png"
+dest_files=[ "res://.import/Idle.png-6be168580ee15be34b01ed944c094c4c.stex" ]
 
 [params]
 
