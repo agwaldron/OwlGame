@@ -5,7 +5,7 @@ const BeePortal = preload("res://src/Enemies/TheWitch/Spells/BeePortal.tscn")
 onready var animatedSpirte = $AnimatedSprite
 onready var stats = $EnemyStats
 
-var beeCoolDown = 500
+var beeCoolDown = 50000
 var beeTimer
 
 func _ready():
