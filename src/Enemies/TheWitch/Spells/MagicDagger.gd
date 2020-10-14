@@ -3,7 +3,8 @@ extends KinematicBody2D
 enum {
 	TRACKING,
 	PULLBACK,
-	FLYING
+	FLYING,
+	VANISH
 }
 
 onready var animatedSprite = $AnimatedSprite
@@ -24,15 +25,16 @@ var vertracktimer = 250
 var pullbackTimer = 20
 var timer
 var ishor
+var spawning
 
 func _ready():
-	animatedSprite.play("Horizontal")
+	animatedSprite.play("SpawnHorizontal")
 	animatedSprite.set_frame(0)
-	animatedSprite.playing = false
 	state = TRACKING
 	timer = hortracktimer
 	horHitBox.disabled = false
 	ishor = true
+	spawning = true
 
 func _process(delta):
 	match state:
@@ -43,9 +45,8 @@ func _process(delta):
 	velocity = move_and_slide(velocity)
 
 func isVertical():
-	animatedSprite.play("Vertical")
+	animatedSprite.play("SpawnVertical")
 	animatedSprite.set_frame(0)
-	animatedSprite.playing = false
 	horHitBox.disabled = true
 	vertHitBox.disabled = false
 	ishor = false
@@ -87,5 +88,28 @@ func pullBack(delta):
 func updatePlayerLocation(pos):
 	playerpos = pos
 
+func vanish():
+	if ishor:
+		animatedSprite.play("VanishHorizontal")
+		horHitBox.disabled = true
+	else:
+		animatedSprite.play("VanishVertical")
+		vertHitBox.disabled = true
+	animatedSprite.set_frame(0)
+	state = VANISH
+	velocity = Vector2.ZERO
+
+func _on_AnimatedSprite_animation_finished():
+	if spawning:
+		if ishor:
+			animatedSprite.play("Horizontal")
+		else:
+			animatedSprite.play("Vertical")
+		animatedSprite.set_frame(0)
+		animatedSprite.playing = false
+		spawning = false
+	elif state == VANISH:
+		queue_free()
+
 func _on_HitBox_body_entered(body):
-	queue_free()
+	call_deferred("vanish")
