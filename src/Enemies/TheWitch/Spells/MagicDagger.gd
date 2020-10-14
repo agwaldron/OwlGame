@@ -20,8 +20,8 @@ var playerpos
 var target
 var horoffset = 35
 var vertoffset = 35
-var hortracktimer = 500
-var vertracktimer = 250
+var hortracktimer = 400
+var vertracktimer = 200
 var pullbackTimer = 20
 var timer
 var ishor

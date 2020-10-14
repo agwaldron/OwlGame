@@ -1,14 +1,20 @@
 extends KinematicBody2D
 
+enum {
+	IDLE,
+	CAST
+}
+
 const BeePortal = preload("res://src/Enemies/TheWitch/Spells/BeePortal.tscn")
 const MagicDagger = preload("res://src/Enemies/TheWitch/Spells/MagicDagger.tscn")
 
-onready var animatedSpirte = $AnimatedSprite
+onready var animatedSprite = $AnimatedSprite
 onready var stats = $EnemyStats
 
+var state
 var beecooldown = 50000
 var beetimer
-var attackcooldown = 700
+var attackcooldown = 600
 var attacktimer
 var vertdaggerpos = 100
 var hordaggerpos = 900
@@ -18,12 +24,15 @@ func _ready():
 	stats.health = 20
 	beetimer = beecooldown
 	attacktimer = attackcooldown
+	state = IDLE
 
 func _process(delta):
 	beeSpawns(delta)
-	attacktimer -= (delta * 100)
-	if attacktimer <= 0:
-		attack()
+	if state == IDLE:
+		attacktimer -= (delta * 100)
+		if attacktimer <= 0:
+			cast()
+
 
 func beeSpawns(delta):
 	beetimer -= (delta * 100)
@@ -35,7 +44,11 @@ func beeSpawns(delta):
 		beeportal.global_position.y -= 300
 		beetimer = beecooldown
 
-func attack():
+func cast():
+	state = CAST
+	animatedSprite.play("Cast")
+
+func castDagger():
 	var magicdagger = MagicDagger.instance()
 	get_parent().add_child(magicdagger)
 	magicdagger.playerpos = playerpos
@@ -53,6 +66,15 @@ func attack():
 
 func updatePlayerLocation(pos):
 	playerpos = pos
+
+func _on_AnimatedSprite_frame_changed():
+	if state == CAST and animatedSprite.get_frame() == 3:
+		castDagger()
+
+func _on_AnimatedSprite_animation_finished():
+	if state == CAST:
+		state = IDLE
+		animatedSprite.play("Idle")
 
 func _on_HurtBox_area_entered(area):
 	var areaGroups = area.get_groups()
