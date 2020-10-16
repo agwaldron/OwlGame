@@ -92,6 +92,7 @@ func vanish():
 	if ishor:
 		animatedSprite.play("VanishHorizontal")
 		horHitBox.disabled = true
+		get_tree().call_group("TheWitch", "spellFinished")
 	else:
 		animatedSprite.play("VanishVertical")
 		vertHitBox.disabled = true

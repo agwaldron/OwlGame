@@ -12,8 +12,10 @@ onready var animatedSprite = $AnimatedSprite
 onready var stats = $EnemyStats
 
 var state
-var beecooldown = 50000
+var beecooldown = 1000
 var beetimer
+var beepos1 = Vector2(350, 125)
+var beepos2 = Vector2(950, 125)
 var attackcooldown = 600
 var attacktimer
 var vertdaggerpos = 100
@@ -39,9 +41,14 @@ func beeSpawns(delta):
 	if beetimer <= 0:
 		var beeportal = BeePortal.instance()
 		get_parent().add_child(beeportal)
-		beeportal.global_position = global_position
-		beeportal.global_position.x -= 300
-		beeportal.global_position.y -= 300
+		beeportal.global_position.x = beepos1.x
+		beeportal.global_position.y = beepos1.y
+
+		beeportal = BeePortal.instance()
+		get_parent().add_child(beeportal)
+		beeportal.global_position.x = beepos2.x
+		beeportal.global_position.y = beepos2.y
+
 		beetimer = beecooldown
 
 func cast():
@@ -62,7 +69,8 @@ func castDagger():
 	magicdagger.global_position.x = playerpos.x - magicdagger.vertoffset
 	magicdagger.global_position.y = vertdaggerpos
 
-	attacktimer = attackcooldown
+func spellFinished():
+	animatedSprite.playing = true
 
 func updatePlayerLocation(pos):
 	playerpos = pos
@@ -70,6 +78,8 @@ func updatePlayerLocation(pos):
 func _on_AnimatedSprite_frame_changed():
 	if state == CAST and animatedSprite.get_frame() == 3:
 		castDagger()
+		animatedSprite.playing = false
+		attacktimer = attackcooldown
 
 func _on_AnimatedSprite_animation_finished():
 	if state == CAST:
