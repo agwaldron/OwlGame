@@ -17,8 +17,8 @@ onready var stats = $EnemyStats
 
 var state
 var horizontalCenter
+var summontracker
 var summoningTimer
-var rngen = RandomNumberGenerator.new()
 
 var obeliskxpos1 = 150
 var obeliskxpos2 = 425
@@ -30,8 +30,8 @@ func _ready():
 	stats.health = 20
 	state = PREP
 	horizontalCenter = get_viewport().size.x/2
+	summontracker = 1
 	summoningTimer = SUMMONING_COOLDOWN
-	rngen.randomize()
 
 func _process(delta):
 	if state == PREP:
@@ -41,14 +41,14 @@ func _process(delta):
 			state = SUMMONING
 
 func summon():
-	var randNum = rngen.randi_range(0, 2)
-	match randNum:
-		0:
-			summon_mummies()
-		1:
-			summon_obelisks()
-		2:
-			summon_sandnado()
+	if summontracker % 2 == 0:
+		summon_mummies()
+	elif summontracker == 1:
+		summon_obelisks()
+	elif summontracker == 3:
+		summon_sandnado()
+
+	summontracker = (summontracker + 1) % 4
 
 func summon_mummies():
 	var circle = SummoningCircle.instance()
