@@ -25,8 +25,9 @@ enum {
 }
 
 const FireBall = preload("res://src/Player/Spells/FireBall.tscn")
-const IceSpike = preload("res://src/Player/Spells/IceSpike.tscn")
 const IceBow = preload("res://src/Player/Spells/IceBow.tscn")
+const IcePlatform = preload("res://src/Player/Spells/IcePlatform.tscn")
+const IceSpike = preload("res://src/Player/Spells/IceSpike.tscn")
 const Lightning = preload("res://src/Player/Spells/LightningBolt.tscn")
 
 onready var animatedSprite = $AnimatedSprite
