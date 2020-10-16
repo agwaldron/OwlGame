@@ -48,6 +48,7 @@ func updatePlayerLocation(pos):
 	target = pos
 
 func vanish():
+	get_tree().call_group("TheWitch", "beeVanish")
 	vanishing = true
 	if facingLeft:
 		animatedSprite.play("VanishLeft")

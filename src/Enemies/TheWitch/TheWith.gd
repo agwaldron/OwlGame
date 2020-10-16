@@ -12,6 +12,9 @@ onready var animatedSprite = $AnimatedSprite
 onready var stats = $EnemyStats
 
 var state
+var beespawns = 0
+var beevanishes = 0
+var beespercycle = 4
 var beecooldown = 1000
 var beetimer
 var beepos1 = Vector2(350, 125)
@@ -33,27 +36,37 @@ func _process(delta):
 	if state == IDLE:
 		attacktimer -= (delta * 100)
 		if attacktimer <= 0:
-			cast()
-
+			startCast()
 
 func beeSpawns(delta):
-	beetimer -= (delta * 100)
-	if beetimer <= 0:
-		var beeportal = BeePortal.instance()
-		get_parent().add_child(beeportal)
-		beeportal.global_position.x = beepos1.x
-		beeportal.global_position.y = beepos1.y
+	if beespawns < beespercycle:
+		beetimer -= (delta * 100)
+		if beetimer <= 0:
+			var beeportal = BeePortal.instance()
+			get_parent().add_child(beeportal)
+			beeportal.global_position.x = beepos1.x
+			beeportal.global_position.y = beepos1.y
 
-		beeportal = BeePortal.instance()
-		get_parent().add_child(beeportal)
-		beeportal.global_position.x = beepos2.x
-		beeportal.global_position.y = beepos2.y
+			beeportal = BeePortal.instance()
+			get_parent().add_child(beeportal)
+			beeportal.global_position.x = beepos2.x
+			beeportal.global_position.y = beepos2.y
 
-		beetimer = beecooldown
+			beespawns += 2
+			beetimer = beecooldown
 
-func cast():
+func startCast():
 	state = CAST
 	animatedSprite.play("Cast")
+
+func cast():
+	if beevanishes < beespercycle:
+		castDagger()
+	else:
+		print("wine")
+		spellFinished()
+		beespawns = 0
+		beevanishes = 0
 
 func castDagger():
 	var magicdagger = MagicDagger.instance()
@@ -69,6 +82,9 @@ func castDagger():
 	magicdagger.global_position.x = playerpos.x - magicdagger.vertoffset
 	magicdagger.global_position.y = vertdaggerpos
 
+func beeVanish():
+	beevanishes += 1
+
 func spellFinished():
 	animatedSprite.playing = true
 
@@ -77,14 +93,14 @@ func updatePlayerLocation(pos):
 
 func _on_AnimatedSprite_frame_changed():
 	if state == CAST and animatedSprite.get_frame() == 3:
-		castDagger()
 		animatedSprite.playing = false
-		attacktimer = attackcooldown
+		cast()
 
 func _on_AnimatedSprite_animation_finished():
 	if state == CAST:
 		state = IDLE
 		animatedSprite.play("Idle")
+		attacktimer = attackcooldown
 
 func _on_HurtBox_area_entered(area):
 	var areaGroups = area.get_groups()
