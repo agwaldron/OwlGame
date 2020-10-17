@@ -15,7 +15,7 @@ var state
 var beespawns = 0
 var beevanishes = 0
 var beespercycle = 4
-var beecooldown = 1000
+var beecooldown = 900
 var beetimer
 var beepos1 = Vector2(350, 125)
 var beepos2 = Vector2(950, 125)
@@ -63,7 +63,7 @@ func cast():
 	if beevanishes < beespercycle:
 		castDagger()
 	else:
-		print("wine")
+		get_tree().call_group("player", "cast_ice_platform")
 		spellFinished()
 		beespawns = 0
 		beevanishes = 0

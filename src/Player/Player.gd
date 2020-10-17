@@ -19,8 +19,9 @@ enum {
 	FREEFALL,
 	GETUP,
 	CAST_FIRE,
-	CAST_ICE_SPIKE,
 	CAST_ICE_ARROW,
+	CAST_ICE_PLATFORM,
+	CAST_ICE_SPIKE,
 	CAST_LIGHTNING
 }
 
@@ -60,6 +61,9 @@ var dash_timer = 0
 var dash_cool_down_timer = 0
 var cast_timer = 0
 var animFinished = false
+var iceplatformpos1 = Vector2(400, 575)
+var iceplatformpos2 = Vector2(600, 400)
+var iceplatformpos3 = Vector2(800, 575)
 
 var hurtBoxes
 var colBoxes
@@ -94,10 +98,12 @@ func _physics_process(delta):
 			get_up_state(delta)
 		CAST_FIRE:
 			cast_fire_state(delta)
-		CAST_ICE_SPIKE:
-			cast_ice_spike_state(delta)
 		CAST_ICE_ARROW:
 			cast_ice_arrow_state(delta)
+		CAST_ICE_PLATFORM:
+			cast_ice_platform_state(delta)
+		CAST_ICE_SPIKE:
+			cast_ice_spike_state(delta)
 		CAST_LIGHTNING:
 			cast_lightning_state(delta)
 
@@ -194,18 +200,21 @@ func cast_fire_state(delta):
 	else:
 		move(delta, true)
 
-func cast_ice_spike_state(delta):
-	cast_timer -= (delta * 100)
-	if cast_timer <= 0:
-		cast_timer = 0
-		state = RUN
-
 func ice_arrow_released():
 	state = RUN
 
 func cast_ice_arrow_state(delta):
 	if Input.is_action_just_released("icearrow"):
 		get_tree().call_group("ConcentrationSpell", "spell_interrupt")
+		state = RUN
+
+func cast_ice_platform_state(delta):
+	move(delta, true)
+
+func cast_ice_spike_state(delta):
+	cast_timer -= (delta * 100)
+	if cast_timer <= 0:
+		cast_timer = 0
 		state = RUN
 
 func cast_lightning_state(delta):
@@ -256,6 +265,43 @@ func cast_fire():
 		fireBall.animatedSprite.play("Right")
 	state = CAST_FIRE
 
+func cast_ice_arrow():
+	velocity = Vector2.ZERO
+	play_cast_animation()
+	var iceBow = IceBow.instance()
+	get_parent().add_child(iceBow)
+	iceBow.global_position = global_position
+	iceBow.global_position.y -= iceBow.sprite_vertical_offset
+	if direction_vector.x < 0:
+		iceBow.global_position.x -= iceBow.sprite_horizontal_offset
+		iceBow.face_left()
+	else:
+		iceBow.global_position.x += iceBow.sprite_horizontal_offset
+		iceBow.face_right()
+	state = CAST_ICE_ARROW
+
+func ice_platform_summoned():
+	play_idle_animation()
+	state = RUN
+
+func cast_ice_platform():
+	velocity.x = 0
+	play_cast_animation()
+	state = CAST_ICE_PLATFORM
+
+	var iceplatform = IcePlatform.instance()
+	get_parent().add_child(iceplatform)
+	iceplatform.global_position = iceplatformpos1
+	iceplatform.playercom = true
+
+	iceplatform = IcePlatform.instance()
+	get_parent().add_child(iceplatform)
+	iceplatform.global_position = iceplatformpos2
+
+	iceplatform = IcePlatform.instance()
+	get_parent().add_child(iceplatform)
+	iceplatform.global_position = iceplatformpos3
+
 func cast_ice_spike():
 	velocity = Vector2.ZERO
 	play_cast_animation()
@@ -271,21 +317,6 @@ func cast_ice_spike():
 		iceSpike.animatedSprite.play("Right")
 		iceSpike.left = false
 	state = CAST_ICE_SPIKE
-
-func cast_ice_arrow():
-	velocity = Vector2.ZERO
-	play_cast_animation()
-	var iceBow = IceBow.instance()
-	get_parent().add_child(iceBow)
-	iceBow.global_position = global_position
-	iceBow.global_position.y -= iceBow.sprite_vertical_offset
-	if direction_vector.x < 0:
-		iceBow.global_position.x -= iceBow.sprite_horizontal_offset
-		iceBow.face_left()
-	else:
-		iceBow.global_position.x += iceBow.sprite_horizontal_offset
-		iceBow.face_right()
-	state = CAST_ICE_ARROW
 
 func cast_lightning():
 	velocity = Vector2.ZERO
