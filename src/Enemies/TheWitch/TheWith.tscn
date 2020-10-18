@@ -80,8 +80,6 @@ position = Vector2( 0, -68.7975 )
 shape = SubResource( 9 )
 
 [node name="EnemyStats" parent="." instance=ExtResource( 2 )]
-[connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
-[connection signal="frame_changed" from="AnimatedSprite" to="." method="_on_AnimatedSprite_frame_changed"]
 [connection signal="area_entered" from="HurtBox" to="." method="_on_HurtBox_area_entered"]
 [connection signal="no_health" from="EnemyStats" to="." method="_on_EnemyStats_no_health"]
 

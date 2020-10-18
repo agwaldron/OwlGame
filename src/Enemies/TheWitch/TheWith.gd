@@ -2,7 +2,9 @@ extends KinematicBody2D
 
 enum {
 	IDLE,
-	CAST
+	CAST,
+	FLYDOWN,
+	FLYUP
 }
 
 const BeePortal = preload("res://src/Enemies/TheWitch/Spells/BeePortal.tscn")
@@ -24,19 +26,60 @@ var attacktimer
 var vertdaggerpos = 100
 var hordaggerpos = 900
 var playerpos
+var wineready
+var groundheight = 700
+var flyheight = 400
+var flyspeed = 500
+var velocity = Vector2.ZERO
 
 func _ready():
+	global_position.y = groundheight
 	stats.health = 20
 	beetimer = beecooldown
 	attacktimer = attackcooldown
 	state = IDLE
+	wineready = false
 
 func _process(delta):
 	beeSpawns(delta)
-	if state == IDLE:
-		attacktimer -= (delta * 100)
-		if attacktimer <= 0:
-			startCast()
+	match state:
+		IDLE:
+			attacktimer -= (delta * 100)
+			if attacktimer <= 0:
+				attack()
+		CAST:
+			pass
+		FLYDOWN:
+			flyDown(delta)
+		FLYUP:
+			flyUp(delta)
+
+func attack():
+	if wineready:
+		state = FLYUP
+		velocity.y = flyspeed * -1
+	else:
+		state = CAST
+		castDagger()
+
+func flyUp(delta):
+	if global_position.y <= flyheight:
+		state = CAST
+		velocity.y = 0
+		castWine()
+	else:
+		velocity = move_and_slide(velocity)
+
+func flyDown(delta):
+	if global_position.y >= groundheight:
+		wineready = false
+		velocity.y = 0
+		state = IDLE
+		beespawns = 0
+		beevanishes = 0
+		attacktimer = attackcooldown
+	else:
+		velocity = move_and_slide(velocity)
 
 func beeSpawns(delta):
 	if beespawns < beespercycle:
@@ -55,18 +98,6 @@ func beeSpawns(delta):
 			beespawns += 2
 			beetimer = beecooldown
 
-func startCast():
-	state = CAST
-	animatedSprite.play("Cast")
-
-func cast():
-	if beevanishes < beespercycle:
-		castDagger()
-	else:
-		get_tree().call_group("player", "cast_ice_platform")
-		spellFinished()
-		beespawns = 0
-		beevanishes = 0
 
 func castDagger():
 	var magicdagger = MagicDagger.instance()
@@ -82,25 +113,25 @@ func castDagger():
 	magicdagger.global_position.x = playerpos.x - magicdagger.vertoffset
 	magicdagger.global_position.y = vertdaggerpos
 
+func castWine():
+	print("wine")
+	spellFinished()
+
 func beeVanish():
 	beevanishes += 1
+	if beevanishes == beespercycle:
+		wineready = true
 
 func spellFinished():
-	animatedSprite.playing = true
+	if wineready:
+		state = FLYDOWN
+		velocity.y = flyspeed
+	else:
+		state = IDLE
+		attacktimer = attackcooldown
 
 func updatePlayerLocation(pos):
 	playerpos = pos
-
-func _on_AnimatedSprite_frame_changed():
-	if state == CAST and animatedSprite.get_frame() == 3:
-		animatedSprite.playing = false
-		cast()
-
-func _on_AnimatedSprite_animation_finished():
-	if state == CAST:
-		state = IDLE
-		animatedSprite.play("Idle")
-		attacktimer = attackcooldown
 
 func _on_HurtBox_area_entered(area):
 	var areaGroups = area.get_groups()
