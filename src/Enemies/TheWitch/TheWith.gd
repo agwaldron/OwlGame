@@ -33,6 +33,7 @@ var flyspeed = 500
 var velocity = Vector2.ZERO
 
 func _ready():
+	animatedSprite.play("Idle")
 	global_position.y = groundheight
 	stats.health = 20
 	beetimer = beecooldown
@@ -57,14 +58,18 @@ func _process(delta):
 func attack():
 	if wineready:
 		state = FLYUP
+		animatedSprite.play("FlyUp")
 		velocity.y = flyspeed * -1
 	else:
 		state = CAST
+		animatedSprite.play("Cast")
+		animatedSprite.set_frame(0)
 		castDagger()
 
 func flyUp(delta):
 	if global_position.y <= flyheight:
 		state = CAST
+		animatedSprite.play("Idle")
 		velocity.y = 0
 		castWine()
 	else:
@@ -75,6 +80,7 @@ func flyDown(delta):
 		wineready = false
 		velocity.y = 0
 		state = IDLE
+		animatedSprite.play("Idle")
 		beespawns = 0
 		beevanishes = 0
 		attacktimer = attackcooldown
@@ -125,6 +131,7 @@ func beeVanish():
 func spellFinished():
 	if wineready:
 		state = FLYDOWN
+		animatedSprite.play("FlyDown")
 		velocity.y = flyspeed
 	else:
 		state = IDLE

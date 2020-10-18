@@ -1,60 +1,82 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://src/CollisionTemplates/HurtBox.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Enemies/EnemyStats.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Assets/Enemies/TheWitch/Idle.png" type="Texture" id=3]
 [ext_resource path="res://src/Enemies/TheWitch/TheWith.gd" type="Script" id=4]
 [ext_resource path="res://Assets/Enemies/TheWitch/Cast.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Enemies/TheWitch/FlyUp.png" type="Texture" id=6]
+[ext_resource path="res://Assets/Enemies/TheWitch/FlyDown.png" type="Texture" id=7]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
-atlas = ExtResource( 3 )
+atlas = ExtResource( 6 )
 region = Rect2( 0, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=2]
 flags = 4
-atlas = ExtResource( 5 )
+atlas = ExtResource( 7 )
 region = Rect2( 0, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=3]
 flags = 4
-atlas = ExtResource( 5 )
-region = Rect2( 128, 0, 128, 128 )
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=4]
 flags = 4
 atlas = ExtResource( 5 )
-region = Rect2( 256, 0, 128, 128 )
+region = Rect2( 0, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=5]
 flags = 4
 atlas = ExtResource( 5 )
-region = Rect2( 384, 0, 128, 128 )
+region = Rect2( 128, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=6]
 flags = 4
 atlas = ExtResource( 5 )
-region = Rect2( 512, 0, 128, 128 )
+region = Rect2( 256, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=7]
 flags = 4
 atlas = ExtResource( 5 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=8]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=9]
+flags = 4
+atlas = ExtResource( 5 )
 region = Rect2( 640, 0, 128, 128 )
 
-[sub_resource type="SpriteFrames" id=8]
+[sub_resource type="SpriteFrames" id=10]
 animations = [ {
 "frames": [ SubResource( 1 ) ],
+"loop": true,
+"name": "FlyUp",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 2 ) ],
+"loop": true,
+"name": "FlyDown",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 3 ) ],
 "loop": true,
 "name": "Idle",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
+"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
 "loop": false,
 "name": "Cast",
 "speed": 8.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=9]
+[sub_resource type="RectangleShape2D" id=11]
 extents = Vector2( 62.1571, 64.4029 )
 
 [node name="TheWith" type="KinematicBody2D" groups=[
@@ -67,8 +89,8 @@ script = ExtResource( 4 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -67.9997 )
-frames = SubResource( 8 )
-animation = "Idle"
+frames = SubResource( 10 )
+animation = "FlyDown"
 playing = true
 
 [node name="HurtBox" parent="." instance=ExtResource( 1 )]
@@ -77,7 +99,7 @@ collision_mask = 5
 
 [node name="CollisionShape2D" parent="HurtBox" index="0"]
 position = Vector2( 0, -68.7975 )
-shape = SubResource( 9 )
+shape = SubResource( 11 )
 
 [node name="EnemyStats" parent="." instance=ExtResource( 2 )]
 [connection signal="area_entered" from="HurtBox" to="." method="_on_HurtBox_area_entered"]
