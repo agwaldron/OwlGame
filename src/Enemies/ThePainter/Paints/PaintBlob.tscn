@@ -1,34 +1,95 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://src/CollisionTemplates/HitBox.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Assets/Enemies/ThePainter/YellowBlob.png" type="Texture" id=2]
-[ext_resource path="res://Assets/Enemies/ThePainter/RedBlob.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Enemies/ThePainter/YellowBlobSplatter.png" type="Texture" id=2]
 [ext_resource path="res://src/Enemies/ThePainter/Paints/PaintBlob.gd" type="Script" id=4]
+[ext_resource path="res://Assets/Enemies/ThePainter/YellowBlobFlying.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Enemies/ThePainter/RedBlobFlying.png" type="Texture" id=6]
 
-[sub_resource type="AtlasTexture" id=1]
+[sub_resource type="AtlasTexture" id=3]
 flags = 4
-atlas = ExtResource( 3 )
-region = Rect2( 0, 0, 64, 64 )
+atlas = ExtResource( 6 )
+region = Rect2( 0, 0, 128, 128 )
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=4]
+flags = 4
+atlas = ExtResource( 6 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=5]
+flags = 4
+atlas = ExtResource( 6 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=6]
+flags = 4
+atlas = ExtResource( 6 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=13]
 flags = 4
 atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 64, 64 )
+region = Rect2( 0, 0, 128, 128 )
 
-[sub_resource type="SpriteFrames" id=3]
+[sub_resource type="AtlasTexture" id=14]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=15]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=16]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=17]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=7]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=8]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=9]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=10]
+flags = 4
+atlas = ExtResource( 5 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="SpriteFrames" id=11]
 animations = [ {
-"frames": [ SubResource( 1 ) ],
+"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
 "loop": true,
-"name": "Red",
+"name": "RedFlying",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 2 ) ],
+"frames": [ SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ) ],
+"loop": false,
+"name": "YellowSplatter",
+"speed": 15.0
+}, {
+"frames": [ SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ) ],
 "loop": true,
-"name": "Yellow",
+"name": "YellowFlying",
 "speed": 5.0
 } ]
 
-[sub_resource type="CircleShape2D" id=4]
+[sub_resource type="CircleShape2D" id=12]
 radius = 29.9009
 
 [node name="PaintBlob" type="KinematicBody2D"]
@@ -37,14 +98,17 @@ collision_mask = 0
 script = ExtResource( 4 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-frames = SubResource( 3 )
-animation = "Yellow"
+frames = SubResource( 11 )
+animation = "YellowSplatter"
+frame = 4
+playing = true
 
 [node name="HitBox" parent="." instance=ExtResource( 1 )]
 collision_layer = 16
 collision_mask = 0
 
 [node name="CollisionShape2D" parent="HitBox" index="0"]
-shape = SubResource( 4 )
+shape = SubResource( 12 )
+[connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
 
 [editable path="HitBox"]

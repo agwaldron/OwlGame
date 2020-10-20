@@ -3,9 +3,11 @@ extends KinematicBody2D
 const PaintBall = preload("res://src/Enemies/ThePainter/Paints/PaintBall.tscn")
 
 onready var animatedSprite = $AnimatedSprite
+onready var hitBox = $HitBox/CollisionShape2D
 
 var velocity = Vector2.ZERO
 var isRed
+var splat = false
 
 var redMaxHeight = -200
 var redRowOne = [
@@ -73,7 +75,7 @@ func _process(delta):
 		if global_position.y <= redMaxHeight:
 			create_red_blobs()
 	else:
-		if global_position.x <= horizontalCenter:
+		if global_position.x <= horizontalCenter and not splat:
 			create_yellow_blobs()
 
 func create_red_blobs():
@@ -121,6 +123,11 @@ func create_red_blobs():
 	queue_free()
 
 func create_yellow_blobs():
+	hitBox.disabled = true
+	animatedSprite.play("YellowSplatter")
+	splat = true
+	velocity = Vector2.ZERO
+
 	var paintBall
 	for pb in yellowBlobsOuter:
 		paintBall = PaintBall.instance()
@@ -138,13 +145,15 @@ func create_yellow_blobs():
 		paintBall.set_color("yellow")
 		paintBall.velocity = Vector2(pb[0]*yellow_inner_speed, pb[1]*yellow_inner_speed)
 
-	queue_free()
-
 func set_color(col):
 	match col:
 		"red":
 			isRed = true
-			animatedSprite.play("Red")
+			animatedSprite.play("RedFlying")
 		"yellow":
 			isRed = false
-			animatedSprite.play("Yellow")
+			animatedSprite.play("YellowFlying")
+
+func _on_AnimatedSprite_animation_finished():
+	if splat:
+		queue_free()

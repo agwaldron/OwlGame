@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/RedBlob.png-2cc1fa43beeb5613701c6a3df1fa880a.stex"
+path="res://.import/YellowBallSplatter.png-dfdc8378c012625b323a5035d29d9101.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemies/ThePainter/RedBlob.png"
-dest_files=[ "res://.import/RedBlob.png-2cc1fa43beeb5613701c6a3df1fa880a.stex" ]
+source_file="res://Assets/Enemies/ThePainter/YellowBallSplatter.png"
+dest_files=[ "res://.import/YellowBallSplatter.png-dfdc8378c012625b323a5035d29d9101.stex" ]
 
 [params]
 
