@@ -33,6 +33,7 @@ var flyspeed = 500
 var velocity = Vector2.ZERO
 
 func _ready():
+	get_tree().call_group("player", "cast_ice_platform")
 	animatedSprite.play("Idle")
 	global_position.y = groundheight
 	stats.health = 20
