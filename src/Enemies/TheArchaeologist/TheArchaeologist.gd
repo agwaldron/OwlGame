@@ -8,8 +8,8 @@ enum {
 	SUMMONING
 }
 
+const Cobra = preload("res://src/Enemies/TheArchaeologist/Summons/Cobra.tscn")
 const Obelisk = preload("res://src/Enemies/TheArchaeologist/Summons/Obelisk.tscn")
-const Sandnado = preload("res://src/Enemies/TheArchaeologist/Summons/Sandnado.tscn")
 const SummoningCircle = preload("res://src/Enemies/TheArchaeologist/Summons/SummoningCircle.tscn")
 
 onready var animatedSprite = $AnimatedSprite
@@ -46,9 +46,15 @@ func summon():
 	elif summontracker == 1:
 		summon_obelisks()
 	elif summontracker == 3:
-		summon_sandnado()
+		summon_cobra()
 
 	summontracker = (summontracker + 1) % 4
+
+func summon_cobra():
+	var cobra = Cobra.instance()
+	get_parent().add_child(cobra)
+	cobra.global_position = global_position
+	cobra.global_position.x -= cobra.horizontaloffset
 
 func summon_mummies():
 	var circle = SummoningCircle.instance()
@@ -81,12 +87,6 @@ func summon_obelisks():
 	get_parent().add_child(obelisk)
 	obelisk.global_position = global_position
 	obelisk.global_position.x = obeliskxpos4
-
-func summon_sandnado():
-	var sandnado = Sandnado.instance()
-	get_parent().add_child(sandnado)
-	sandnado.global_position = global_position
-	sandnado.global_position.x -= sandnado.sprite_horizontal_offset
 
 func summon_complete():
 	state = PREP

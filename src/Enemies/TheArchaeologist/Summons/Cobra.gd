@@ -15,6 +15,7 @@ onready var summonLargeHitBox = $SummonLargeHitBox/CollisionShape2D
 var state
 var velocity = Vector2.ZERO
 var speed = 300
+var horizontaloffset = 100
 
 func _ready():
 	animatedSprite.play("Summon")
@@ -52,3 +53,5 @@ func _on_AnimatedSprite_animation_finished():
 	elif state == VANISH:
 		queue_free()
 
+func _on_MovingNeckHitBox_body_entered(body):
+	call_deferred("vanish")
