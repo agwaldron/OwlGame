@@ -280,6 +280,9 @@ func cast_ice_arrow():
 		iceBow.face_right()
 	state = CAST_ICE_ARROW
 
+func disperse_ice_platform():
+	get_tree().call_group("iceplatform", "shatterPlatform")
+
 func ice_platform_summoned():
 	play_idle_animation()
 	state = RUN

@@ -4,7 +4,8 @@ enum {
 	IDLE,
 	CAST,
 	FLYDOWN,
-	FLYUP
+	FLYUP,
+	WINE # temp
 }
 
 const BeePortal = preload("res://src/Enemies/TheWitch/Spells/BeePortal.tscn")
@@ -32,8 +33,10 @@ var flyheight = 400
 var flyspeed = 500
 var velocity = Vector2.ZERO
 
+var winecooldown = 200 #temporary to test player ice platforms
+var winetimer = winecooldown # ^^
+
 func _ready():
-	get_tree().call_group("player", "cast_ice_platform")
 	animatedSprite.play("Idle")
 	global_position.y = groundheight
 	stats.health = 20
@@ -55,9 +58,12 @@ func _process(delta):
 			flyDown(delta)
 		FLYUP:
 			flyUp(delta)
+		WINE: # temp
+			castingWine(delta)
 
 func attack():
 	if wineready:
+		get_tree().call_group("player", "cast_ice_platform")
 		state = FLYUP
 		animatedSprite.play("FlyUp")
 		velocity.y = flyspeed * -1
@@ -105,7 +111,6 @@ func beeSpawns(delta):
 			beespawns += 2
 			beetimer = beecooldown
 
-
 func castDagger():
 	var magicdagger = MagicDagger.instance()
 	get_parent().add_child(magicdagger)
@@ -120,9 +125,16 @@ func castDagger():
 	magicdagger.global_position.x = playerpos.x - magicdagger.vertoffset
 	magicdagger.global_position.y = vertdaggerpos
 
+# temp
+func castingWine(delta):
+	winetimer -= (delta* 100)
+	if winetimer <= 0:
+		get_tree().call_group("player", "disperse_ice_platform")
+		spellFinished()
+
 func castWine():
-	print("wine")
-	spellFinished()
+	winetimer = winecooldown
+	state = WINE
 
 func beeVanish():
 	beevanishes += 1

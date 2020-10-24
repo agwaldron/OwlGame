@@ -86,7 +86,9 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=14]
 extents = Vector2( 61.8207, 7.58759 )
 
-[node name="IcePlatform" type="KinematicBody2D"]
+[node name="IcePlatform" type="KinematicBody2D" groups=[
+"iceplatform",
+]]
 script = ExtResource( 3 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]

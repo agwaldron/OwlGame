@@ -38,6 +38,7 @@ func startMoving():
 
 func vanish():
 	velocity = Vector2.ZERO
+	global_position.x += 20
 	state = VANISH
 	animatedSprite.play("Vanish")
 	animatedSprite.set_frame(0)
@@ -51,6 +52,7 @@ func _on_AnimatedSprite_animation_finished():
 	if state == SUMMON:
 		call_deferred("startMoving")
 	elif state == VANISH:
+		get_tree().call_group("archaeologist", "summon_complete")
 		queue_free()
 
 func _on_MovingNeckHitBox_body_entered(body):

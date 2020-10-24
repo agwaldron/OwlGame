@@ -6,7 +6,7 @@
 [ext_resource path="res://src/Environment/Camera.gd" type="Script" id=4]
 [ext_resource path="res://src/Player/Player.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/Player/HealthBar.tscn" type="PackedScene" id=6]
-[ext_resource path="res://src/Enemies/TheWitch/TheWith.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/Enemies/TheWitch/TheWitch.tscn" type="PackedScene" id=7]
 
 [node name="TheWitchArena" type="Node2D"]
 
