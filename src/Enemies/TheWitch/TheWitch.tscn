@@ -45,12 +45,12 @@ region = Rect2( 640, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=8]
 flags = 4
-atlas = ExtResource( 7 )
+atlas = ExtResource( 6 )
 region = Rect2( 0, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=9]
 flags = 4
-atlas = ExtResource( 6 )
+atlas = ExtResource( 7 )
 region = Rect2( 0, 0, 128, 128 )
 
 [sub_resource type="SpriteFrames" id=10]
@@ -67,12 +67,12 @@ animations = [ {
 }, {
 "frames": [ SubResource( 8 ) ],
 "loop": true,
-"name": "FlyDown",
+"name": "FlyUp",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 9 ) ],
 "loop": true,
-"name": "FlyUp",
+"name": "FlyDown",
 "speed": 5.0
 } ]
 

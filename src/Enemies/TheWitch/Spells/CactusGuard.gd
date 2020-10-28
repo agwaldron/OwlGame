@@ -46,5 +46,5 @@ func _on_AnimatedSprite_animation_finished():
 		get_tree().call_group("TheWitch", "cactusGuardUp")
 		state = STATIC
 	elif state == DISPERSE:
-		get_tree().call_group("TheWitch", "spellFinished")
+		get_tree().call_group("TheWitch", "cactusFinished")
 		queue_free()

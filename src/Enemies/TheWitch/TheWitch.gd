@@ -11,6 +11,7 @@ enum {
 const BeePortal = preload("res://src/Enemies/TheWitch/Spells/BeePortal.tscn")
 const CactusAttack = preload("res://src/Enemies/TheWitch/Spells/CactusAttack.tscn")
 const CactusGuard = preload("res://src/Enemies/TheWitch/Spells/CactusGuard.tscn")
+const WineBottle = preload("res://src/Enemies/TheWitch/Spells/WineBottle.tscn")
 
 onready var animatedSprite = $AnimatedSprite
 onready var stats = $EnemyStats
@@ -35,9 +36,6 @@ var groundheight = 700
 var flyheight = 400
 var flyspeed = 500
 var velocity = Vector2.ZERO
-
-var winecooldown = 200 #temporary to test player ice platforms
-var winetimer = winecooldown # ^^
 
 func _ready():
 	animatedSprite.play("Idle")
@@ -139,14 +137,18 @@ func castCactusAttack():
 
 # temp
 func castingWine(delta):
-	winetimer -= (delta* 100)
-	if winetimer <= 0:
-		get_tree().call_group("player", "disperse_ice_platform")
-		spellFinished()
+	pass
 
 func castWine():
-	winetimer = winecooldown
+	animatedSprite.play("Cast")
+	animatedSprite.set_frame(0)
 	state = WINE
+
+	var wineBottle = WineBottle.instance()
+	get_parent().add_child(wineBottle)
+	wineBottle.global_position = global_position
+	wineBottle.global_position.x -= wineBottle.horoffset
+	wineBottle.global_position.y += wineBottle.vertoffset
 
 func cactusSmashed():
 	numcactusattacks += 1
@@ -163,14 +165,15 @@ func beeVanish():
 	if beevanishes == beespercycle:
 		wineready = true
 
-func spellFinished():
-	if wineready:
-		state = FLYDOWN
-		animatedSprite.play("FlyDown")
-		velocity.y = flyspeed
-	else:
-		state = IDLE
-		attacktimer = attackcooldown
+func cactusFinished():
+	state = IDLE
+	attacktimer = attackcooldown
+
+func wineFinished():
+	state = FLYDOWN
+	animatedSprite.play("FlyDown")
+	velocity.y = flyspeed
+	get_tree().call_group("player", "disperse_ice_platform")
 
 func updatePlayerLocation(pos):
 	playerpos = pos
