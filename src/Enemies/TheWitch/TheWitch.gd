@@ -150,10 +150,10 @@ func castWine():
 
 func cactusSmashed():
 	numcactusattacks += 1
-	if numcactusattacks >= maxcactusattacks:
-		spellFinished()
-	else:
+	if numcactusattacks < maxcactusattacks:
 		cactusready = true
+	else:
+		get_tree().call_group("cactusguard", "disperse")
 
 func cactusGuardUp():
 	cactusready = true
@@ -164,7 +164,6 @@ func beeVanish():
 		wineready = true
 
 func spellFinished():
-	get_tree().call_group("cactusguard", "disperse")
 	if wineready:
 		state = FLYDOWN
 		animatedSprite.play("FlyDown")

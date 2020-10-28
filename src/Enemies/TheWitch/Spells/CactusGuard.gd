@@ -22,18 +22,29 @@ func _ready():
 	state = GROW
 
 func disperse():
-	queue_free()
+	state = DISPERSE
+	animatedSprite.play("Disperse")
+	animatedSprite.set_frame(0)
 
 func _on_AnimatedSprite_frame_changed():
-	if animatedSprite.get_frame() == 2:
+	if state == GROW and animatedSprite.get_frame() == 2:
 		hitboxsmall.disabled = true
 		hitboxmedium.disabled = false
-	elif animatedSprite.get_frame() == 5:
+	elif state == GROW and animatedSprite.get_frame() == 5:
 		hitboxmedium.disabled = true
 		hitboxfull.disabled = false
+	elif state == DISPERSE and animatedSprite.get_frame() == 2:
+		hitboxfull.disabled = true
+		hitboxmedium.disabled = false
+	elif state == DISPERSE and animatedSprite.get_frame() == 5:
+		hitboxmedium.disabled = true
+		hitboxsmall.disabled = false
 
 func _on_AnimatedSprite_animation_finished():
 	if state == GROW:
 		animatedSprite.play("Static")
 		get_tree().call_group("TheWitch", "cactusGuardUp")
 		state = STATIC
+	elif state == DISPERSE:
+		get_tree().call_group("TheWitch", "spellFinished")
+		queue_free()

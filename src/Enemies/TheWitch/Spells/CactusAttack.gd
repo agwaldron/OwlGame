@@ -63,6 +63,7 @@ func shatter():
 	velocity = Vector2.ZERO
 	hitBox.disabled = true
 	state = SHATTERING
+	animatedSprite.play("Shatter")
 
 func _on_AnimatedSprite_animation_finished():
 	if state == TRACKING:
