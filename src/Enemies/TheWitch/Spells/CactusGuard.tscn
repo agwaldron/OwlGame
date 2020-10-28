@@ -1,0 +1,116 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://src/Enemies/TheWitch/Spells/CactusGuard.gd" type="Script" id=1]
+[ext_resource path="res://src/CollisionTemplates/HitBox.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Assets/Enemies/TheWitch/Spells/CactusGuardGrowing.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Enemies/TheWitch/Spells/CactusGuardStatic.png" type="Texture" id=4]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 128, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=3]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 256, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=4]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 384, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=5]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 512, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=6]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 640, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=7]
+flags = 4
+atlas = ExtResource( 3 )
+region = Rect2( 768, 0, 128, 128 )
+
+[sub_resource type="AtlasTexture" id=8]
+flags = 4
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 128, 128 )
+
+[sub_resource type="SpriteFrames" id=9]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
+"loop": true,
+"name": "Grow",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 8 ) ],
+"loop": true,
+"name": "Static",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=10]
+extents = Vector2( 34.2301, 61.1916 )
+
+[sub_resource type="RectangleShape2D" id=11]
+extents = Vector2( 26.5001, 25.0813 )
+
+[sub_resource type="RectangleShape2D" id=12]
+extents = Vector2( 34.104, 52.2095 )
+
+[node name="CactusGuard" type="KinematicBody2D" groups=[
+"cactusguard",
+]]
+collision_layer = 16
+collision_mask = 7
+script = ExtResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0, -63.562 )
+frames = SubResource( 9 )
+animation = "Grow"
+frame = 5
+
+[node name="HitBoxFull" parent="." instance=ExtResource( 2 )]
+collision_layer = 16
+collision_mask = 7
+
+[node name="CollisionShape2D" parent="HitBoxFull" index="0"]
+position = Vector2( 0, -63.1568 )
+shape = SubResource( 10 )
+disabled = true
+
+[node name="HitBoxSmall" parent="." instance=ExtResource( 2 )]
+collision_layer = 16
+collision_mask = 7
+
+[node name="CollisionShape2D" parent="HitBoxSmall" index="0"]
+position = Vector2( 0, -25.5704 )
+shape = SubResource( 11 )
+disabled = true
+
+[node name="HitBoxMedium" parent="." instance=ExtResource( 2 )]
+collision_layer = 8
+collision_mask = 7
+
+[node name="CollisionShape2D" parent="HitBoxMedium" index="0"]
+position = Vector2( 0, -54.4896 )
+shape = SubResource( 12 )
+disabled = true
+[connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
+[connection signal="frame_changed" from="AnimatedSprite" to="." method="_on_AnimatedSprite_frame_changed"]
+
+[editable path="HitBoxFull"]
+
+[editable path="HitBoxSmall"]
+
+[editable path="HitBoxMedium"]

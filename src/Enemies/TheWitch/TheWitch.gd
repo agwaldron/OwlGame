@@ -2,14 +2,15 @@ extends KinematicBody2D
 
 enum {
 	IDLE,
-	CAST,
+	CACTUS,
 	FLYDOWN,
 	FLYUP,
 	WINE # temp
 }
 
 const BeePortal = preload("res://src/Enemies/TheWitch/Spells/BeePortal.tscn")
-const MagicDagger = preload("res://src/Enemies/TheWitch/Spells/MagicDagger.tscn")
+const CactusAttack = preload("res://src/Enemies/TheWitch/Spells/CactusAttack.tscn")
+const CactusGuard = preload("res://src/Enemies/TheWitch/Spells/CactusGuard.tscn")
 
 onready var animatedSprite = $AnimatedSprite
 onready var stats = $EnemyStats
@@ -24,8 +25,10 @@ var beepos1 = Vector2(350, 125)
 var beepos2 = Vector2(950, 125)
 var attackcooldown = 600
 var attacktimer
-var vertdaggerpos = 100
-var hordaggerpos = 900
+var maxcactusattacks = 3
+var numcactusattacks = 0
+var cactusready
+var cactusattackheight = 150
 var playerpos
 var wineready
 var groundheight = 700
@@ -44,6 +47,7 @@ func _ready():
 	attacktimer = attackcooldown
 	state = IDLE
 	wineready = false
+	cactusready = false
 
 func _process(delta):
 	beeSpawns(delta)
@@ -52,8 +56,8 @@ func _process(delta):
 			attacktimer -= (delta * 100)
 			if attacktimer <= 0:
 				attack()
-		CAST:
-			pass
+		CACTUS:
+			cactusState()
 		FLYDOWN:
 			flyDown(delta)
 		FLYUP:
@@ -68,14 +72,21 @@ func attack():
 		animatedSprite.play("FlyUp")
 		velocity.y = flyspeed * -1
 	else:
-		state = CAST
+		state = CACTUS
 		animatedSprite.play("Cast")
 		animatedSprite.set_frame(0)
-		castDagger()
+		numcactusattacks = 0
+		cactusready = false
+		castCactusGuard()
+
+func cactusState():
+	if cactusready:
+		animatedSprite.play("Cast")
+		animatedSprite.set_frame(0)
+		castCactusAttack()
 
 func flyUp(delta):
 	if global_position.y <= flyheight:
-		state = CAST
 		animatedSprite.play("Idle")
 		velocity.y = 0
 		castWine()
@@ -111,19 +122,20 @@ func beeSpawns(delta):
 			beespawns += 2
 			beetimer = beecooldown
 
-func castDagger():
-	var magicdagger = MagicDagger.instance()
-	get_parent().add_child(magicdagger)
-	magicdagger.playerpos = playerpos
-	magicdagger.global_position.x = hordaggerpos
-	magicdagger.global_position.y = playerpos.y - magicdagger.horoffset
+func castCactusGuard():
+	var cactusGuard = CactusGuard.instance()
+	get_parent().add_child(cactusGuard)
+	cactusGuard.global_position = global_position
+	cactusGuard.global_position.x -= cactusGuard.horoffset
+	cactusGuard.global_position.y += cactusGuard.vertoffset
 
-	magicdagger = MagicDagger.instance()
-	get_parent().add_child(magicdagger)
-	magicdagger.playerpos = playerpos
-	magicdagger.isVertical()
-	magicdagger.global_position.x = playerpos.x - magicdagger.vertoffset
-	magicdagger.global_position.y = vertdaggerpos
+func castCactusAttack():
+	var cactusAttack = CactusAttack.instance()
+	get_parent().add_child(cactusAttack)
+	cactusAttack.playerpos = playerpos
+	cactusAttack.global_position.x = playerpos.x
+	cactusAttack.global_position.y = cactusattackheight
+	cactusready = false
 
 # temp
 func castingWine(delta):
@@ -136,12 +148,23 @@ func castWine():
 	winetimer = winecooldown
 	state = WINE
 
+func cactusSmashed():
+	numcactusattacks += 1
+	if numcactusattacks >= maxcactusattacks:
+		spellFinished()
+	else:
+		cactusready = true
+
+func cactusGuardUp():
+	cactusready = true
+
 func beeVanish():
 	beevanishes += 1
 	if beevanishes == beespercycle:
 		wineready = true
 
 func spellFinished():
+	get_tree().call_group("cactusguard", "disperse")
 	if wineready:
 		state = FLYDOWN
 		animatedSprite.play("FlyDown")
