@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://src/Environment/TableTileSet.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Environment/FloorTileSet.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://src/Player/Player.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/Player/HealthBar.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/Enemies/TheWitch/TheWitch.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/Enemies/TheWitch/Spells/WineWave.tscn" type="PackedScene" id=8]
 
 [node name="TheWitchArena" type="Node2D"]
 
@@ -35,3 +36,6 @@ position = Vector2( 253.433, 703.873 )
 
 [node name="TheWith" parent="." instance=ExtResource( 7 )]
 position = Vector2( 1059.5, 687.938 )
+
+[node name="WineWave" parent="." instance=ExtResource( 8 )]
+position = Vector2( 995.5, 703.702 )

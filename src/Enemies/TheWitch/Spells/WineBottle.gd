@@ -5,13 +5,15 @@ enum {
 	POUR
 }
 
+const WineWave = preload("res://src/Enemies/TheWitch/Spells/WineWave.tscn")
+
 onready var animatedSprite = $AnimatedSprite
 onready var hitboxsmall = $HitBoxSmall/CollisionShape2D
 onready var hitboxfull = $HitBox2Full/CollisionShape2D
 
 var state
-var horoffset = 60
-var vertoffset = 15
+var horoffset = 100
+var vertoffset = 0
 
 func _ready():
 	animatedSprite.play("Summon")
