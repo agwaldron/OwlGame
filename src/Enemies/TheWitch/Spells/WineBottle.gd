@@ -2,7 +2,8 @@ extends KinematicBody2D
 
 enum {
 	SUMMON,
-	POUR
+	POUR,
+	VANISH
 }
 
 const WineWave = preload("res://src/Enemies/TheWitch/Spells/WineWave.tscn")
@@ -21,6 +22,16 @@ func _ready():
 	state = SUMMON
 	hitboxsmall.disabled = false
 
+func summonWave():
+	var wineWave = WineWave.instance()
+	get_parent().add_child(wineWave)
+	wineWave.global_position = global_position
+
+func disappear():
+	state = VANISH
+	animatedSprite.play("Vanish")
+	animatedSprite.set_frame(0)
+
 func _on_AnimatedSprite_frame_changed():
 	if state == SUMMON and animatedSprite.get_frame() == 3:
 		hitboxsmall.disabled = true
@@ -31,5 +42,7 @@ func _on_AnimatedSprite_animation_finished():
 		state = POUR
 		animatedSprite.play("Pour")
 	elif state == POUR:
-		get_tree().call_group("TheWitch", "wineFinished")
+		summonWave()
+		#get_tree().call_group("TheWitch", "wineFinished")
+	elif state == VANISH:
 		queue_free()
