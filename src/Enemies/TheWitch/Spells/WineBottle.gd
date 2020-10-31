@@ -26,8 +26,9 @@ func summonWave():
 	var wineWave = WineWave.instance()
 	get_parent().add_child(wineWave)
 	wineWave.global_position = global_position
+	wineWave.global_position.y += wineWave.vertoffset
 
-func disappear():
+func vanish():
 	state = VANISH
 	animatedSprite.play("Vanish")
 	animatedSprite.set_frame(0)
