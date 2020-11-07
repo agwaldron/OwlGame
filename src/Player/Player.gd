@@ -22,7 +22,8 @@ enum {
 	CAST_ICE_ARROW,
 	CAST_ICE_PLATFORM,
 	CAST_ICE_SPIKE,
-	CAST_LIGHTNING
+	CAST_LIGHTNING,
+	PUKE
 }
 
 const FireBall = preload("res://src/Player/Spells/FireBall.tscn")
@@ -440,6 +441,16 @@ func move(delta, grav):
 	velocity = move_and_slide(velocity, Vector2.UP)
 	get_tree().call_group("Enemies", "updatePlayerLocation", global_position)
 
+func blackOut():
+	disable_col_boxes()
+	disable_hurt_boxes()
+	velocity = Vector2.ZERO
+	state = PUKE
+	if direction_vector.x < 0:
+		animatedSprite.play("PukeLeft")
+	else:
+		animatedSprite.play("PukeRight")
+
 func _on_HurtBox_area_entered(area):
 	if not immune:
 		get_tree().call_group("ConcentrationSpell", "spell_interrupt")
@@ -447,11 +458,13 @@ func _on_HurtBox_area_entered(area):
 		health -= 1
 		get_tree().call_group("health_bar", "set_health", health)
 		if health <= 0:
-			queue_free()
-		if is_on_floor():
+			call_deferred("blackOut")
+		elif is_on_floor():
 			call_deferred("start_getting_up")
 		else:
 			call_deferred("start_free_fall")
 
 func _on_AnimatedSprite_animation_finished():
 	animFinished = true
+	if state == PUKE:
+		queue_free()
