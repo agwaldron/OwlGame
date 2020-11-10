@@ -52,6 +52,7 @@ onready var runRightColBox = $RunRightCollisionShape
 onready var runRightHurtBox = $RunRightHurtBox/CollisionShape2D
 
 var health = 5
+var blackedout = false
 var immune = false
 var immune_duration = 75
 var immune_timer
@@ -61,7 +62,6 @@ var direction_vector = Vector2.RIGHT
 var dash_timer = 0
 var dash_cool_down_timer = 0
 var cast_timer = 0
-var animFinished = false
 var iceplatformpos1 = Vector2(400, 575)
 var iceplatformpos2 = Vector2(600, 400)
 var iceplatformpos3 = Vector2(800, 575)
@@ -95,8 +95,6 @@ func _physics_process(delta):
 			air_state(delta)
 		FREEFALL:
 			free_fall_state(delta)
-		GETUP:
-			get_up_state(delta)
 		CAST_FIRE:
 			cast_fire_state(delta)
 		CAST_ICE_ARROW:
@@ -184,12 +182,6 @@ func free_fall_state(delta):
 	else:
 		move(delta, true)
 
-func get_up_state(delta):
-	if animFinished:
-		play_idle_animation()
-		immune_timer = immune_duration
-		state = RUN
-
 func cast_fire_state(delta):
 	cast_timer -= (delta * 100)
 	if cast_timer <= 0:
@@ -248,6 +240,14 @@ func start_getting_up():
 	velocity = Vector2.ZERO
 	play_getting_up_animation()
 	state = GETUP
+
+func getUp():
+	if blackedout:
+		puke()
+	else:
+		play_idle_animation()
+		immune_timer = immune_duration
+		state = RUN
 
 func cast_fire():
 	velocity.x = 0
@@ -400,7 +400,6 @@ func play_getting_up_animation():
 	disable_col_boxes()
 	disable_hurt_boxes()
 
-	animFinished = false
 	if direction_vector.x < 0:
 		idleRightColBox.disabled = false
 		animatedSprite.play("GetUpLeft")
@@ -442,8 +441,14 @@ func move(delta, grav):
 	get_tree().call_group("Enemies", "updatePlayerLocation", global_position)
 
 func blackOut():
-	disable_col_boxes()
+	blackedout = true
 	disable_hurt_boxes()
+	if is_on_floor():
+		puke()
+	else:
+		start_free_fall()
+
+func puke():
 	velocity = Vector2.ZERO
 	state = PUKE
 	if direction_vector.x < 0:
@@ -465,6 +470,7 @@ func _on_HurtBox_area_entered(area):
 			call_deferred("start_free_fall")
 
 func _on_AnimatedSprite_animation_finished():
-	animFinished = true
 	if state == PUKE:
 		queue_free()
+	elif state == GETUP:
+		getUp()
