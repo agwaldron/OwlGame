@@ -469,8 +469,10 @@ func _on_HurtBox_area_entered(_area):
 		else:
 			call_deferred("start_free_fall")
 
+func _on_AnimatedSprite_frame_changed():
+	if state == PUKE and animatedSprite.get_frame() == 4:
+		get_tree().call_group("gameoverscreen", "fadeIn")
+
 func _on_AnimatedSprite_animation_finished():
-	if state == PUKE:
-		queue_free()
-	elif state == GETUP:
+	if state == GETUP:
 		getUp()

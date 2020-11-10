@@ -1,14 +1,20 @@
-[gd_scene format=2]
+[gd_scene load_steps=2 format=2]
 
-[node name="GameOver" type="ColorRect"]
+[ext_resource path="res://src/Environment/GameOverScreen.gd" type="Script" id=1]
+
+[node name="GameOver" type="ColorRect" groups=[
+"gameoverscreen",
+]]
 margin_right = 1280.0
 margin_bottom = 750.0
-color = Color( 0, 0, 0, 1 )
+color = Color( 0, 0, 0, 0 )
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="."]
+[node name="GameOverText" type="Label" parent="."]
+visible = false
 margin_left = 340.0
 margin_top = 300.0
 margin_right = 940.0
