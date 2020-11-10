@@ -83,7 +83,7 @@ func cactusState():
 		animatedSprite.set_frame(0)
 		castCactusAttack()
 
-func flyUp(delta):
+func flyUp(_delta):
 	if global_position.y <= flyheight:
 		animatedSprite.play("Idle")
 		velocity.y = 0
@@ -91,7 +91,7 @@ func flyUp(delta):
 	else:
 		velocity = move_and_slide(velocity)
 
-func flyDown(delta):
+func flyDown(_delta):
 	if global_position.y >= groundheight:
 		wineready = false
 		velocity.y = 0
@@ -136,7 +136,7 @@ func castCactusAttack():
 	cactusready = false
 
 # temp
-func castingWine(delta):
+func castingWine(_delta):
 	pass
 
 func castWine():

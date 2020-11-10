@@ -9,7 +9,7 @@ var max_height = 500
 var min_height = 660
 var velocity = Vector2.ZERO
 
-func _process(delta):
+func _process(_delta):
 	if velocity.y < 0 and global_position.y < max_height:
 		velocity.y = velocity.y * -1
 	elif velocity.y > 0 and global_position.y > min_height:
@@ -23,5 +23,5 @@ func _on_HitBox_area_entered(area):
 		if x == "BlockingSpell":
 			queue_free()
 
-func _on_HitBox_body_entered(body):
+func _on_HitBox_body_entered(_body):
 	queue_free()

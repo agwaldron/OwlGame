@@ -23,7 +23,7 @@ func _ready():
 	summonSmallHitBox.disabled = false
 	state = SUMMON
 
-func _process(delta):
+func _process(_delta):
 	if state == MOVING:
 		velocity = move_and_slide(velocity)
 
@@ -55,5 +55,5 @@ func _on_AnimatedSprite_animation_finished():
 		get_tree().call_group("archaeologist", "summon_complete")
 		queue_free()
 
-func _on_MovingNeckHitBox_body_entered(body):
+func _on_MovingNeckHitBox_body_entered(_body):
 	call_deferred("vanish")

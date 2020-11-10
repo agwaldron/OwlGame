@@ -11,7 +11,7 @@ onready var sprite_horizontal_offset = 20
 var velocity = Vector2(SPEED, 0)
 var col = false
 
-func _process(delta):
+func _process(_delta):
 	velocity = move_and_slide(velocity)
 
 func explode():
@@ -26,10 +26,10 @@ func explode():
 	col = true
 	hitBox.disabled = true
 
-func _on_HitBox_area_entered(area):
+func _on_HitBox_area_entered(_area):
 	call_deferred("explode")
 
-func _on_HitBox_body_entered(body):
+func _on_HitBox_body_entered(_body):
 	call_deferred("explode")
 
 func _on_AnimatedSprite_animation_finished():

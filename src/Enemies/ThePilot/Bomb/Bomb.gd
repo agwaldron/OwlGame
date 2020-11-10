@@ -6,7 +6,7 @@ const BombExplsion = preload("res://src/Enemies/ThePilot/Bomb/BombExplosion.tscn
 
 var velocity = Vector2(0, SPEED)
 
-func _process(delta):
+func _process(_delta):
 	velocity = move_and_slide(velocity)
 
 func explode():
@@ -16,5 +16,5 @@ func explode():
 	bombExplosion.global_position = global_position
 	queue_free()
 
-func _on_HitBox_body_entered(body):
+func _on_HitBox_body_entered(_body):
 	call_deferred("explode")

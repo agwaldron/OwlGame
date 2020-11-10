@@ -15,7 +15,7 @@ func _ready():
 	leftDir = false
 	animatedSprite.play("FlyRight")
 
-func _process(delta):
+func _process(_delta):
 	velocity = move_and_slide(velocity)
 
 func shatter():
@@ -28,10 +28,10 @@ func shatter():
 		animatedSprite.play("ShatterRight")
 	animatedSprite.set_frame(0)
 
-func _on_HitBox_area_entered(area):
+func _on_HitBox_area_entered(_area):
 	call_deferred("shatter")
 
-func _on_HitBox_body_entered(body):
+func _on_HitBox_body_entered(_body):
 	call_deferred("shatter")
 
 func _on_AnimatedSprite_animation_finished():

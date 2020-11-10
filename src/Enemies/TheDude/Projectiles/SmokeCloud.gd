@@ -23,7 +23,7 @@ func _ready():
 	animatedSprite.set_frame(0)
 	state = GROW
 
-func _process(delta):
+func _process(_delta):
 	velocity = move_and_slide(velocity)
 
 func collision():
@@ -55,5 +55,5 @@ func _on_AnimatedSprite_animation_finished():
 		get_tree().call_group("dude", "start_attack")
 		queue_free()
 
-func _on_HitBox_body_entered(body):
+func _on_HitBox_body_entered(_body):
 	call_deferred("collision")

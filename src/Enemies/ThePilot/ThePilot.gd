@@ -52,7 +52,7 @@ func _process(delta):
 		FLYBACKHIGH:
 			flyBackHigh(delta)
 
-func flyBy(delta):
+func flyBy(_delta):
 	velocity = move_and_slide(velocity)
 	if global_position.x < NEG_TURN_BACK_POINT:
 		animatedSprite.play("PlaneFar")
@@ -61,7 +61,7 @@ func flyBy(delta):
 		state = FLYBACKHIGH
 		hurtBox.disabled = true
 
-func bombDrop(delta):
+func bombDrop(_delta):
 	velocity = move_and_slide(velocity)
 	#if bombReady:
 		#checkForPlayer()
@@ -73,7 +73,7 @@ func bombDrop(delta):
 		state = FLYBACKLOW
 		hurtBox.disabled = true
 
-func flyBackLow(delta):
+func flyBackLow(_delta):
 	velocity = move_and_slide(velocity)
 	if global_position.x > POS_TURN_BACK_POINT:
 		animatedSprite.play("PlaneClose")
@@ -82,7 +82,7 @@ func flyBackLow(delta):
 		state = FLYBY
 		hurtBox.disabled = false
 
-func flyBackHigh(delta):
+func flyBackHigh(_delta):
 	velocity = move_and_slide(velocity)
 	if global_position.x > POS_TURN_BACK_POINT:
 		animatedSprite.play("PlaneClose")

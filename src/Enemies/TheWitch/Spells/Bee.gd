@@ -20,7 +20,7 @@ func _ready():
 	vanishing = false
 	facingLeft = true
 
-func _process(delta):
+func _process(_delta):
 	if not vanishing:
 		velocity = position.direction_to(target) * SPEED
 		if velocity.y > 0 and global_position.y >= minHeight:

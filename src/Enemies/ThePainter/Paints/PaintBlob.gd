@@ -69,7 +69,7 @@ var yellowBlobsInner = [
 func _ready():
 	horizontalCenter = get_viewport().size.x / 2
 
-func _process(delta):
+func _process(_delta):
 	velocity = move_and_slide(velocity)
 	if isRed:
 		if global_position.y <= redMaxHeight:

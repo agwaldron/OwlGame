@@ -72,5 +72,5 @@ func _on_AnimatedSprite_animation_finished():
 		get_tree().call_group("TheWitch", "cactusSmashed")
 		queue_free()
 
-func _on_HitBox_body_entered(body):
+func _on_HitBox_body_entered(_body):
 	call_deferred("shatter")

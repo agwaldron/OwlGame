@@ -13,6 +13,7 @@ margin_left = 340.0
 margin_top = 300.0
 margin_right = 940.0
 margin_bottom = 450.0
+custom_colors/font_color = Color( 0.521569, 0.0431373, 0.0431373, 1 )
 text = "YOU BLACKED OUT"
 align = 1
 valign = 1

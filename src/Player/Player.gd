@@ -196,7 +196,7 @@ func cast_fire_state(delta):
 func ice_arrow_released():
 	state = RUN
 
-func cast_ice_arrow_state(delta):
+func cast_ice_arrow_state(_delta):
 	if Input.is_action_just_released("icearrow"):
 		get_tree().call_group("ConcentrationSpell", "spell_interrupt")
 		state = RUN
@@ -456,7 +456,7 @@ func puke():
 	else:
 		animatedSprite.play("PukeRight")
 
-func _on_HurtBox_area_entered(area):
+func _on_HurtBox_area_entered(_area):
 	if not immune:
 		get_tree().call_group("ConcentrationSpell", "spell_interrupt")
 		get_tree().call_group("camera", "player_hit")

@@ -21,7 +21,7 @@ func _ready():
 	velocity.x = -SHUFFLE_SPEED
 	animatedSprite.play("ShuffleLeft")
 
-func _process(delta):
+func _process(_delta):
 	if global_position.x < turnAroundLeft or global_position.x > turnAroundRight:
 		turn_around()
 	velocity = move_and_slide(velocity)

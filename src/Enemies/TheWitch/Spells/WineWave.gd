@@ -23,7 +23,7 @@ func _ready():
 	animatedSprite.play("Summon")
 	animatedSprite.set_frame(0)
 
-func _process(delta):
+func _process(_delta):
 	if state == MOVING:
 		velocity = move_and_slide(velocity)
 
@@ -60,5 +60,5 @@ func _on_AnimatedSprite_animation_finished():
 	elif state == VANISH:
 		queue_free()
 
-func _on_HitBoxFullBody_body_entered(body):
+func _on_HitBoxFullBody_body_entered(_body):
 	call_deferred("vanish")

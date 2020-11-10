@@ -46,7 +46,7 @@ func _on_HitBox_area_entered(area):
 		if x == "BlockingSpell":
 			call_deferred("splatter")
 
-func _on_HitBox_body_entered(body):
+func _on_HitBox_body_entered(_body):
 	call_deferred("splatter")
 
 func _on_AnimatedSprite_animation_finished():
