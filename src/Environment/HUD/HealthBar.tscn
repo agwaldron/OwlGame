@@ -1,8 +1,9 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://src/Player/HealthBar.gd" type="Script" id=1]
+[ext_resource path="res://src/Environment/HUD/HealthBar.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Player/Heart.png" type="Texture" id=2]
 [ext_resource path="res://Assets/Player/HeartEmpty.png" type="Texture" id=3]
+
 
 [node name="HealthBar" type="Control" groups=[
 "health_bar",
