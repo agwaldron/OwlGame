@@ -1,8 +1,8 @@
 extends KinematicBody2D
 
-var speed = 600
+var speed = 2500
 var velocity = Vector2(speed, 0)
-var probeduration = 25
+var probeduration = 10
 var probetimer = 0
 
 func _process(delta):
