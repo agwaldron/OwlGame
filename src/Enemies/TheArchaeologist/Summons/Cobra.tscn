@@ -212,17 +212,18 @@ extents = Vector2( 34.5775, 21.8855 )
 extents = Vector2( 35.3719, 61.5451 )
 
 [node name="Cobra" type="KinematicBody2D"]
-collision_layer = 16
+collision_layer = 8
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -64.6742 )
 frames = SubResource( 36 )
 animation = "Move"
+frame = 1
 playing = true
 
 [node name="MovingNeckHitBox" parent="." instance=ExtResource( 1 )]
-collision_layer = 16
+collision_layer = 8
 
 [node name="CollisionShape2D" parent="MovingNeckHitBox" index="0"]
 position = Vector2( -32.8724, -60.0673 )
@@ -230,7 +231,7 @@ shape = SubResource( 37 )
 disabled = true
 
 [node name="MovingBodyHitBox" parent="." instance=ExtResource( 1 )]
-collision_layer = 16
+collision_layer = 8
 
 [node name="CollisionShape2D" parent="MovingBodyHitBox" index="0"]
 position = Vector2( 0, -8.50126 )
@@ -239,7 +240,7 @@ disabled = true
 
 [node name="SummonSmallHitBox" parent="." instance=ExtResource( 1 )]
 visible = false
-collision_layer = 16
+collision_layer = 8
 
 [node name="CollisionShape2D" parent="SummonSmallHitBox" index="0"]
 position = Vector2( 0, -23.0383 )
@@ -248,7 +249,7 @@ disabled = true
 
 [node name="SummonLargeHitBox" parent="." instance=ExtResource( 1 )]
 visible = false
-collision_layer = 16
+collision_layer = 8
 
 [node name="CollisionShape2D" parent="SummonLargeHitBox" index="0"]
 position = Vector2( -4.76654, -62.8211 )

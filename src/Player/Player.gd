@@ -8,13 +8,12 @@ export var MAX_AIR_SPEED = 250
 export var RUN_ACCELERATION = 600
 export var MAX_RUN_SPEED = 300
 export var FRICTION = 700
-export var DASH_SPEED = 800
-export var DASH_DURATION = 25
-export var DASH_COOLDOWN = 35
+export var TELEPORT_COOLDOWN = 35
 
 enum {
 	RUN,
-	DASH,
+	TELEPORTA,
+	TELEPORTV,
 	AIR,
 	FREEFALL,
 	GETUP,
@@ -31,6 +30,7 @@ const IceBow = preload("res://src/Player/Spells/IceBow.tscn")
 const IcePlatform = preload("res://src/Player/Spells/IcePlatform.tscn")
 const IceSpike = preload("res://src/Player/Spells/IceSpike.tscn")
 const Lightning = preload("res://src/Player/Spells/LightningBolt.tscn")
+const TeleportProbe = preload("res://src/Player/Spells/TeleportProbe.tscn")
 
 onready var animatedSprite = $AnimatedSprite
 onready var airColBox = $AirCollisionShape
@@ -39,8 +39,6 @@ onready var castLeftColBox = $CastLeftCollisionShape
 onready var castLeftHurtBox = $CastLeftHurtBox/CollisionShape2D
 onready var castRightColBox = $CastRightCollisionShape
 onready var castRightHurtBox = $CastRightHurtBox/CollisionShape2D
-onready var dashHurtBox = $DashHurtBox/CollisionShape2D
-onready var dashColBox = $DashCollisionShape
 onready var freeFallColBox = $FreeFallCollisionShape
 onready var idleLeftColBox = $IdelLeftCollisionShape
 onready var idleLeftHurtBox = $IdleLeftHurtBox/CollisionShape2D
@@ -61,6 +59,7 @@ var velocity = Vector2.ZERO
 var direction_vector = Vector2.RIGHT
 var dash_timer = 0
 var dash_cool_down_timer = 0
+var teleporttimer = 0
 var cast_timer = 0
 var iceplatformpos1 = Vector2(400, 575)
 var iceplatformpos2 = Vector2(600, 400)
@@ -70,9 +69,9 @@ var hurtBoxes
 var colBoxes
 
 func _ready():
-	colBoxes = [airColBox, castLeftColBox, castRightColBox, dashColBox, freeFallColBox,
+	colBoxes = [airColBox, castLeftColBox, castRightColBox, freeFallColBox,
 				idleLeftColBox, idleRightColBox, runLeftColBox, runRightColBox]
-	hurtBoxes = [airHurtBox, castLeftHurtBox, castRightHurtBox, dashHurtBox, 
+	hurtBoxes = [airHurtBox, castLeftHurtBox, castRightHurtBox, 
 				idleLeftHurtBox, idleRightHurtBox, runLeftHurtBox, runRightHurtBox]
 	idleRightColBox.disabled = false
 	idleRightHurtBox.disabled = false
@@ -89,8 +88,6 @@ func _physics_process(delta):
 	match state:
 		RUN:
 			run_state(delta)
-		DASH:
-			dash_state(delta)
 		AIR:
 			air_state(delta)
 		FREEFALL:
@@ -121,8 +118,8 @@ func run_state(delta):
 
 	move(delta, true)
 
-	if Input.is_action_just_pressed("dash"):
-		dash_action()
+	if Input.is_action_just_pressed("teleport"):
+		teleport_action()
 
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		jump_action()
@@ -139,19 +136,6 @@ func run_state(delta):
 	if Input.is_action_just_pressed("lightning") and is_on_floor():
 		cast_lightning()
 
-func dash_state(delta):
-	dash_timer -= (delta * 100)
-	if dash_timer <= 0:
-		dash_cool_down_timer = DASH_COOLDOWN
-		dash_timer = 0
-		velocity.x = velocity.x * 0.35
-		if is_on_floor():
-			state = RUN
-		else:
-			state = AIR
-	else:
-		move(delta, false)
-
 func air_state(delta):
 	var input_vector = Vector2.ZERO
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
@@ -166,9 +150,9 @@ func air_state(delta):
 		play_air_animation();
 
 	move(delta, true)
-	
-	if Input.is_action_just_pressed("dash"):
-		dash_action()
+
+	if Input.is_action_just_pressed("teleport"):
+		teleport_action()
 
 	if Input.is_action_just_pressed("fireball"):
 		cast_fire()
@@ -216,12 +200,30 @@ func cast_lightning_state(delta):
 		cast_timer = 0
 		state = RUN
 
-func dash_action():
-	if dash_cool_down_timer <= 0:
-		dash_timer = DASH_DURATION
-		velocity.x = direction_vector.x * DASH_SPEED
-		play_dash_animation()
-		state = DASH
+func teleport_action():
+	play_teleport_vanish_animation()
+	velocity = Vector2.ZERO
+	state = TELEPORTV
+
+func teleportProbe():
+	var teleportprobe = TeleportProbe.instance()
+	get_parent().add_child(teleportprobe)
+	teleportprobe.global_position = global_position
+	if direction_vector.x < 0:
+		teleportprobe.faceLeft()
+
+func teleport(pos):
+	play_teleport_appear_animation()
+	global_position = pos
+	state = TELEPORTA
+
+func teleportFinished():
+	if is_on_floor():
+		play_idle_animation()
+		state = RUN
+	else:
+		play_air_animation()
+		state = AIR
 
 func jump_action():
 	velocity.y = JUMP_SPEED
@@ -371,6 +373,22 @@ func play_running_animation():
 		runRightHurtBox.disabled = false
 		animatedSprite.play("RunRight")
 
+func play_teleport_vanish_animation():
+	disable_hurt_boxes()
+	disable_col_boxes()
+	if direction_vector.x < 0:
+		animatedSprite.play("TeleportVanishLeft")
+	else:
+		animatedSprite.play("TeleportVanishRight")
+	animatedSprite.set_frame(0)
+
+func play_teleport_appear_animation():
+	if direction_vector.x < 0:
+		animatedSprite.play("TeleportAppearLeft")
+	else:
+		animatedSprite.play("TeleportAppearRight")
+	animatedSprite.set_frame(0)
+
 func play_air_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
@@ -379,7 +397,7 @@ func play_air_animation():
 	airHurtBox.disabled = false
 	if direction_vector.x < 0 and velocity.y < 0:
 		animatedSprite.play("JumpLeft")
-	elif direction_vector.x < 0 and velocity.y > 0:
+	elif direction_vector.x < 0 and velocity.y >= 0:
 		animatedSprite.play("FallLeft")
 	elif direction_vector.x > 0 and velocity.y < 0:
 		animatedSprite.play("JumpRight")
@@ -419,17 +437,6 @@ func play_cast_animation():
 		castRightColBox.disabled = false;
 		castRightHurtBox.disabled = false;
 		animatedSprite.play("CastRight")
-
-func play_dash_animation():
-	disable_hurt_boxes()
-	disable_col_boxes()
-
-	dashColBox.disabled = false
-	dashHurtBox.disabled = false
-	if direction_vector.x < 0:
-		animatedSprite.play("DashLeft")
-	else:
-		animatedSprite.play("DashRight")
 
 func move(delta, grav):
 	if grav:
@@ -476,3 +483,7 @@ func _on_AnimatedSprite_frame_changed():
 func _on_AnimatedSprite_animation_finished():
 	if state == GETUP:
 		getUp()
+	elif state == TELEPORTV:
+		teleportProbe()
+	elif state == TELEPORTA:
+		call_deferred("teleportFinished")
