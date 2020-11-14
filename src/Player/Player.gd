@@ -59,6 +59,10 @@ var velocity = Vector2.ZERO
 var direction_vector = Vector2.RIGHT
 var teleporttimer = 0
 var cast_timer = 0
+var icearrowcooldown = 125
+var icearrowtimer = 0
+var icespikecooldown = 100
+var icespiketimer = 0
 var fireballchargesmax = 3
 var fireballcharges = fireballchargesmax
 var fireballrechargecooldown = 125
@@ -106,12 +110,12 @@ func runCoolDownTimers(delta):
 		if immune_timer <= 0:
 			immune = false
 	teleporttimer -= (delta * 100)
+	icearrowtimer -= (delta * 100)
+	icespiketimer -= (delta * 100)
 	if fireballcharges < fireballchargesmax:
 		fireballrechargetimer -= (delta * 100)
 		if fireballrechargetimer <= 0:
 			fireballcharges += 1
-			print("fireballready")
-			print(fireballcharges)
 			fireballrechargetimer = fireballrechargecooldown
 
 func run_state(delta):
@@ -129,21 +133,19 @@ func run_state(delta):
 
 	move(delta, true)
 
-	if Input.is_action_just_pressed("teleport"):
-		if teleporttimer <= 0:
-			teleport_action()
+	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
+		teleport_action()
 
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		jump_action()
 
-	if Input.is_action_just_pressed("fireball"):
-		if fireballcharges > 0:
-			cast_fire()
+	if Input.is_action_just_pressed("fireball") and fireballcharges > 0:
+		cast_fire()
 
-	if Input.is_action_just_pressed("icespike") and is_on_floor():
+	if Input.is_action_just_pressed("icespike") and is_on_floor() and icespiketimer <= 0:
 		cast_ice_spike()
 
-	if Input.is_action_just_pressed("icearrow") and is_on_floor():
+	if Input.is_action_just_pressed("icearrow") and is_on_floor() and icearrowtimer <= 0:
 		cast_ice_arrow()
 
 	if Input.is_action_just_pressed("lightning") and is_on_floor():
@@ -164,13 +166,11 @@ func air_state(delta):
 
 	move(delta, true)
 
-	if Input.is_action_just_pressed("teleport"):
-		if teleporttimer <= 0:
-			teleport_action()
+	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
+		teleport_action()
 
-	if Input.is_action_just_pressed("fireball"):
-		if fireballcharges > 0:
-			cast_fire()
+	if Input.is_action_just_pressed("fireball") and fireballcharges > 0:
+		cast_fire()
 
 	if is_on_floor():
 		state = RUN
@@ -287,6 +287,7 @@ func cast_fire():
 
 func cast_ice_arrow():
 	velocity = Vector2.ZERO
+	icearrowtimer = icearrowcooldown
 	play_cast_animation()
 	var iceBow = IceBow.instance()
 	get_parent().add_child(iceBow)
@@ -327,6 +328,7 @@ func cast_ice_platform():
 
 func cast_ice_spike():
 	velocity = Vector2.ZERO
+	icespiketimer = icespikecooldown
 	play_cast_animation()
 	var iceSpike = IceSpike.instance()
 	get_parent().add_child(iceSpike)
