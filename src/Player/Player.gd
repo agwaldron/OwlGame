@@ -31,6 +31,7 @@ const IcePlatform = preload("res://src/Player/Spells/IcePlatform.tscn")
 const IceSpike = preload("res://src/Player/Spells/IceSpike.tscn")
 const Lightning = preload("res://src/Player/Spells/LightningBolt.tscn")
 const TeleportProbe = preload("res://src/Player/Spells/TeleportProbe.tscn")
+const mainmenupath = "res://src/Environment/Menus/MainMenu.tscn"
 
 onready var animatedSprite = $AnimatedSprite
 onready var airColBox = $AirCollisionShape
@@ -85,6 +86,8 @@ func _ready():
 	get_tree().call_group("health_bar", "set_max", health)
 
 func _physics_process(delta):
+	if Input.is_action_just_pressed("quit"):
+		quitGame()
 	runCoolDownTimers(delta)
 	match state:
 		RUN:
@@ -481,6 +484,9 @@ func puke():
 		animatedSprite.play("PukeLeft")
 	else:
 		animatedSprite.play("PukeRight")
+
+func quitGame():
+	get_tree().change_scene(mainmenupath)
 
 func _on_HurtBox_area_entered(_area):
 	if not immune:
