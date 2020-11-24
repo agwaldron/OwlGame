@@ -83,7 +83,7 @@ func _ready():
 	idleRightColBox.disabled = false
 	idleRightHurtBox.disabled = false
 
-	get_tree().call_group("health_bar", "set_max", health)
+	get_tree().call_group("health_bar", "setMax", health)
 
 func _physics_process(delta):
 	if Input.is_action_just_pressed("quit"):
@@ -493,7 +493,7 @@ func _on_HurtBox_area_entered(_area):
 		get_tree().call_group("ConcentrationSpell", "spell_interrupt")
 		get_tree().call_group("camera", "player_hit")
 		health -= 1
-		get_tree().call_group("health_bar", "set_health", health)
+		get_tree().call_group("health_bar", "setHealth", health)
 		if health <= 0:
 			call_deferred("blackOut")
 		elif is_on_floor():

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/IceSpike.png-e4da21b48532f0f3ced043a8f92b2aeb.stex"
+path="res://.import/IceArrowCoolDown.png-c7d43f0b3913498f9ff669ae386bdf98.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Player/IceSpike.png"
-dest_files=[ "res://.import/IceSpike.png-e4da21b48532f0f3ced043a8f92b2aeb.stex" ]
+source_file="res://Assets/Player/IceArrowCoolDown.png"
+dest_files=[ "res://.import/IceArrowCoolDown.png-c7d43f0b3913498f9ff669ae386bdf98.stex" ]
 
 [params]
 
