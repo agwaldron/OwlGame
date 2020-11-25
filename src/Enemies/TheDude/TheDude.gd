@@ -3,7 +3,9 @@ extends KinematicBody2D
 enum {
 	IDLE,
 	LEMON,
-	SMOKE
+	SMOKE,
+	ENRAGING,
+	ENRAGEDIDLE
 }
 
 const Lemon = preload("res://src/Enemies/TheDude/Projectiles/Lemon.tscn")
@@ -14,25 +16,32 @@ onready var stats = $EnemyStats
 
 var lemonNext
 var state
+var startenrage
 
 func _ready():
 	stats.health = 15
 	lemonNext = true
 	state = IDLE
+	startenrage = false
 	animatedSprite.play("Idle")
 	animatedSprite.set_frame(0)
-	start_attack()
+	startAttack()
 
-func start_attack():
-	if lemonNext:
-		animatedSprite.play("GrabLemon")
-		state = LEMON
-	else:
-		animatedSprite.play("BlowSmoke")
-		state = SMOKE
+func startAttack():
+	if state == IDLE:
+		if startenrage:
+			enrage()
+		elif lemonNext:
+			animatedSprite.play("GrabLemon")
+			state = LEMON
+		else:
+			animatedSprite.play("BlowSmoke")
+			state = SMOKE
+	elif state == ENRAGEDIDLE:
+		print("enrage")
 	animatedSprite.set_frame(0)
 
-func throw_lemon():
+func throwLemon():
 	var lemon = Lemon.instance()
 	get_parent().add_child(lemon)
 	lemon.global_position = global_position
@@ -40,21 +49,32 @@ func throw_lemon():
 	lemon.global_position.y -= lemon.sprite_vertical_offset
 	lemon.velocity.x = lemon.HORIZONTAL_SPEED
 
-func blow_smoke():
+func blowSmoke():
 	var smokeCloud = SmokeCloud.instance()
 	get_parent().add_child(smokeCloud)
 	smokeCloud.global_position = global_position
 	smokeCloud.global_position.x -= smokeCloud.sprite_horizontal_offset
 	smokeCloud.global_position.y -= smokeCloud.sprite_vertical_offset
 
+func enrageFlag():
+	startenrage = true
+
+func enrage():
+	animatedSprite.play("Enrage")
+	animatedSprite.set_frame(0)
+	state = ENRAGING
+	startenrage = false
+
 func _on_AnimatedSprite_frame_changed():
 	if state == LEMON and animatedSprite.get_frame() == 14:
-		call_deferred("throw_lemon")
+		call_deferred("throwLemon")
 	elif state == SMOKE and animatedSprite.get_frame() == 13:
-		call_deferred("blow_smoke")
+		call_deferred("blowSmoke")
 
 func _on_AnimatedSprite_animation_finished():
-	if state == LEMON:
+	if startenrage:
+		call_deferred("enrage")
+	elif state == LEMON:
 		lemonNext = false
 		state = IDLE
 		animatedSprite.play("Idle")
@@ -62,6 +82,9 @@ func _on_AnimatedSprite_animation_finished():
 		lemonNext = true
 		state = IDLE
 		animatedSprite.play("Idle")
+	elif state == ENRAGING:
+		animatedSprite.play("EnragedIdle")
+		state = ENRAGEDIDLE
 
 func _on_TheDude_area_entered(area):
 	var area_groups = area.get_groups()

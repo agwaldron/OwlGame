@@ -92,4 +92,5 @@ func _on_HurtBox_area_entered(area):
 			stats.health -= area.damage
 
 func _on_EnemyStats_no_health():
+	get_tree().call_group("dude", "enrageFlag")
 	queue_free()

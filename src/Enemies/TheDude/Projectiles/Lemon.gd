@@ -46,7 +46,7 @@ func bounce_wall():
 
 func _on_AnimatedSprite_animation_finished():
 	if explode:
-		get_tree().call_group("dude", "start_attack")
+		get_tree().call_group("dude", "startAttack")
 		queue_free()
 
 func _on_HitBox_area_entered(area):
