@@ -26,7 +26,7 @@ var state
 var velocity = Vector2.ZERO
 
 func _ready():
-	stats.health = 15
+	stats.health = 1
 	state = IDLEMIN
 	animatedSprite.play("IdleRight")
 	leapTimer = leapCoolDown

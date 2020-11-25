@@ -486,7 +486,7 @@ func puke():
 		animatedSprite.play("PukeRight")
 
 func quitGame():
-	get_tree().change_scene(mainmenupath)
+	var _ignore = get_tree().change_scene(mainmenupath)
 
 func _on_HurtBox_area_entered(_area):
 	if not immune:

@@ -16,7 +16,7 @@ func _process(delta):
 			fading = false
 			label.visible = true
 			yield(get_tree().create_timer(mainmenutimer), "timeout")
-			get_tree().change_scene(mainmenupath)
+			var _ignore = get_tree().change_scene(mainmenupath)
 		else:
 			color = Color(0, 0, 0, transparency)
 

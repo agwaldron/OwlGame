@@ -10,25 +10,25 @@ const witcharena = "res://src/Levels/TheWitchArena.tscn"
 const mainmenu = "res://src/Environment/Menus/MainMenu.tscn"
 
 func _on_TutorialButton_pressed():
-	get_tree().change_scene(tutorial)
+	var _ignore = get_tree().change_scene(tutorial)
 
 func _on_ArchaeologistButton_pressed():
-	get_tree().change_scene(archaeologistarena)
+	var _ignore = get_tree().change_scene(archaeologistarena)
 
 func _on_DudeButton_pressed():
-	get_tree().change_scene(dudearena)
+	var _ignore = get_tree().change_scene(dudearena)
 
 func _on_MusicianButton_pressed():
-	get_tree().change_scene(musicianarena)
+	var _ignore = get_tree().change_scene(musicianarena)
 
 func _on_PainterButton_pressed():
-	get_tree().change_scene(painterarena)
+	var _ignore = get_tree().change_scene(painterarena)
 
 func _on_PilotButton_pressed():
-	get_tree().change_scene(pilotarena)
+	var _ignore = get_tree().change_scene(pilotarena)
 
 func _on_WitchButton_pressed():
-	get_tree().change_scene(witcharena)
+	var _ignore = get_tree().change_scene(witcharena)
 
 func _on_BackButton_pressed():
-	get_tree().change_scene(mainmenu)
+	var _ignore = get_tree().change_scene(mainmenu)

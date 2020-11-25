@@ -38,7 +38,7 @@ func startAttack():
 			animatedSprite.play("BlowSmoke")
 			state = SMOKE
 	elif state == ENRAGEDIDLE:
-		print("enrage")
+		pass
 	animatedSprite.set_frame(0)
 
 func throwLemon():
@@ -57,7 +57,10 @@ func blowSmoke():
 	smokeCloud.global_position.y -= smokeCloud.sprite_vertical_offset
 
 func enrageFlag():
-	startenrage = true
+	if state == IDLE:
+		enrage()
+	else:
+		startenrage = true
 
 func enrage():
 	animatedSprite.play("Enrage")
