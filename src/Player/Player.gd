@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-export var GRAVITY_ACCELERATION = 3000
+export var GRAVITY_ACCELERATION = 10000
 export var MAX_FALL_SPEED = 1000
 export var JUMP_SPEED = -1250
 export var AIR_ACCELERATION = 600
@@ -14,7 +14,9 @@ enum {
 	RUN,
 	TELEPORTA,
 	TELEPORTV,
-	AIR,
+	AIRRISE,
+	HANGTIME,
+	AIRFALL,
 	FREEFALL,
 	GETUP,
 	CAST_FIRE,
@@ -58,6 +60,20 @@ var immune_timer
 var state = RUN
 var velocity = Vector2.ZERO
 var direction_vector = Vector2.RIGHT
+var maxjumpheight = 140
+var minjumpheight = 70
+var jumpstartpos
+var jumpdistance
+var maxjump = false
+var jumpreleased = false
+var maxjumpholdduration = 20
+var maxjumpholdtimer = 0
+var maxjumpspeed = 700
+var jumpacceleration = 2000
+var maxfallspeed = 1200
+var fallacceleration = 3000
+var airhangtimeduration = 5
+var airhangtimetimer = 0
 var teleporttimer = 0
 var cast_timer = 0
 var icearrowcooldown = 125
@@ -92,8 +108,12 @@ func _physics_process(delta):
 	match state:
 		RUN:
 			run_state(delta)
-		AIR:
-			air_state(delta)
+		AIRRISE:
+			air_rise_state(delta)
+		HANGTIME:
+			hang_time_state(delta)
+		AIRFALL:
+			air_fall_state(delta)
 		FREEFALL:
 			free_fall_state(delta)
 		CAST_FIRE:
@@ -129,10 +149,10 @@ func run_state(delta):
 	if input_vector != Vector2.ZERO:
 		direction_vector.x = input_vector.x
 		velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
-		play_running_animation();
+		play_running_animation()
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
-		play_idle_animation();
+		play_idle_animation()
 
 	move(delta, true)
 
@@ -154,20 +174,48 @@ func run_state(delta):
 	if Input.is_action_just_pressed("lightning") and is_on_floor():
 		cast_lightning()
 
-func air_state(delta):
+func air_rise_state(delta):
 	var input_vector = Vector2.ZERO
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	input_vector = input_vector.normalized()
 
 	if input_vector != Vector2.ZERO:
 		direction_vector.x = input_vector.x
-		velocity = velocity.move_toward(input_vector * MAX_AIR_SPEED, AIR_ACCELERATION * delta)
-		play_air_animation();
+		velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
+		play_air_rise_animation()
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
-		play_air_animation();
+		play_air_rise_animation()
+	
+	jumpdistance = jumpstartpos - global_position.y
+	maxjumpholdtimer += (delta * 100)
+	if not jumpreleased:
+		if Input.is_action_just_released("jump"):
+			jumpreleased = true
+			if maxjumpholdtimer >= maxjumpholdduration:
+				maxjump = true
+		elif jumpdistance >= minjumpheight:
+			maxjump = true
+			jumpreleased = true
 
-	move(delta, true)
+	if not maxjump and jumpdistance >= minjumpheight:
+		if velocity.y >= 0:
+			velocity.y = 0
+			airhangtimetimer = 0
+			state = HANGTIME
+		else:
+			move(delta, true)
+	elif maxjump and jumpdistance >= maxjumpheight:
+		if velocity.y >= 0:
+			velocity.y = 0
+			airhangtimetimer = 0
+			state = HANGTIME
+		else:
+			move(delta, true)
+	else:
+		velocity.y -= jumpacceleration * delta
+		velocity.y = min(velocity.y, maxjumpspeed)
+		move(delta, false)
 
 	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
 		teleport_action()
@@ -175,8 +223,55 @@ func air_state(delta):
 	if Input.is_action_just_pressed("fireball") and fireballcharges > 0:
 		cast_fire()
 
+func hang_time_state(delta):
+	var input_vector = Vector2.ZERO
+	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	input_vector = input_vector.normalized()
+
+	if input_vector != Vector2.ZERO:
+		direction_vector.x = input_vector.x
+		velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
+		play_air_fall_animation()
+	else:
+		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+		play_air_fall_animation()
+	
+	airhangtimetimer += (delta * 100)
+	if airhangtimetimer >= airhangtimeduration:
+		state = AIRFALL
+		move(delta, true)
+	else:
+		move(delta, false)
+
+	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
+		teleport_action()
+
+	if Input.is_action_just_pressed("fireball") and fireballcharges > 0:
+		cast_fire()
+
+func air_fall_state(delta):
+	var input_vector = Vector2.ZERO
+	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	input_vector = input_vector.normalized()
+
+	if input_vector != Vector2.ZERO:
+		direction_vector.x = input_vector.x
+		velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
+		play_air_fall_animation()
+	else:
+		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+		play_air_fall_animation()
+	
 	if is_on_floor():
 		state = RUN
+	else:
+		move(delta, true)
+
+	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
+		teleport_action()
+
+	if Input.is_action_just_pressed("fireball") and fireballcharges > 0:
+		cast_fire()
 
 func free_fall_state(delta):
 	if is_on_floor():
@@ -191,7 +286,8 @@ func cast_fire_state(delta):
 		if is_on_floor():
 			state = RUN
 		else:
-			state = AIR
+			airhangtimetimer = 0
+			state = HANGTIME
 	else:
 		move(delta, true)
 
@@ -241,12 +337,17 @@ func teleportFinished():
 		play_idle_animation()
 		state = RUN
 	else:
-		play_air_animation()
-		state = AIR
+		play_air_fall_animation()
+		airhangtimetimer = 0
+		state = HANGTIME
 
 func jump_action():
-	velocity.y = JUMP_SPEED
-	state = AIR
+	play_air_rise_animation()
+	jumpstartpos = global_position.y
+	maxjump = false
+	jumpreleased = false
+	maxjumpholdtimer = 0
+	state = AIRRISE
 
 func start_free_fall():
 	immune = true
@@ -361,18 +462,17 @@ func cast_lightning():
 		lightning.animatedSprite.play("Right")
 	state = CAST_LIGHTNING
 
-func disable_hurt_boxes():
-	for x in hurtBoxes:
-		x.disabled = true
-
 func disable_col_boxes():
 	for x in colBoxes:
+		x.disabled = true
+
+func disable_hurt_boxes():
+	for x in hurtBoxes:
 		x.disabled = true
 
 func play_idle_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
-
 	if direction_vector.x < 0:
 		idleLeftColBox.disabled = false
 		idleLeftHurtBox.disabled = false
@@ -385,7 +485,6 @@ func play_idle_animation():
 func play_running_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
-
 	if direction_vector.x < 0:
 		runLeftColBox.disabled = false
 		runLeftHurtBox.disabled = false
@@ -411,25 +510,29 @@ func play_teleport_appear_animation():
 		animatedSprite.play("TeleportAppearRight")
 	animatedSprite.set_frame(0)
 
-func play_air_animation():
-	disable_hurt_boxes()
+func play_air_rise_animation():
 	disable_col_boxes()
-
+	disable_hurt_boxes()
 	airColBox.disabled = false
 	airHurtBox.disabled = false
-	if direction_vector.x < 0 and velocity.y < 0:
+	if direction_vector.x < 0:
 		animatedSprite.play("JumpLeft")
-	elif direction_vector.x < 0 and velocity.y >= 0:
-		animatedSprite.play("FallLeft")
-	elif direction_vector.x > 0 and velocity.y < 0:
+	else:
 		animatedSprite.play("JumpRight")
+
+func play_air_fall_animation():
+	disable_col_boxes()
+	disable_hurt_boxes()
+	airColBox.disabled = false
+	airHurtBox.disabled = false
+	if direction_vector.x < 0:
+		animatedSprite.play("FallLeft")
 	else:
 		animatedSprite.play("FallRight")
 
 func play_free_fall_animation():
 	disable_col_boxes()
 	disable_hurt_boxes()
-
 	freeFallColBox.disabled = false
 	if direction_vector.x < 0:
 		animatedSprite.play("FreeFallLeft")
@@ -439,7 +542,6 @@ func play_free_fall_animation():
 func play_getting_up_animation():
 	disable_col_boxes()
 	disable_hurt_boxes()
-
 	if direction_vector.x < 0:
 		idleRightColBox.disabled = false
 		animatedSprite.play("GetUpLeft")
@@ -450,7 +552,6 @@ func play_getting_up_animation():
 func play_cast_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
-
 	if direction_vector.x < 0:
 		castLeftColBox.disabled = false;
 		castLeftHurtBox.disabled = false;
@@ -464,8 +565,6 @@ func move(delta, grav):
 	if grav:
 		velocity.y += GRAVITY_ACCELERATION * delta
 		velocity.y = min(velocity.y, MAX_FALL_SPEED)
-	else:
-		velocity.y = 0
 	velocity = move_and_slide(velocity, Vector2.UP)
 	get_tree().call_group("Enemies", "updatePlayerLocation", global_position)
 

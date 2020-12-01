@@ -22,7 +22,6 @@ limit_right = 2850
 limit_bottom = 750
 drag_margin_h_enabled = true
 drag_margin_v_enabled = true
-smoothing_enabled = true
 editor_draw_limits = true
 editor_draw_drag_margin = true
 script = ExtResource( 6 )
