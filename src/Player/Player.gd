@@ -1,6 +1,5 @@
 extends KinematicBody2D
 
-export var GRAVITY_ACCELERATION = 10000
 export var MAX_FALL_SPEED = 1000
 export var JUMP_SPEED = -1250
 export var AIR_ACCELERATION = 600
@@ -60,18 +59,18 @@ var immune_timer
 var state = RUN
 var velocity = Vector2.ZERO
 var direction_vector = Vector2.RIGHT
-var maxjumpheight = 140
-var minjumpheight = 70
+var maxjumpheight = 180
+var minjumpheight = 120
 var jumpstartpos
 var jumpdistance
 var maxjump = false
 var jumpreleased = false
 var maxjumpholdduration = 20
 var maxjumpholdtimer = 0
-var maxjumpspeed = 700
+var maxjumpspeed = 900
 var jumpacceleration = 2000
-var maxfallspeed = 1200
-var fallacceleration = 3000
+var maxfallspeed = 1100
+var fallacceleration = 6000
 var airhangtimeduration = 5
 var airhangtimetimer = 0
 var teleporttimer = 0
@@ -285,9 +284,6 @@ func cast_fire_state(delta):
 		cast_timer = 0
 		if is_on_floor():
 			state = RUN
-		else:
-			airhangtimetimer = 0
-			state = HANGTIME
 	else:
 		move(delta, true)
 
@@ -372,9 +368,11 @@ func getUp():
 		state = RUN
 
 func cast_fire():
-	velocity.x = 0
+	if is_on_floor():
+		velocity.x = 0
+		play_cast_animation()
+		state = CAST_FIRE
 	fireballcharges -= 1
-	play_cast_animation()
 	var fireBall = FireBall.instance()
 	get_parent().add_child(fireBall)
 	fireBall.global_position = global_position
@@ -387,7 +385,6 @@ func cast_fire():
 	else:
 		fireBall.global_position.x += fireBall.sprite_horizontal_offset
 		fireBall.animatedSprite.play("Right")
-	state = CAST_FIRE
 
 func cast_ice_arrow():
 	velocity = Vector2.ZERO
@@ -563,8 +560,8 @@ func play_cast_animation():
 
 func move(delta, grav):
 	if grav:
-		velocity.y += GRAVITY_ACCELERATION * delta
-		velocity.y = min(velocity.y, MAX_FALL_SPEED)
+		velocity.y += fallacceleration * delta
+		velocity.y = min(velocity.y, maxfallspeed)
 	velocity = move_and_slide(velocity, Vector2.UP)
 	get_tree().call_group("Enemies", "updatePlayerLocation", global_position)
 
