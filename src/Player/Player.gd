@@ -59,17 +59,14 @@ var immune_timer
 var state = RUN
 var velocity = Vector2.ZERO
 var direction_vector = Vector2.RIGHT
-var maxjumpduration = 60
-var minjumpduration = 40
+var maxjumpduration = 35
+var minjumpduration = 15
 var curjumptimer
-var maxjump = false
 var jumpreleased = false
-var maxjumpholdduration = 20
-var maxjumpholdtimer = 0
-var maxjumpspeed = 375
+var maxjumpspeed = 500
 var jumpacceleration = 4500
-var maxfallspeed = 500
-var fallacceleration = 5000
+var maxfallspeed = 650
+var fallacceleration = 2500
 var airhangtimeduration = 5
 var airhangtimetimer = 0
 var teleporttimer = 0
@@ -185,24 +182,11 @@ func air_rise_state(delta):
 		play_air_rise_animation()
 
 	curjumptimer += (delta * 100)
-	maxjumpholdtimer += (delta * 100)
 	if not jumpreleased:
-		if Input.is_action_just_released("jump"):
-			jumpreleased = true
-			if maxjumpholdtimer >= maxjumpholdduration:
-				maxjump = true
-		elif curjumptimer >= minjumpduration:
-			maxjump = true
+		if Input.is_action_just_released("jump") or curjumptimer >= maxjumpduration:
 			jumpreleased = true
 
-	if not maxjump and curjumptimer >= minjumpduration:
-		if velocity.y >= 0:
-			velocity.y = 0
-			airhangtimetimer = 0
-			state = HANGTIME
-		else:
-			move(delta, true)
-	elif maxjump and curjumptimer >= maxjumpduration:
+	if jumpreleased and curjumptimer >= minjumpduration:
 		if velocity.y >= 0:
 			velocity.y = 0
 			airhangtimetimer = 0
@@ -210,8 +194,8 @@ func air_rise_state(delta):
 		else:
 			move(delta, true)
 	else:
-		velocity.y -= jumpacceleration * delta
-		velocity.y = max(velocity.y, (maxjumpspeed*-1))
+		velocity.y -= (jumpacceleration * delta)
+		velocity.y = max(velocity.y, (-1*maxjumpspeed))
 		move(delta, false)
 
 	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
@@ -335,9 +319,7 @@ func teleportFinished():
 
 func jump_action():
 	play_air_rise_animation()
-	maxjump = false
 	jumpreleased = false
-	maxjumpholdtimer = 0
 	curjumptimer = 0
 	state = AIRRISE
 
