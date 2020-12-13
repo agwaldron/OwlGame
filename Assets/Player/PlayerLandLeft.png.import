@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/PlayerDashRight.png-f8198e1c94cf4f4d3a535a8e181c4ec3.stex"
+path="res://.import/PlayerLandLeft.png-05d151ce320463e009cf683cd79d0e99.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Player/PlayerDashRight.png"
-dest_files=[ "res://.import/PlayerDashRight.png-f8198e1c94cf4f4d3a535a8e181c4ec3.stex" ]
+source_file="res://Assets/Player/PlayerLandLeft.png"
+dest_files=[ "res://.import/PlayerLandLeft.png-05d151ce320463e009cf683cd79d0e99.stex" ]
 
 [params]
 

@@ -12,6 +12,7 @@ func _on_AnimatedSprite_frame_changed():
 		var bee = Bee.instance()
 		get_parent().add_child(bee)
 		bee.global_position = global_position
+		bee.z_index = z_index
 
 func _on_AnimatedSprite_animation_finished():
 	queue_free()

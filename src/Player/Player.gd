@@ -17,6 +17,7 @@ enum {
 	HANGTIME,
 	AIRFALL,
 	FREEFALL,
+	LAND,
 	GETUP,
 	CAST_FIRE,
 	CAST_ICE_ARROW,
@@ -93,8 +94,8 @@ func _ready():
 				idleLeftHurtBox, idleRightHurtBox, runLeftHurtBox, runRightHurtBox]
 	idleRightColBox.disabled = false
 	idleRightHurtBox.disabled = false
-
 	get_tree().call_group("HUD", "setMaxHealth", health)
+	z_index = 1
 
 func _physics_process(delta):
 	if Input.is_action_just_pressed("quit"):
@@ -109,6 +110,8 @@ func _physics_process(delta):
 			hang_time_state(delta)
 		AIRFALL:
 			air_fall_state(delta)
+		LAND:
+			move(delta, false)
 		FREEFALL:
 			free_fall_state(delta)
 		CAST_FIRE:
@@ -242,7 +245,12 @@ func air_fall_state(delta):
 		play_air_fall_animation()
 	
 	if is_on_floor():
-		state = RUN
+		state = LAND
+		if direction_vector.x < 0:
+			animatedSprite.play("LandLeft")
+		else:
+			animatedSprite.play("LandRight")
+		animatedSprite.set_frame(0)
 	else:
 		move(delta, true)
 
@@ -580,7 +588,9 @@ func _on_AnimatedSprite_frame_changed():
 		get_tree().call_group("HUD", "gameOver")
 
 func _on_AnimatedSprite_animation_finished():
-	if state == GETUP:
+	if state == LAND:
+		state = RUN
+	elif state == GETUP:
 		getUp()
 	elif state == TELEPORTV:
 		teleportProbe()

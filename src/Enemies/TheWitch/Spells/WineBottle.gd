@@ -27,6 +27,7 @@ func summonWave():
 	get_parent().add_child(wineWave)
 	wineWave.global_position = global_position
 	wineWave.global_position.y += wineWave.vertoffset
+	wineWave.z_index = z_index
 
 func vanish():
 	state = VANISH

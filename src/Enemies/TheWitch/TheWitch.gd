@@ -111,11 +111,13 @@ func beeSpawns(delta):
 			get_parent().add_child(beeportal)
 			beeportal.global_position.x = beepos1.x
 			beeportal.global_position.y = beepos1.y
+			beeportal.z_index = z_index
 
 			beeportal = BeePortal.instance()
 			get_parent().add_child(beeportal)
 			beeportal.global_position.x = beepos2.x
 			beeportal.global_position.y = beepos2.y
+			beeportal.z_index = z_index
 
 			beespawns += 2
 			beetimer = beecooldown
@@ -126,6 +128,7 @@ func castCactusGuard():
 	cactusGuard.global_position = global_position
 	cactusGuard.global_position.x -= cactusGuard.horoffset
 	cactusGuard.global_position.y += cactusGuard.vertoffset
+	cactusGuard.z_index = z_index
 
 func castCactusAttack():
 	var cactusAttack = CactusAttack.instance()
@@ -149,6 +152,7 @@ func castWine():
 	wineBottle.global_position = global_position
 	wineBottle.global_position.x -= wineBottle.horoffset
 	wineBottle.global_position.y += wineBottle.vertoffset
+	wineBottle.z_index = z_index
 
 func cactusSmashed():
 	numcactusattacks += 1
