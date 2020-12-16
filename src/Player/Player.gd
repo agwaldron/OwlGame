@@ -60,8 +60,8 @@ var immune_timer
 var state = RUN
 var velocity = Vector2.ZERO
 var direction_vector = Vector2.RIGHT
-var maxjumpduration = 35
-var minjumpduration = 15
+var maxjumpduration = 40
+var minjumpduration = 25
 var curjumptimer
 var jumpreleased = false
 var maxjumpspeed = 500
@@ -111,7 +111,7 @@ func _physics_process(delta):
 		AIRFALL:
 			air_fall_state(delta)
 		LAND:
-			move(delta, false)
+			land_state(delta)
 		FREEFALL:
 			free_fall_state(delta)
 		CAST_FIRE:
@@ -259,6 +259,10 @@ func air_fall_state(delta):
 
 	if Input.is_action_just_pressed("fireball") and fireballcharges > 0:
 		cast_fire()
+
+func land_state(delta):
+	velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+	move(delta, false)
 
 func free_fall_state(delta):
 	if is_on_floor():

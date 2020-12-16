@@ -18,7 +18,7 @@ onready var standingHitBox = $StandingHurtBox/CollisionShape2D
 onready var leapingHitBox = $LeapingHurtBox/CollisionShape2D
 onready var stats = $EnemyStats
 
-var minLeftPos = 250
+var minLeftPos = 125
 var maxLeftPos = 975
 var leapCoolDown = 200
 var leapTimer = 0
@@ -26,7 +26,7 @@ var state
 var velocity = Vector2.ZERO
 
 func _ready():
-	stats.health = 1
+	stats.health = 15
 	state = IDLEMIN
 	animatedSprite.play("IdleRight")
 	leapTimer = leapCoolDown
