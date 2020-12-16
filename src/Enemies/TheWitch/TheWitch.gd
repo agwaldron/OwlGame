@@ -20,16 +20,16 @@ var state
 var beespawns = 0
 var beevanishes = 0
 var beespercycle = 4
-var beecooldown = 900
+var beecooldown = 750
 var beetimer
-var beepos1 = Vector2(350, 125)
-var beepos2 = Vector2(950, 125)
-var attackcooldown = 600
+var beepos1 = Vector2(250, 300)
+var beepos2 = Vector2(1050, 300)
+var attackcooldown = 300
 var attacktimer
 var maxcactusattacks = 3
 var numcactusattacks = 0
 var cactusready
-var cactusattackheight = 150
+var cactusattackheight = 200
 var playerpos
 var wineready
 var groundheight = 700

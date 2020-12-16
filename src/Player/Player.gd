@@ -314,7 +314,11 @@ func teleportProbe():
 	if direction_vector.x < 0:
 		teleportprobe.faceLeft()
 
-func teleport(pos):
+func teleportMove(pos):
+	global_position = pos
+	get_tree().call_group("Enemies", "updatePlayerLocation", global_position)
+
+func teleportAppear(pos):
 	play_teleport_appear_animation()
 	global_position = pos
 	state = TELEPORTA
