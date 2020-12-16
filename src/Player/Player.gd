@@ -6,7 +6,7 @@ export var AIR_ACCELERATION = 600
 export var MAX_AIR_SPEED = 250
 export var RUN_ACCELERATION = 600
 export var MAX_RUN_SPEED = 300
-export var FRICTION = 700
+export var FRICTION = 800
 export var TELEPORT_COOLDOWN = 75
 
 enum {
