@@ -1,12 +1,17 @@
 extends KinematicBody2D
 
-export var MAX_FALL_SPEED = 1000
-export var JUMP_SPEED = -1250
-export var AIR_ACCELERATION = 600
-export var MAX_AIR_SPEED = 250
-export var RUN_ACCELERATION = 600
-export var MAX_RUN_SPEED = 300
-export var FRICTION = 800
+export var MAX_FALL_SPEED = 500
+export var JUMP_SPEED = -600
+export var GRAV_ACCELERATION = 2500
+export var MIN_JUMP_DURATION = 10
+export var MAX_JUMP_DURATION = 25
+export var HANG_TIME = 3
+#export var AIR_ACCELERATION = 600
+#export var MAX_AIR_SPEED = 250
+#export var RUN_ACCELERATION = 600
+#export var MAX_RUN_SPEED = 300
+#export var FRICTION = 800
+export var HORIZONTAL_SPEED = 275
 export var TELEPORT_COOLDOWN = 75
 
 enum {
@@ -60,15 +65,15 @@ var immune_timer
 var state = RUN
 var velocity = Vector2.ZERO
 var direction_vector = Vector2.RIGHT
-var maxjumpduration = 40
-var minjumpduration = 25
+#var maxjumpduration = 40
+#var minjumpduration = 25
 var curjumptimer
 var jumpreleased = false
-var maxjumpspeed = 500
-var jumpacceleration = 4500
-var maxfallspeed = 650
-var fallacceleration = 2500
-var airhangtimeduration = 5
+#var maxjumpspeed = 500
+#var jumpacceleration = 4500
+#var maxfallspeed = 650
+#var fallacceleration = 2500
+#var airhangtimeduration = 3
 var airhangtimetimer = 0
 var teleporttimer = 0
 var cast_timer = 0
@@ -96,6 +101,7 @@ func _ready():
 	idleRightHurtBox.disabled = false
 	get_tree().call_group("HUD", "setMaxHealth", health)
 	z_index = 1
+	#animatedSprite.material.set_shader_param("white", true)
 
 func _physics_process(delta):
 	if Input.is_action_just_pressed("quit"):
@@ -142,17 +148,22 @@ func runCoolDownTimers(delta):
 func run_state(delta):
 	var input_vector = Vector2.ZERO
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-	input_vector = input_vector.normalized()
+	#input_vector = input_vector.normalized()
 
 	if input_vector != Vector2.ZERO:
 		direction_vector.x = input_vector.x
-		velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
+		#velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
+		velocity = input_vector * HORIZONTAL_SPEED
 		play_running_animation()
 	else:
-		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+		#velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+		velocity = input_vector
 		play_idle_animation()
 
 	move(delta, true)
+
+	if not is_on_floor():
+		state = AIRFALL
 
 	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
 		teleport_action()
@@ -175,21 +186,23 @@ func run_state(delta):
 func air_rise_state(delta):
 	var input_vector = Vector2.ZERO
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-	input_vector = input_vector.normalized()
+	#input_vector = input_vector.normalized()
 	if input_vector != Vector2.ZERO:
 		direction_vector.x = input_vector.x
-		velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
+		#velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
+		velocity.x = input_vector.x * HORIZONTAL_SPEED
 		play_air_rise_animation()
 	else:
-		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+		#velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+		velocity.x = input_vector.x
 		play_air_rise_animation()
 
 	curjumptimer += (delta * 100)
 	if not jumpreleased:
-		if Input.is_action_just_released("jump") or curjumptimer >= maxjumpduration:
+		if Input.is_action_just_released("jump") or curjumptimer >= MAX_JUMP_DURATION:
 			jumpreleased = true
 
-	if jumpreleased and curjumptimer >= minjumpduration:
+	if jumpreleased and curjumptimer >= MIN_JUMP_DURATION:
 		if velocity.y >= 0:
 			velocity.y = 0
 			airhangtimetimer = 0
@@ -197,8 +210,8 @@ func air_rise_state(delta):
 		else:
 			move(delta, true)
 	else:
-		velocity.y -= (jumpacceleration * delta)
-		velocity.y = max(velocity.y, (-1*maxjumpspeed))
+		#velocity.y -= (jumpacceleration * delta)
+		#velocity.y = max(velocity.y, (-1*maxjumpspeed))
 		move(delta, false)
 
 	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
@@ -210,17 +223,19 @@ func air_rise_state(delta):
 func hang_time_state(delta):
 	var input_vector = Vector2.ZERO
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-	input_vector = input_vector.normalized()
+	#input_vector = input_vector.normalized()
 	if input_vector != Vector2.ZERO:
 		direction_vector.x = input_vector.x
-		velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
+		#velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
+		velocity.x = input_vector.x * HORIZONTAL_SPEED
 		play_air_fall_animation()
 	else:
-		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+		#velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+		velocity.x = input_vector.x
 		play_air_fall_animation()
 
 	airhangtimetimer += (delta * 100)
-	if airhangtimetimer >= airhangtimeduration:
+	if airhangtimetimer >= HANG_TIME:
 		state = AIRFALL
 		move(delta, true)
 	else:
@@ -235,15 +250,17 @@ func hang_time_state(delta):
 func air_fall_state(delta):
 	var input_vector = Vector2.ZERO
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-	input_vector = input_vector.normalized()
+	#input_vector = input_vector.normalized()
 	if input_vector != Vector2.ZERO:
 		direction_vector.x = input_vector.x
-		velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
+		#velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
+		velocity.x = input_vector.x * HORIZONTAL_SPEED
 		play_air_fall_animation()
 	else:
-		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+		#velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+		velocity.x = input_vector.x
 		play_air_fall_animation()
-	
+
 	if is_on_floor():
 		state = LAND
 		if direction_vector.x < 0:
@@ -261,7 +278,10 @@ func air_fall_state(delta):
 		cast_fire()
 
 func land_state(delta):
-	velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+	#velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)
+	var input_vector = Vector2.ZERO
+	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	velocity.x = input_vector.x * HORIZONTAL_SPEED
 	move(delta, false)
 
 func free_fall_state(delta):
@@ -337,6 +357,7 @@ func jump_action():
 	play_air_rise_animation()
 	jumpreleased = false
 	curjumptimer = 0
+	velocity.y = JUMP_SPEED
 	state = AIRRISE
 
 func start_free_fall():
@@ -554,8 +575,8 @@ func play_cast_animation():
 
 func move(delta, grav):
 	if grav:
-		velocity.y += fallacceleration * delta
-		velocity.y = min(velocity.y, maxfallspeed)
+		velocity.y += GRAV_ACCELERATION * delta
+		velocity.y = min(velocity.y, MAX_FALL_SPEED)
 	velocity = move_and_slide(velocity, Vector2.UP)
 	get_tree().call_group("Enemies", "updatePlayerLocation", global_position)
 

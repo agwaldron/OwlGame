@@ -46,6 +46,7 @@ func _ready():
 	state = IDLE
 	wineready = false
 	cactusready = false
+	#animatedSprite.material.set_shader_param("white", true)
 
 func _process(delta):
 	beeSpawns(delta)

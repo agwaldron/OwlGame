@@ -50,6 +50,7 @@ func _ready():
 	attackFlag = false
 	attackReady = false
 	changeTimer = CHANGE_DURATION
+	#animatedSprite.material.set_shader_param("white", true)
 
 func _process(delta):
 	if attackFlag:

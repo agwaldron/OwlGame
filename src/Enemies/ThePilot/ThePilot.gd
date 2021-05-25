@@ -40,6 +40,7 @@ func _ready():
 	bombTwoReady = false
 	bombThreeReady = false
 	width = get_viewport().size.x
+	#animatedSprite.material.set_shader_param("white", true)
 
 func _process(delta):
 	match state:

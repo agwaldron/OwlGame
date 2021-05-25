@@ -32,6 +32,7 @@ func _ready():
 	leapTimer = leapCoolDown
 	standingHitBox.disabled = false
 	global_position.x = minLeftPos
+	#animatedSprite.material.set_shader_param("white", true)
 
 func _process(delta):
 	if state == IDLEMIN or state == IDLEMAX:

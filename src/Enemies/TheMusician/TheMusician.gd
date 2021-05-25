@@ -38,6 +38,7 @@ func _ready():
 	state = CHOOSE
 	play_next_cool_down = PLAY_FREQ
 	rngen.randomize()
+	#animatedSprite.material.set_shader_param("white", true)
 
 func _process(delta):
 	match state:

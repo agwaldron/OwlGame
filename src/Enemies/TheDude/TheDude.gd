@@ -26,6 +26,7 @@ func _ready():
 	animatedSprite.play("Idle")
 	animatedSprite.set_frame(0)
 	startAttack()
+	#animatedSprite.material.set_shader_param("white", true)
 
 func startAttack():
 	if state == IDLE:

@@ -32,6 +32,7 @@ func _ready():
 	horizontalCenter = get_viewport().size.x/2
 	summontracker = 1
 	summoningTimer = SUMMONING_COOLDOWN
+	#animatedSprite.material.set_shader_param("white", true)
 
 func _process(delta):
 	if state == PREP:
