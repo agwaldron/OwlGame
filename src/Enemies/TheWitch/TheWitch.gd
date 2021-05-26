@@ -37,6 +37,10 @@ var flyheight = 400
 var flyspeed = 500
 var velocity = Vector2.ZERO
 
+var hitflashduration = 8
+var hitflashtimer = 0
+var hitflashflag = false
+
 func _ready():
 	animatedSprite.play("Idle")
 	global_position.y = groundheight
@@ -46,9 +50,10 @@ func _ready():
 	state = IDLE
 	wineready = false
 	cactusready = false
-	#animatedSprite.material.set_shader_param("white", true)
 
 func _process(delta):
+	if hitflashflag:
+		hit_flash_countdown(delta)
 	beeSpawns(delta)
 	match state:
 		IDLE:
@@ -183,10 +188,20 @@ func wineFinished():
 func updatePlayerLocation(pos):
 	playerpos = pos
 
+func hit_flash_countdown(delta):
+	if hitflashtimer <= 0:
+		hitflashflag = false
+		animatedSprite.material.set_shader_param("white", false)
+	else:
+		hitflashtimer -= delta * 100
+
 func _on_HurtBox_area_entered(area):
 	var areaGroups = area.get_groups()
 	for x in areaGroups:
 		if x == "PlayerSpell":
+			hitflashtimer = hitflashduration
+			hitflashflag = true
+			animatedSprite.material.set_shader_param("white", true)
 			stats.health -= area.damage
 
 func _on_EnemyStats_no_health():

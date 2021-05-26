@@ -20,6 +20,10 @@ var state
 var play_next_cool_down
 var rngen = RandomNumberGenerator.new()
 
+var hitflashduration = 8
+var hitflashtimer = 0
+var hitflashflag = false
+
 var start_tied_delay = 100
 var tied_middles_played = 0
 var max_tied_middles = 5
@@ -38,9 +42,10 @@ func _ready():
 	state = CHOOSE
 	play_next_cool_down = PLAY_FREQ
 	rngen.randomize()
-	#animatedSprite.material.set_shader_param("white", true)
 
 func _process(delta):
+	if hitflashflag:
+		hit_flash_countdown(delta)
 	match state:
 		CHOOSE:
 			choose_note(delta)
@@ -117,10 +122,20 @@ func eighth_state(delta):
 		eighths_played = 0
 		state = CHOOSE
 
+func hit_flash_countdown(delta):
+	if hitflashtimer <= 0:
+		hitflashflag = false
+		animatedSprite.material.set_shader_param("white", false)
+	else:
+		hitflashtimer -= delta * 100
+
 func _on_HurtBox_area_entered(area):
 	var area_groups = area.get_groups()
 	for x in area_groups:
 		if x == "PlayerSpell":
+			hitflashtimer = hitflashduration
+			hitflashflag = true
+			animatedSprite.material.set_shader_param("white", true)
 			stats.health -= area.damage
 
 func _on_EnemyStats_no_health():

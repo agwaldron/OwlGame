@@ -20,6 +20,10 @@ var horizontalCenter
 var summontracker
 var summoningTimer
 
+var hitflashduration = 8
+var hitflashtimer = 0
+var hitflashflag = false
+
 var obeliskxpos1 = 150
 var obeliskxpos2 = 425
 var obeliskxpos3 = 700
@@ -32,9 +36,10 @@ func _ready():
 	horizontalCenter = get_viewport().size.x/2
 	summontracker = 1
 	summoningTimer = SUMMONING_COOLDOWN
-	#animatedSprite.material.set_shader_param("white", true)
 
 func _process(delta):
+	if hitflashflag:
+		hit_flash_countdown(delta)
 	if state == PREP:
 		summoningTimer -= (delta * 100)
 		if summoningTimer <= 0:
@@ -93,6 +98,13 @@ func summon_complete():
 	state = PREP
 	summoningTimer = SUMMONING_COOLDOWN
 
+func hit_flash_countdown(delta):
+	if hitflashtimer <= 0:
+		animatedSprite.material.set_shader_param("white", false)
+		hitflashflag = false
+	else:
+		hitflashtimer -= delta * 100
+
 func _on_AnimatedSprite_animation_finished():
 	if state == SUMMONING:
 		animatedSprite.play("Idle")
@@ -106,6 +118,9 @@ func _on_HurtBox_area_entered(area):
 	var areaGroups = area.get_groups()
 	for x in areaGroups:
 		if x == "PlayerSpell":
+			hitflashtimer = hitflashduration
+			hitflashflag = true
+			animatedSprite.material.set_shader_param("white", true)
 			stats.health -= area.damage
 
 func _on_EnemyStats_no_health():

@@ -114,7 +114,7 @@ material = SubResource( 2 )
 position = Vector2( 0, -64.2561 )
 frames = SubResource( 15 )
 animation = "PlayTied"
-frame = 1
+frame = 5
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

@@ -18,6 +18,10 @@ var lemonNext
 var state
 var startenrage
 
+var hitflashduration = 8
+var hitflashtimer = 0
+var hitflashflag = false
+
 func _ready():
 	stats.health = 15
 	lemonNext = true
@@ -26,7 +30,10 @@ func _ready():
 	animatedSprite.play("Idle")
 	animatedSprite.set_frame(0)
 	startAttack()
-	#animatedSprite.material.set_shader_param("white", true)
+
+func _process(delta):
+	if hitflashflag:
+		hit_flash_countdown(delta)
 
 func startAttack():
 	if state == IDLE:
@@ -69,6 +76,13 @@ func enrage():
 	state = ENRAGING
 	startenrage = false
 
+func hit_flash_countdown(delta):
+	if hitflashtimer <= 0:
+		animatedSprite.material.set_shader_param("white", false)
+		hitflashflag = false
+	else:
+		hitflashtimer -= delta * 100
+
 func _on_AnimatedSprite_frame_changed():
 	if state == LEMON and animatedSprite.get_frame() == 14:
 		call_deferred("throwLemon")
@@ -94,6 +108,9 @@ func _on_TheDude_area_entered(area):
 	var area_groups = area.get_groups()
 	for x in area_groups:
 		if x == "PlayerSpell":
+			hitflashtimer = hitflashduration
+			hitflashflag = true
+			animatedSprite.material.set_shader_param("white", true)
 			stats.health -= area.damage
 
 func _on_EnemyStats_no_health():

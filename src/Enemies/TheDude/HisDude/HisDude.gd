@@ -25,6 +25,10 @@ var leapTimer = 0
 var state
 var velocity = Vector2.ZERO
 
+var hitflashduration = 8
+var hitflashtimer = 0
+var hitflashflag = false
+
 func _ready():
 	stats.health = 15
 	state = IDLEMIN
@@ -32,9 +36,10 @@ func _ready():
 	leapTimer = leapCoolDown
 	standingHitBox.disabled = false
 	global_position.x = minLeftPos
-	#animatedSprite.material.set_shader_param("white", true)
 
 func _process(delta):
+	if hitflashflag:
+		hit_flash_countdown(delta)
 	if state == IDLEMIN or state == IDLEMAX:
 		leapTimer -= (delta * 100)
 		if leapTimer <= 0:
@@ -64,6 +69,13 @@ func land():
 	standingHitBox.disabled = false
 	velocity.x = 0
 
+func hit_flash_countdown(delta):
+	if hitflashtimer <= 0:
+		hitflashflag = false
+		animatedSprite.material.set_shader_param("white", false)
+	else:
+		hitflashtimer -= delta * 100
+
 func _on_AnimatedSprite_animation_finished():
 	if state == LEAPOFFMIN:
 		animatedSprite.play("LeapingRight")
@@ -90,6 +102,9 @@ func _on_HurtBox_area_entered(area):
 	var area_groups = area.get_groups()
 	for x in area_groups:
 		if x == "PlayerSpell":
+			hitflashtimer = hitflashduration
+			hitflashflag = true
+			animatedSprite.material.set_shader_param("white", true)
 			stats.health -= area.damage
 
 func _on_EnemyStats_no_health():

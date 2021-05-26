@@ -29,6 +29,10 @@ var bombTwoReady
 var bombThreeReady
 var width
 
+var hitflashduration = 8
+var hitflashtimer = 0
+var hitflashflag = false
+
 func _ready():
 	stats.health = 20
 	state = FLYBY
@@ -40,9 +44,10 @@ func _ready():
 	bombTwoReady = false
 	bombThreeReady = false
 	width = get_viewport().size.x
-	#animatedSprite.material.set_shader_param("white", true)
 
 func _process(delta):
+	if hitflashflag:
+		hit_flash_countdown(delta)
 	match state:
 		FLYBY:
 			flyBy(delta)
@@ -124,10 +129,20 @@ func checkForDropSite():
 		bomb.global_position = global_position
 		bombThreeReady = false
 
+func hit_flash_countdown(delta):
+	if hitflashtimer <= 0:
+		hitflashflag = false
+		animatedSprite.material.set_shader_param("white", false)
+	else:
+		hitflashtimer -= delta * 100
+
 func _on_HurtBox_area_entered(area):
 	var area_groups = area.get_groups()
 	for x in area_groups:
 		if x == "PlayerSpell":
+			hitflashtimer = hitflashduration
+			hitflashflag = true
+			animatedSprite.material.set_shader_param("white", true)
 			stats.health -= area.damage
 
 func _on_EnemyStats_no_health():

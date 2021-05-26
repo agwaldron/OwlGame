@@ -23,6 +23,10 @@ var changeTimer
 var attackFlag
 var attackReady
 
+var hitflashduration = 8
+var hitflashtimer = 0
+var hitflashflag = false
+
 var blue_horizontal_speed0 = -200
 var blue_horizontal_speed1 = -400
 var blue_horizontal_speed2 = -600
@@ -50,9 +54,10 @@ func _ready():
 	attackFlag = false
 	attackReady = false
 	changeTimer = CHANGE_DURATION
-	#animatedSprite.material.set_shader_param("white", true)
 
 func _process(delta):
+	if hitflashflag:
+		hit_flash_countdown(delta)
 	if attackFlag:
 		attackTimer -= (delta * 100)
 		if attackReady and animatedSprite.frame == 3:
@@ -169,10 +174,20 @@ func play_idle_animation():
 		YELLOW:
 			animatedSprite.play("IdleYellow")
 
+func hit_flash_countdown(delta):
+	if hitflashtimer <= 0:
+		hitflashflag = false
+		animatedSprite.material.set_shader_param("white", false)
+	else:
+		hitflashtimer -= delta * 100
+
 func _on_HurtBox_area_entered(area):
 	var areaGroups = area.get_groups()
 	for x in areaGroups:
 		if x == "PlayerSpell":
+			hitflashtimer = hitflashduration
+			hitflashflag = true
+			animatedSprite.material.set_shader_param("white", true)
 			stats.health -= area.damage
 
 func _on_EnemyStats_no_health():
