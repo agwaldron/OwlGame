@@ -76,6 +76,10 @@ var jumpreleased = false
 #var airhangtimeduration = 3
 var airhangtimetimer = 0
 var teleporttimer = 0
+var blinktimer
+var blinktimerwhite = 10
+var blinktimerreg = 25
+var blinkflag = false
 var cast_timer = 0
 var icearrowcooldown = 125
 var icearrowtimer = 0
@@ -133,9 +137,21 @@ func _physics_process(delta):
 
 func runCoolDownTimers(delta):
 	if immune:
+		blinktimer -= (delta * 100)
+		if blinktimer <= 0:
+			if blinkflag:
+				blinkflag = false
+				blinktimer = blinktimerreg
+				animatedSprite.material.set_shader_param("white", false)
+			else:
+				blinkflag = true
+				blinktimer = blinktimerwhite
+				animatedSprite.material.set_shader_param("white", true)
+
 		immune_timer -= (delta * 100)
 		if immune_timer <= 0:
 			immune = false
+			animatedSprite.material.set_shader_param("white", false)
 	teleporttimer -= (delta * 100)
 	icearrowtimer -= (delta * 100)
 	icespiketimer -= (delta * 100)
@@ -607,10 +623,14 @@ func _on_HurtBox_area_entered(_area):
 		get_tree().call_group("HUD", "setHealth", health)
 		if health <= 0:
 			call_deferred("blackOut")
-		elif is_on_floor():
-			call_deferred("start_getting_up")
 		else:
-			call_deferred("start_free_fall")
+			blinkflag = true
+			blinktimer = blinktimerwhite
+			animatedSprite.material.set_shader_param("white", true)
+			if is_on_floor():
+				call_deferred("start_getting_up")
+			else:
+				call_deferred("start_free_fall")
 
 func _on_AnimatedSprite_frame_changed():
 	if state == PUKE and animatedSprite.get_frame() == 4:
