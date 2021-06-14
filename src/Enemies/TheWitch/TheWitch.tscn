@@ -17,7 +17,7 @@ void fragment(){
 	vec4 color = texture(TEXTURE, UV);
 	
 	if(white){
-		COLOR = vec4 (1, 1, 1, color.a)
+		COLOR = vec4 (0.85, 0.85, 0.85, color.a)
 	}else{
 		COLOR = color;
 	}

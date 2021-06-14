@@ -15,7 +15,7 @@ void fragment(){
 	vec4 color = texture(TEXTURE, UV);
 	
 	if(white){
-		COLOR = vec4 (1, 1, 1, color.a)
+		COLOR = vec4 (0.85, 0.85, 0.85, color.a)
 	}else{
 		COLOR = color;
 	}
@@ -114,7 +114,6 @@ material = SubResource( 2 )
 position = Vector2( 0, -64.2561 )
 frames = SubResource( 15 )
 animation = "PlayTied"
-frame = 5
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

@@ -78,7 +78,7 @@ var airhangtimetimer = 0
 var teleporttimer = 0
 var blinktimer
 var blinktimerwhite = 10
-var blinktimerreg = 25
+var blinktimerreg = 30
 var blinkflag = false
 var cast_timer = 0
 var icearrowcooldown = 125
