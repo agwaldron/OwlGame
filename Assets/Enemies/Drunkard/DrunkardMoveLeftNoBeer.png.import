@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/DrunkardMoveLeft.png-0138bb7c96ce27032a82ec96f3f29c8c.stex"
+path="res://.import/DrunkardMoveLeftNoBeer.png-0bb9742ce5362bceb1ca9f1b1b3c2e72.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemies/Drunkard/DrunkardMoveLeft.png"
-dest_files=[ "res://.import/DrunkardMoveLeft.png-0138bb7c96ce27032a82ec96f3f29c8c.stex" ]
+source_file="res://Assets/Enemies/Drunkard/DrunkardMoveLeftNoBeer.png"
+dest_files=[ "res://.import/DrunkardMoveLeftNoBeer.png-0bb9742ce5362bceb1ca9f1b1b3c2e72.stex" ]
 
 [params]
 
