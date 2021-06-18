@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://Assets/Enemies/Drunkard/DrunkardMoveLeftNoBeer.png" type="Texture" id=1]
 [ext_resource path="res://Assets/Enemies/Drunkard/DrunkardMoveRightNoBeer.png" type="Texture" id=2]
@@ -7,6 +7,25 @@
 [ext_resource path="res://src/Enemies/EnemyStats.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Assets/Enemies/Drunkard/DrunkardMoveLeftBeer.png" type="Texture" id=6]
 [ext_resource path="res://Assets/Enemies/Drunkard/DrunkardMoveRightBeer.png" type="Texture" id=7]
+
+[sub_resource type="Shader" id=36]
+code = "shader_type canvas_item;
+
+uniform bool white;
+
+void fragment(){
+	vec4 color = texture(TEXTURE, UV);
+	
+	if(white){
+		COLOR = vec4 (0.85, 0.85, 0.85, color.a)
+	}else{
+		COLOR = color;
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=37]
+shader = SubResource( 36 )
+shader_param/white = null
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -50,82 +69,82 @@ region = Rect2( 896, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=9]
 flags = 4
-atlas = ExtResource( 6 )
+atlas = ExtResource( 7 )
 region = Rect2( 0, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=10]
 flags = 4
-atlas = ExtResource( 6 )
+atlas = ExtResource( 7 )
 region = Rect2( 128, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=11]
 flags = 4
-atlas = ExtResource( 6 )
+atlas = ExtResource( 7 )
 region = Rect2( 256, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=12]
 flags = 4
-atlas = ExtResource( 6 )
+atlas = ExtResource( 7 )
 region = Rect2( 384, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=13]
 flags = 4
-atlas = ExtResource( 6 )
+atlas = ExtResource( 7 )
 region = Rect2( 512, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=14]
 flags = 4
-atlas = ExtResource( 6 )
+atlas = ExtResource( 7 )
 region = Rect2( 640, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=15]
 flags = 4
-atlas = ExtResource( 6 )
+atlas = ExtResource( 7 )
 region = Rect2( 768, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=16]
 flags = 4
-atlas = ExtResource( 6 )
+atlas = ExtResource( 7 )
 region = Rect2( 896, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=17]
 flags = 4
-atlas = ExtResource( 7 )
+atlas = ExtResource( 6 )
 region = Rect2( 0, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=18]
 flags = 4
-atlas = ExtResource( 7 )
+atlas = ExtResource( 6 )
 region = Rect2( 128, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=19]
 flags = 4
-atlas = ExtResource( 7 )
+atlas = ExtResource( 6 )
 region = Rect2( 256, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=20]
 flags = 4
-atlas = ExtResource( 7 )
+atlas = ExtResource( 6 )
 region = Rect2( 384, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=21]
 flags = 4
-atlas = ExtResource( 7 )
+atlas = ExtResource( 6 )
 region = Rect2( 512, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=22]
 flags = 4
-atlas = ExtResource( 7 )
+atlas = ExtResource( 6 )
 region = Rect2( 640, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=23]
 flags = 4
-atlas = ExtResource( 7 )
+atlas = ExtResource( 6 )
 region = Rect2( 768, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=24]
 flags = 4
-atlas = ExtResource( 7 )
+atlas = ExtResource( 6 )
 region = Rect2( 896, 0, 128, 128 )
 
 [sub_resource type="AtlasTexture" id=25]
@@ -177,12 +196,12 @@ animations = [ {
 }, {
 "frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ) ],
 "loop": true,
-"name": "MoveLeftBeer",
+"name": "MoveRightBeer",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
 "loop": true,
-"name": "MoveRightBeer",
+"name": "MoveLeftBeer",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 25 ), SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ) ],
@@ -191,34 +210,66 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=34]
-extents = Vector2( 19.1403, 47.724 )
+[sub_resource type="RectangleShape2D" id=40]
+extents = Vector2( 28, 49 )
+
+[sub_resource type="RectangleShape2D" id=38]
+extents = Vector2( 28, 49 )
 
 [sub_resource type="RectangleShape2D" id=35]
-extents = Vector2( 47.6016, 49.2168 )
+extents = Vector2( 25, 49 )
+
+[sub_resource type="RectangleShape2D" id=39]
+extents = Vector2( 25, 49 )
 
 [node name="Drunkard" type="KinematicBody2D"]
 collision_layer = 8
+collision_mask = 5
 script = ExtResource( 4 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+material = SubResource( 37 )
 position = Vector2( 0, -63.9071 )
 frames = SubResource( 33 )
-animation = "MoveLeftBeer"
-frame = 3
+animation = "MoveRightNoBeer"
+frame = 2
 playing = true
 
-[node name="HurtBox" parent="." instance=ExtResource( 3 )]
-position = Vector2( 0, -63.9071 )
+[node name="LeftHurtBox" parent="." instance=ExtResource( 3 )]
+visible = false
 collision_layer = 8
-collision_mask = 7
+collision_mask = 5
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="HurtBox"]
-position = Vector2( 0, 14.3619 )
-shape = SubResource( 34 )
+[node name="CollisionShape2D" parent="LeftHurtBox" index="0"]
+position = Vector2( -5.75, -49 )
+shape = SubResource( 40 )
+disabled = true
+
+[node name="RightHurtBox" parent="." instance=ExtResource( 3 )]
+collision_layer = 8
+collision_mask = 5
+
+[node name="CollisionShape2D" parent="RightHurtBox" index="0"]
+position = Vector2( 5.75, -49 )
+shape = SubResource( 38 )
+disabled = true
+
+[node name="LeftCollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2( -5.75, -49 )
+shape = SubResource( 35 )
+disabled = true
+
+[node name="RightCollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 5.75, -49 )
+shape = SubResource( 39 )
+disabled = true
 
 [node name="EnemyStats" parent="." instance=ExtResource( 5 )]
+[connection signal="area_entered" from="LeftHurtBox" to="." method="_on_HurtBox_area_entered"]
+[connection signal="area_entered" from="RightHurtBox" to="." method="_on_HurtBox_area_entered"]
+[connection signal="no_health" from="EnemyStats" to="." method="_on_EnemyStats_no_health"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -49.5452 )
-shape = SubResource( 35 )
+[editable path="LeftHurtBox"]
+
+[editable path="RightHurtBox"]
