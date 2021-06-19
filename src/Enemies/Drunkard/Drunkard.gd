@@ -18,6 +18,7 @@ var state
 var speed = 275
 var velocity = Vector2.ZERO
 var movingleft
+var playerloc
 
 var hitflashduration = 8
 var hitflashtimer
@@ -41,6 +42,13 @@ func _process(delta):
 		turn_around()
 	velocity = move_and_slide(velocity)
 
+func hit_flash_cooldown(delta):
+	if hitflashtimer <= 0:
+		hitflashflag = false
+		animatedSprite.material.set_shader_param("white", false)
+	else:
+		hitflashtimer -= (delta * 100)
+
 func turn_around():
 	movingleft = not movingleft
 	leftColBox.disabled = not leftColBox.disabled
@@ -54,12 +62,8 @@ func turn_around():
 		animatedSprite.play("MoveRightBeer")
 		velocity = Vector2(speed, 0)
 
-func hit_flash_cooldown(delta):
-	if hitflashtimer <= 0:
-		hitflashflag = false
-		animatedSprite.material.set_shader_param("white", false)
-	else:
-		hitflashtimer -= (delta * 100)
+func updatePlayerLocation(loc):
+	playerloc = loc
 
 func _on_HurtBox_area_entered(area):
 	var areagroups = area.get_groups()
