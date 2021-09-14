@@ -10,7 +10,7 @@ func _ready():
 
 func _on_AnimatedSprite_animation_finished():
 	var mummy = Mummy.instance()
-	get_parent().add_child(mummy)
 	mummy.global_position = global_position
+	get_parent().add_child(mummy)
 	get_tree().call_group("archaeologist", "summon_complete")
 	queue_free()

@@ -9,7 +9,7 @@ onready var stats = $EnemyStats
 var turning
 var vanishing
 var facingLeft
-var  minHeight = 660
+var minHeight = 660
 var target = Vector2.ZERO
 var velocity = Vector2.ZERO
 

@@ -1,10 +1,9 @@
 extends KinematicBody2D
 
 enum{
-	LEFTNOBEER,
-	LEFTBEER,
-	RIGHTNOBEER,
-	RIGHTBEER
+	BEER,
+	THROWING,
+	NOBEER
 }
 
 onready var animatedSprite = $AnimatedSprite
@@ -25,7 +24,7 @@ var hitflashtimer
 var hitflashflag
 
 func _ready():
-	state = LEFTBEER
+	state = BEER
 	animatedSprite.play("MoveLeftBeer")
 	movingleft = true
 	leftColBox.disabled = false

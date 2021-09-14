@@ -12,9 +12,10 @@ var turning
 var crumbling
 var turnAroundLeft = 200
 var turnAroundRight = 1000
-#var hitflashduration = 10
-#var hitflashtimer = 0
-#var hitflashflag
+var hitflashduration = 10
+var hitflashtimer = 0
+var hitflashflag
+var matdup
 
 func _ready():
 	stats.health = 2
@@ -24,9 +25,9 @@ func _ready():
 	velocity.x = -SHUFFLE_SPEED
 	animatedSprite.play("ShuffleLeft")
 
-func _process(_delta):
-	#if hitflashflag:
-		#hit_flash_countdown(delta)
+func _process(delta):
+	if hitflashflag:
+		hit_flash_countdown(delta)
 	if global_position.x < turnAroundLeft or global_position.x > turnAroundRight:
 		turn_around()
 	velocity = move_and_slide(velocity)
@@ -42,12 +43,12 @@ func turn_around():
 		animatedSprite.set_frame(0)
 		global_position.x = turnAroundRight - 5
 
-#func hit_flash_countdown(delta):
-	#if hitflashtimer <= 0:
-		#hitflashflag = false
-		#animatedSprite.material.set_shader_param("white", false)
-	#else:
-		#hitflashtimer -= delta * 100
+func hit_flash_countdown(delta):
+	if hitflashtimer <= 0:
+		hitflashflag = false
+		animatedSprite.material.set_shader_param("white", false)
+	else:
+		hitflashtimer -= delta * 100
 
 func crumble():
 	velocity.x = 0
@@ -60,12 +61,12 @@ func crumble():
 	crumbling = true
 
 func _on_HurtBox_area_entered(area):
-	#hitflashtimer = hitflashduration
-	#hitflashflag = true
-	#animatedSprite.material.set_shader_param("white", true)
 	var areaGroups = area.get_groups()
 	for x in areaGroups:
 		if x == "PlayerSpell":
+			hitflashtimer = hitflashduration
+			hitflashflag = true
+			animatedSprite.material.set_shader_param("white", true)
 			stats.health -= area.damage
 
 func _on_EnemyStats_no_health():
