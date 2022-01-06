@@ -53,7 +53,7 @@ func _on_HitBox_area_entered(area):
 	var areaGroups = area.get_groups()
 	for x in areaGroups:
 		if x == "BlockingSpell":
-			call_deferred("explode")
+			call_deferred("explode_lemon")
 
 func _on_HitBox_body_entered(body):
 	var areaGroups = body.get_groups()

@@ -43,7 +43,7 @@ func start_attack():
 			animatedSprite.play("GrabLemon")
 			state = LEMON
 		else:
-			animatedSprite.play("Blow_smoke")
+			animatedSprite.play("BlowSmoke")
 			state = SMOKE
 	elif state == ENRAGED_IDLE:
 		pass
