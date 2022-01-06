@@ -16,14 +16,14 @@ export var TELEPORT_COOLDOWN = 75
 
 enum {
 	RUN,
-	TELEPORTA,
-	TELEPORTV,
-	AIRRISE,
-	HANGTIME,
-	AIRFALL,
-	FREEFALL,
+	TELEPORT_APPEAR,
+	TELEPORT_VANISH,
+	AIR_RISE,
+	HANG_TIME,
+	AIR_FALL,
+	FREE_FALL,
 	LAND,
-	GETUP,
+	GET_UP,
 	CAST_FIRE,
 	CAST_ICE_ARROW,
 	CAST_ICE_PLATFORM,
@@ -114,15 +114,15 @@ func _physics_process(delta):
 	match state:
 		RUN:
 			run_state(delta)
-		AIRRISE:
+		AIR_RISE:
 			air_rise_state(delta)
-		HANGTIME:
+		HANG_TIME:
 			hang_time_state(delta)
-		AIRFALL:
+		AIR_FALL:
 			air_fall_state(delta)
 		LAND:
 			land_state(delta)
-		FREEFALL:
+		FREE_FALL:
 			free_fall_state(delta)
 		CAST_FIRE:
 			cast_fire_state(delta)
@@ -179,7 +179,7 @@ func run_state(delta):
 	move(delta, true)
 
 	if not is_on_floor():
-		state = AIRFALL
+		state = AIR_FALL
 
 	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
 		teleport_action()
@@ -222,7 +222,7 @@ func air_rise_state(delta):
 		if velocity.y >= 0:
 			velocity.y = 0
 			airhangtimetimer = 0
-			state = HANGTIME
+			state = HANG_TIME
 		else:
 			move(delta, true)
 	else:
@@ -252,7 +252,7 @@ func hang_time_state(delta):
 
 	airhangtimetimer += (delta * 100)
 	if airhangtimetimer >= HANG_TIME:
-		state = AIRFALL
+		state = AIR_FALL
 		move(delta, true)
 	else:
 		move(delta, false)
@@ -341,7 +341,7 @@ func cast_lightning_state(delta):
 func teleport_action():
 	play_teleport_vanish_animation()
 	velocity = Vector2.ZERO
-	state = TELEPORTV
+	state = TELEPORT_VANISH
 
 func teleport_probe():
 	var teleportprobe = TeleportProbe.instance()
@@ -357,7 +357,7 @@ func teleport_move(pos):
 func teleport_appear(pos):
 	play_teleport_appear_animation()
 	global_position = pos
-	state = TELEPORTA
+	state = TELEPORT_APPEAR
 
 func teleport_finished():
 	teleporttimer = TELEPORT_COOLDOWN
@@ -367,28 +367,28 @@ func teleport_finished():
 	else:
 		play_air_fall_animation()
 		airhangtimetimer = 0
-		state = HANGTIME
+		state = HANG_TIME
 
 func jump_action():
 	play_air_rise_animation()
 	jumpreleased = false
 	curjumptimer = 0
 	velocity.y = JUMP_SPEED
-	state = AIRRISE
+	state = AIR_RISE
 
 func start_free_fall():
 	immune = true
 	immune_timer = immune_duration
 	velocity = Vector2.ZERO
 	play_free_fall_animation()
-	state = FREEFALL
+	state = FREE_FALL
 
 func start_getting_up():
 	immune = true
 	immune_timer = immune_duration
 	velocity = Vector2.ZERO
 	play_getting_up_animation()
-	state = GETUP
+	state = GET_UP
 
 func get_up():
 	if blackedout:
@@ -639,9 +639,9 @@ func _on_AnimatedSprite_frame_changed():
 func _on_AnimatedSprite_animation_finished():
 	if state == LAND:
 		state = RUN
-	elif state == GETUP:
+	elif state == GET_UP:
 		get_up()
-	elif state == TELEPORTV:
+	elif state == TELEPORT_VANISH:
 		teleport_probe()
-	elif state == TELEPORTA:
+	elif state == TELEPORT_APPEAR:
 		call_deferred("teleport_finished")
