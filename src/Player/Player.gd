@@ -99,7 +99,7 @@ var colBoxes
 func _ready():
 	colBoxes = [airColBox, castLeftColBox, castRightColBox, freeFallColBox,
 				idleLeftColBox, idleRightColBox, runLeftColBox, runRightColBox]
-	hurtBoxes = [airHurtBox, castLeftHurtBox, castRightHurtBox, 
+	hurtBoxes = [airHurtBox, castLeftHurtBox, castRightHurtBox,
 				idleLeftHurtBox, idleRightHurtBox, runLeftHurtBox, runRightHurtBox]
 	idleRightColBox.disabled = false
 	idleRightHurtBox.disabled = false
@@ -109,8 +109,8 @@ func _ready():
 
 func _physics_process(delta):
 	if Input.is_action_just_pressed("quit"):
-		quitGame()
-	runCoolDownTimers(delta)
+		quit_game()
+	run_cool_down_timers(delta)
 	match state:
 		RUN:
 			run_state(delta)
@@ -135,7 +135,7 @@ func _physics_process(delta):
 		CAST_LIGHTNING:
 			cast_lightning_state(delta)
 
-func runCoolDownTimers(delta):
+func run_cool_down_timers(delta):
 	if immune:
 		blinktimer -= (delta * 100)
 		if blinktimer <= 0:
@@ -343,23 +343,23 @@ func teleport_action():
 	velocity = Vector2.ZERO
 	state = TELEPORTV
 
-func teleportProbe():
+func teleport_probe():
 	var teleportprobe = TeleportProbe.instance()
 	get_parent().add_child(teleportprobe)
 	teleportprobe.global_position = global_position
 	if direction_vector.x < 0:
 		teleportprobe.faceLeft()
 
-func teleportMove(pos):
+func teleport_move(pos):
 	global_position = pos
 	get_tree().call_group("Enemies", "updatePlayerLocation", global_position)
 
-func teleportAppear(pos):
+func teleport_appear(pos):
 	play_teleport_appear_animation()
 	global_position = pos
 	state = TELEPORTA
 
-func teleportFinished():
+func teleport_finished():
 	teleporttimer = TELEPORT_COOLDOWN
 	if is_on_floor():
 		play_idle_animation()
@@ -390,7 +390,7 @@ func start_getting_up():
 	play_getting_up_animation()
 	state = GETUP
 
-func getUp():
+func get_up():
 	if blackedout:
 		puke()
 	else:
@@ -596,7 +596,7 @@ func move(delta, grav):
 	velocity = move_and_slide(velocity, Vector2.UP)
 	get_tree().call_group("Enemies", "updatePlayerLocation", global_position)
 
-func blackOut():
+func black_out():
 	blackedout = true
 	disable_hurt_boxes()
 	if is_on_floor():
@@ -612,7 +612,7 @@ func puke():
 	else:
 		animatedSprite.play("PukeRight")
 
-func quitGame():
+func quit_game():
 	var _ignore = get_tree().change_scene(mainmenupath)
 
 func _on_HurtBox_area_entered(_area):
@@ -622,7 +622,7 @@ func _on_HurtBox_area_entered(_area):
 		health -= 1
 		get_tree().call_group("HUD", "setHealth", health)
 		if health <= 0:
-			call_deferred("blackOut")
+			call_deferred("black_out")
 		else:
 			blinkflag = true
 			blinktimer = blinktimerwhite
@@ -640,8 +640,8 @@ func _on_AnimatedSprite_animation_finished():
 	if state == LAND:
 		state = RUN
 	elif state == GETUP:
-		getUp()
+		get_up()
 	elif state == TELEPORTV:
-		teleportProbe()
+		teleport_probe()
 	elif state == TELEPORTA:
-		call_deferred("teleportFinished")
+		call_deferred("teleport_finished")
