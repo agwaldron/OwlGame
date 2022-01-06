@@ -100,7 +100,7 @@ func flyBackHigh(_delta):
 		bombTwoReady = true
 		bombThreeReady = true
 
-func updatePlayerLocation(loc):
+func update_player_location(loc):
 	playerLocation = loc
 
 func checkForPlayer():

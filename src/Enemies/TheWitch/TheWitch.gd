@@ -185,7 +185,7 @@ func wineFinished():
 	velocity.y = flyspeed
 	get_tree().call_group("player", "disperse_ice_platform")
 
-func updatePlayerLocation(pos):
+func update_player_location(pos):
 	playerpos = pos
 
 func hit_flash_countdown(delta):

@@ -352,7 +352,7 @@ func teleport_probe():
 
 func teleport_move(pos):
 	global_position = pos
-	get_tree().call_group("Enemies", "updatePlayerLocation", global_position)
+	get_tree().call_group("Enemies", "update_player_location", global_position)
 
 func teleport_appear(pos):
 	play_teleport_appear_animation()
@@ -594,7 +594,7 @@ func move(delta, grav):
 		velocity.y += GRAV_ACCELERATION * delta
 		velocity.y = min(velocity.y, MAX_FALL_SPEED)
 	velocity = move_and_slide(velocity, Vector2.UP)
-	get_tree().call_group("Enemies", "updatePlayerLocation", global_position)
+	get_tree().call_group("Enemies", "update_player_location", global_position)
 
 func black_out():
 	blackedout = true

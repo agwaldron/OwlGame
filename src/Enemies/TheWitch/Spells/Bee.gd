@@ -44,7 +44,7 @@ func turn():
 		facingLeft = true
 		animatedSprite.play("TurnLeft")
 
-func updatePlayerLocation(pos):
+func update_player_location(pos):
 	target = pos
 
 func vanish():

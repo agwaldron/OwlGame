@@ -61,7 +61,7 @@ func turn_around():
 		animatedSprite.play("MoveRightBeer")
 		velocity = Vector2(speed, 0)
 
-func updatePlayerLocation(loc):
+func update_player_location(loc):
 	playerloc = loc
 
 func _on_HurtBox_area_entered(area):
