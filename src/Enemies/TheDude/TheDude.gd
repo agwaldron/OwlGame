@@ -5,7 +5,7 @@ enum {
 	LEMON,
 	SMOKE,
 	ENRAGING,
-	ENRAGEDIDLE
+	ENRAGED_IDLE
 }
 
 const Lemon = preload("res://src/Enemies/TheDude/Projectiles/Lemon.tscn")
@@ -29,13 +29,13 @@ func _ready():
 	startenrage = false
 	animatedSprite.play("Idle")
 	animatedSprite.set_frame(0)
-	startAttack()
+	start_attack()
 
 func _process(delta):
 	if hitflashflag:
 		hit_flash_countdown(delta)
 
-func startAttack():
+func start_attack():
 	if state == IDLE:
 		if startenrage:
 			enrage()
@@ -43,13 +43,13 @@ func startAttack():
 			animatedSprite.play("GrabLemon")
 			state = LEMON
 		else:
-			animatedSprite.play("BlowSmoke")
+			animatedSprite.play("Blow_smoke")
 			state = SMOKE
-	elif state == ENRAGEDIDLE:
+	elif state == ENRAGED_IDLE:
 		pass
 	animatedSprite.set_frame(0)
 
-func throwLemon():
+func throw_lemon():
 	var lemon = Lemon.instance()
 	get_parent().add_child(lemon)
 	lemon.global_position = global_position
@@ -57,14 +57,14 @@ func throwLemon():
 	lemon.global_position.y -= lemon.sprite_vertical_offset
 	lemon.velocity.x = lemon.HORIZONTAL_SPEED
 
-func blowSmoke():
+func blow_smoke():
 	var smokeCloud = SmokeCloud.instance()
 	get_parent().add_child(smokeCloud)
 	smokeCloud.global_position = global_position
 	smokeCloud.global_position.x -= smokeCloud.sprite_horizontal_offset
 	smokeCloud.global_position.y -= smokeCloud.sprite_vertical_offset
 
-func enrageFlag():
+func enrage_flag():
 	if state == IDLE:
 		enrage()
 	else:
@@ -85,9 +85,9 @@ func hit_flash_countdown(delta):
 
 func _on_AnimatedSprite_frame_changed():
 	if state == LEMON and animatedSprite.get_frame() == 14:
-		call_deferred("throwLemon")
+		call_deferred("throw_lemon")
 	elif state == SMOKE and animatedSprite.get_frame() == 13:
-		call_deferred("blowSmoke")
+		call_deferred("blow_smoke")
 
 func _on_AnimatedSprite_animation_finished():
 	if startenrage:
@@ -102,7 +102,7 @@ func _on_AnimatedSprite_animation_finished():
 		animatedSprite.play("Idle")
 	elif state == ENRAGING:
 		animatedSprite.play("EnragedIdle")
-		state = ENRAGEDIDLE
+		state = ENRAGED_IDLE
 
 func _on_TheDude_area_entered(area):
 	var area_groups = area.get_groups()

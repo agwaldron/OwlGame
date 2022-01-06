@@ -3,7 +3,7 @@ extends KinematicBody2D
 enum{
 	BEER,
 	THROWING,
-	NOBEER
+	NO_BEER
 }
 
 onready var animatedSprite = $AnimatedSprite

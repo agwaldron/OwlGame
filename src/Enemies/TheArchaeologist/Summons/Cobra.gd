@@ -27,7 +27,7 @@ func _process(_delta):
 	if state == MOVING:
 		velocity = move_and_slide(velocity)
 
-func startMoving():
+func start_moving():
 	animatedSprite.play("Move")
 	animatedSprite.set_frame(0)
 	state = MOVING
@@ -50,7 +50,7 @@ func _on_AnimatedSprite_frame_changed():
 
 func _on_AnimatedSprite_animation_finished():
 	if state == SUMMON:
-		call_deferred("startMoving")
+		call_deferred("start_moving")
 	elif state == VANISH:
 		get_tree().call_group("archaeologist", "summon_complete")
 		queue_free()

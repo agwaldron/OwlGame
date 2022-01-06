@@ -5,7 +5,7 @@ export var JUMP_SPEED = -600
 export var GRAV_ACCELERATION = 2500
 export var MIN_JUMP_DURATION = 10
 export var MAX_JUMP_DURATION = 25
-export var HANG_TIME = 3
+export var HANG_TIME_DURATION = 3
 #export var AIR_ACCELERATION = 600
 #export var MAX_AIR_SPEED = 250
 #export var RUN_ACCELERATION = 600
@@ -251,7 +251,7 @@ func hang_time_state(delta):
 		play_air_fall_animation()
 
 	airhangtimetimer += (delta * 100)
-	if airhangtimetimer >= HANG_TIME:
+	if airhangtimetimer >= HANG_TIME_DURATION:
 		state = AIR_FALL
 		move(delta, true)
 	else:

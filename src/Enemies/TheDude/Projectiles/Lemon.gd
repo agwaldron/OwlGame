@@ -25,7 +25,7 @@ func _process(delta):
 		velocity.y = min(velocity.y, maxFallSpeed)
 		velocity = move_and_slide(velocity, Vector2.UP)
 
-func explodeLemon():
+func explode_lemon():
 	animatedSprite.play("Explode")
 	hitBox.disabled = true
 	explode = true
@@ -39,14 +39,14 @@ func bounce_floor():
 	elif bounces == 3:
 		velocity.y = -bouncespeed3
 	else:
-		call_deferred("explodeLemon")
+		call_deferred("explode_lemon")
 
 func bounce_wall():
 	velocity.x = velocity.x * -1
 
 func _on_AnimatedSprite_animation_finished():
 	if explode:
-		get_tree().call_group("dude", "startAttack")
+		get_tree().call_group("dude", "start_attack")
 		queue_free()
 
 func _on_HitBox_area_entered(area):
