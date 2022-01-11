@@ -110,7 +110,7 @@ func eighth_state(delta):
 			var eighthNote = EighthNote.instance()
 			get_parent().add_child(eighthNote)
 			eighthNote.global_position.x = global_position.x - eighthNote.spriteHorizontalOffset
-			eighthNote.global_position.y = rand_range(eighthNote.max_height, eighthNote.min_height)
+			eighthNote.global_position.y = rand_range(eighthNote.maxHeight, eighthNote.minHeight)
 			eighthNote.velocity = Vector2(eighthNote.HORIZONTAL_SPEED, eighthNote.VERTICAL_SPEED)
 			eighthsPlayed += 1
 			noteTimer = timeBetweenEighths
