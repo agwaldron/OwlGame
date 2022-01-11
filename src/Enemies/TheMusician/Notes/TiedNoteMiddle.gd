@@ -2,8 +2,8 @@ extends KinematicBody2D
 
 export var SPEED = 800
 
-onready var sprite_vertical_offset = 75
-onready var sprite_horizontal_offset = 35
+onready var spriteVerticalOffset = 75
+onready var spriteHorizontalOffset = 35
 
 var velocity = Vector2(SPEED, 0)
 

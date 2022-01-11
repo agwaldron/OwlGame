@@ -73,8 +73,8 @@ func tied_state(delta):
 			var tiedNoteStart = TiedNoteStart.instance()
 			get_parent().add_child(tiedNoteStart)
 			tiedNoteStart.global_position = global_position
-			tiedNoteStart.global_position.x -= tiedNoteStart.sprite_horizontal_offset
-			tiedNoteStart.global_position.y -= tiedNoteStart.sprite_vertical_offset
+			tiedNoteStart.global_position.x -= tiedNoteStart.spriteHorizontal_offset
+			tiedNoteStart.global_position.y -= tiedNoteStart.spriteVerticalOffset
 			tiedNoteStart.velocity.x = tiedNoteStart.SPEED * -1
 			tiedPlaceMarker += 1
 			noteTimer = timeBetweenTieds
@@ -83,8 +83,8 @@ func tied_state(delta):
 			var tiedNoteMiddle = TiedNoteMiddle.instance()
 			get_parent().add_child(tiedNoteMiddle)
 			tiedNoteMiddle.global_position = global_position
-			tiedNoteMiddle.global_position.x -= tiedNoteMiddle.sprite_horizontal_offset
-			tiedNoteMiddle.global_position.y -= tiedNoteMiddle.sprite_vertical_offset
+			tiedNoteMiddle.global_position.x -= tiedNoteMiddle.spriteHorizontal_offset
+			tiedNoteMiddle.global_position.y -= tiedNoteMiddle.spriteVerticalOffset
 			tiedNoteMiddle.velocity.x = tiedNoteMiddle.SPEED * -1
 			tiedMiddlesPlayed += 1
 			if tiedMiddlesPlayed >= maxTiedMiddles:
@@ -95,8 +95,8 @@ func tied_state(delta):
 			var tiedNoteEnd = TiedNoteEnd.instance()
 			get_parent().add_child(tiedNoteEnd)
 			tiedNoteEnd.global_position = global_position
-			tiedNoteEnd.global_position.x -= tiedNoteEnd.sprite_horizontal_offset
-			tiedNoteEnd.global_position.y -= tiedNoteEnd.sprite_vertical_offset
+			tiedNoteEnd.global_position.x -= tiedNoteEnd.spriteHorizontal_offset
+			tiedNoteEnd.global_position.y -= tiedNoteEnd.spriteVerticalOffset
 			tiedNoteEnd.velocity.x = tiedNoteEnd.SPEED * -1
 			tiedPlaceMarker = 0
 			tiedMiddlesPlayed = 0
@@ -109,7 +109,7 @@ func eighth_state(delta):
 		if noteTimer <= 0:
 			var eighthNote = EighthNote.instance()
 			get_parent().add_child(eighthNote)
-			eighthNote.global_position.x = global_position.x - eighthNote.sprite_horizontal_offset
+			eighthNote.global_position.x = global_position.x - eighthNote.spriteHorizontal_offset
 			eighthNote.global_position.y = rand_range(eighthNote.max_height, eighthNote.min_height)
 			eighthNote.velocity = Vector2(eighthNote.HORIZONTAL_SPEED, eighthNote.VERTICAL_SPEED)
 			eighthsPlayed += 1

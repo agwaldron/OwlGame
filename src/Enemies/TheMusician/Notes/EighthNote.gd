@@ -3,7 +3,7 @@ extends KinematicBody2D
 export var HORIZONTAL_SPEED = -600
 export var VERTICAL_SPEED = -400
 
-onready var sprite_horizontal_offset = 35
+onready var spriteHorizontalOffset = 35
 
 var maxHeight = 500
 var minHeight = 660
