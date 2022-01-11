@@ -20,21 +20,18 @@ var state
 var play_next_cool_down
 var rngen = RandomNumberGenerator.new()
 
-var hitflashduration = 8
-var hitflashtimer = 0
-var hitflashflag = false
-
-var start_tied_delay = 100
-var tied_middles_played = 0
-var max_tied_middles = 5
-var time_between_tieds = 7
-var tied_place_marker = 0
-
-var eighths_played = 0
-var max_eighths = 5
-var time_between_eighths = 125
-
-var note_timer = 0
+var hitFlashDuration = 8
+var hitFlashTimer = 0
+var hitFlashFlag = false
+var startTiedDelay = 100
+var tiedMiddlesPlayed = 0
+var maxTiedMiddles = 5
+var timeBetweenTieds = 7
+var tiedPlaceMarker = 0
+var eighthsPlayed = 0
+var maxEighths = 5
+var timeBetweenEighths = 125
+var noteTimer = 0
 
 func _ready():
 	stats.health = 20
@@ -44,7 +41,7 @@ func _ready():
 	rngen.randomize()
 
 func _process(delta):
-	if hitflashflag:
+	if hitFlashFlag:
 		hit_flash_countdown(delta)
 	match state:
 		CHOOSE:
@@ -60,81 +57,81 @@ func choose_note(delta):
 		var rand_num = rngen.randi_range(0, 1)
 		if rand_num == 0:
 			animatedSprite.play("PlayTied")
-			note_timer = start_tied_delay
+			noteTimer = startTiedDelay
 			state = TIED
 		else:
 			animatedSprite.play("PlayEighth")
-			eighths_played = 0
-			tied_middles_played = 0
-			note_timer = time_between_eighths
+			eighthsPlayed = 0
+			tiedMiddlesPlayed = 0
+			noteTimer = timeBetweenEighths
 			state = EIGHTH
 
 func tied_state(delta):
-	note_timer -= (delta * 100)
-	if tied_place_marker == 0:
-		if note_timer <= 0:
+	noteTimer -= (delta * 100)
+	if tiedPlaceMarker == 0:
+		if noteTimer <= 0:
 			var tiedNoteStart = TiedNoteStart.instance()
 			get_parent().add_child(tiedNoteStart)
 			tiedNoteStart.global_position = global_position
 			tiedNoteStart.global_position.x -= tiedNoteStart.sprite_horizontal_offset
 			tiedNoteStart.global_position.y -= tiedNoteStart.sprite_vertical_offset
 			tiedNoteStart.velocity.x = tiedNoteStart.SPEED * -1
-			tied_place_marker += 1
-			note_timer = time_between_tieds
-	elif tied_place_marker == 1:
-		if note_timer <= 0:
+			tiedPlaceMarker += 1
+			noteTimer = timeBetweenTieds
+	elif tiedPlaceMarker == 1:
+		if noteTimer <= 0:
 			var tiedNoteMiddle = TiedNoteMiddle.instance()
 			get_parent().add_child(tiedNoteMiddle)
 			tiedNoteMiddle.global_position = global_position
 			tiedNoteMiddle.global_position.x -= tiedNoteMiddle.sprite_horizontal_offset
 			tiedNoteMiddle.global_position.y -= tiedNoteMiddle.sprite_vertical_offset
 			tiedNoteMiddle.velocity.x = tiedNoteMiddle.SPEED * -1
-			tied_middles_played += 1
-			if tied_middles_played >= max_tied_middles:
-				tied_place_marker += 1
-			note_timer = time_between_tieds
+			tiedMiddlesPlayed += 1
+			if tiedMiddlesPlayed >= maxTiedMiddles:
+				tiedPlaceMarker += 1
+			noteTimer = timeBetweenTieds
 	else:
-		if note_timer <= 0:
+		if noteTimer <= 0:
 			var tiedNoteEnd = TiedNoteEnd.instance()
 			get_parent().add_child(tiedNoteEnd)
 			tiedNoteEnd.global_position = global_position
 			tiedNoteEnd.global_position.x -= tiedNoteEnd.sprite_horizontal_offset
 			tiedNoteEnd.global_position.y -= tiedNoteEnd.sprite_vertical_offset
 			tiedNoteEnd.velocity.x = tiedNoteEnd.SPEED * -1
-			tied_place_marker = 0
-			tied_middles_played = 0
+			tiedPlaceMarker = 0
+			tiedMiddlesPlayed = 0
 			play_next_cool_down = PLAY_FREQ
 			state = CHOOSE
 
 func eighth_state(delta):
-	if eighths_played < max_eighths:
-		note_timer -= (delta * 100)
-		if note_timer <= 0:
+	if eighthsPlayed < maxEighths:
+		noteTimer -= (delta * 100)
+		if noteTimer <= 0:
 			var eighthNote = EighthNote.instance()
 			get_parent().add_child(eighthNote)
 			eighthNote.global_position.x = global_position.x - eighthNote.sprite_horizontal_offset
 			eighthNote.global_position.y = rand_range(eighthNote.max_height, eighthNote.min_height)
 			eighthNote.velocity = Vector2(eighthNote.HORIZONTAL_SPEED, eighthNote.VERTICAL_SPEED)
-			eighths_played += 1
-			note_timer = time_between_eighths
+			eighthsPlayed += 1
+			noteTimer = timeBetweenEighths
 	else:
 		play_next_cool_down = PLAY_FREQ
-		eighths_played = 0
+		eighthsPlayed = 0
 		state = CHOOSE
 
 func hit_flash_countdown(delta):
-	if hitflashtimer <= 0:
-		hitflashflag = false
+	if hitFlashTimer <= 0:
+		hitFlashFlag = false
 		animatedSprite.material.set_shader_param("white", false)
 	else:
-		hitflashtimer -= delta * 100
+		hitFlashTimer -= delta * 100
 
 func _on_HurtBox_area_entered(area):
 	var area_groups = area.get_groups()
 	for x in area_groups:
 		if x == "PlayerSpell":
-			hitflashtimer = hitflashduration
-			hitflashflag = true
+			hitFlashTimer = hitFlashDuration
+			hitFlashFlag = true
 			animatedSprite.material.set_shader_param("white", true)
 			stats.health -= area.damage
 
