@@ -34,7 +34,7 @@ func _process(delta):
 		pullBack(delta)
 	velocity = move_and_slide(velocity)
 
-func updatePlayerLocation(pos):
+func update_player_location(pos):
 	playerpos = pos
 
 func trackPlayer(delta):

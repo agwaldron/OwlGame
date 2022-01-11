@@ -5,7 +5,7 @@ export var JUMP_SPEED = -600
 export var GRAV_ACCELERATION = 2500
 export var MIN_JUMP_DURATION = 10
 export var MAX_JUMP_DURATION = 25
-export var HANG_TIME = 3
+export var HANG_TIME_DURATION = 3
 #export var AIR_ACCELERATION = 600
 #export var MAX_AIR_SPEED = 250
 #export var RUN_ACCELERATION = 600
@@ -16,14 +16,14 @@ export var TELEPORT_COOLDOWN = 75
 
 enum {
 	RUN,
-	TELEPORTA,
-	TELEPORTV,
-	AIRRISE,
-	HANGTIME,
-	AIRFALL,
-	FREEFALL,
+	TELEPORT_APPEAR,
+	TELEPORT_VANISH,
+	AIR_RISE,
+	HANG_TIME,
+	AIR_FALL,
+	FREE_FALL,
 	LAND,
-	GETUP,
+	GET_UP,
 	CAST_FIRE,
 	CAST_ICE_ARROW,
 	CAST_ICE_PLATFORM,
@@ -99,7 +99,7 @@ var colBoxes
 func _ready():
 	colBoxes = [airColBox, castLeftColBox, castRightColBox, freeFallColBox,
 				idleLeftColBox, idleRightColBox, runLeftColBox, runRightColBox]
-	hurtBoxes = [airHurtBox, castLeftHurtBox, castRightHurtBox, 
+	hurtBoxes = [airHurtBox, castLeftHurtBox, castRightHurtBox,
 				idleLeftHurtBox, idleRightHurtBox, runLeftHurtBox, runRightHurtBox]
 	idleRightColBox.disabled = false
 	idleRightHurtBox.disabled = false
@@ -109,20 +109,20 @@ func _ready():
 
 func _physics_process(delta):
 	if Input.is_action_just_pressed("quit"):
-		quitGame()
-	runCoolDownTimers(delta)
+		quit_game()
+	run_cool_down_timers(delta)
 	match state:
 		RUN:
 			run_state(delta)
-		AIRRISE:
+		AIR_RISE:
 			air_rise_state(delta)
-		HANGTIME:
+		HANG_TIME:
 			hang_time_state(delta)
-		AIRFALL:
+		AIR_FALL:
 			air_fall_state(delta)
 		LAND:
 			land_state(delta)
-		FREEFALL:
+		FREE_FALL:
 			free_fall_state(delta)
 		CAST_FIRE:
 			cast_fire_state(delta)
@@ -135,7 +135,7 @@ func _physics_process(delta):
 		CAST_LIGHTNING:
 			cast_lightning_state(delta)
 
-func runCoolDownTimers(delta):
+func run_cool_down_timers(delta):
 	if immune:
 		blinktimer -= (delta * 100)
 		if blinktimer <= 0:
@@ -179,7 +179,7 @@ func run_state(delta):
 	move(delta, true)
 
 	if not is_on_floor():
-		state = AIRFALL
+		state = AIR_FALL
 
 	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
 		teleport_action()
@@ -222,7 +222,7 @@ func air_rise_state(delta):
 		if velocity.y >= 0:
 			velocity.y = 0
 			airhangtimetimer = 0
-			state = HANGTIME
+			state = HANG_TIME
 		else:
 			move(delta, true)
 	else:
@@ -251,8 +251,8 @@ func hang_time_state(delta):
 		play_air_fall_animation()
 
 	airhangtimetimer += (delta * 100)
-	if airhangtimetimer >= HANG_TIME:
-		state = AIRFALL
+	if airhangtimetimer >= HANG_TIME_DURATION:
+		state = AIR_FALL
 		move(delta, true)
 	else:
 		move(delta, false)
@@ -341,25 +341,25 @@ func cast_lightning_state(delta):
 func teleport_action():
 	play_teleport_vanish_animation()
 	velocity = Vector2.ZERO
-	state = TELEPORTV
+	state = TELEPORT_VANISH
 
-func teleportProbe():
+func teleport_probe():
 	var teleportprobe = TeleportProbe.instance()
 	get_parent().add_child(teleportprobe)
 	teleportprobe.global_position = global_position
 	if direction_vector.x < 0:
 		teleportprobe.faceLeft()
 
-func teleportMove(pos):
+func teleport_move(pos):
 	global_position = pos
-	get_tree().call_group("Enemies", "updatePlayerLocation", global_position)
+	get_tree().call_group("Enemies", "update_player_location", global_position)
 
-func teleportAppear(pos):
+func teleport_appear(pos):
 	play_teleport_appear_animation()
 	global_position = pos
-	state = TELEPORTA
+	state = TELEPORT_APPEAR
 
-func teleportFinished():
+func teleport_finished():
 	teleporttimer = TELEPORT_COOLDOWN
 	if is_on_floor():
 		play_idle_animation()
@@ -367,30 +367,30 @@ func teleportFinished():
 	else:
 		play_air_fall_animation()
 		airhangtimetimer = 0
-		state = HANGTIME
+		state = HANG_TIME
 
 func jump_action():
 	play_air_rise_animation()
 	jumpreleased = false
 	curjumptimer = 0
 	velocity.y = JUMP_SPEED
-	state = AIRRISE
+	state = AIR_RISE
 
 func start_free_fall():
 	immune = true
 	immune_timer = immune_duration
 	velocity = Vector2.ZERO
 	play_free_fall_animation()
-	state = FREEFALL
+	state = FREE_FALL
 
 func start_getting_up():
 	immune = true
 	immune_timer = immune_duration
 	velocity = Vector2.ZERO
 	play_getting_up_animation()
-	state = GETUP
+	state = GET_UP
 
-func getUp():
+func get_up():
 	if blackedout:
 		puke()
 	else:
@@ -594,9 +594,9 @@ func move(delta, grav):
 		velocity.y += GRAV_ACCELERATION * delta
 		velocity.y = min(velocity.y, MAX_FALL_SPEED)
 	velocity = move_and_slide(velocity, Vector2.UP)
-	get_tree().call_group("Enemies", "updatePlayerLocation", global_position)
+	get_tree().call_group("Enemies", "update_player_location", global_position)
 
-func blackOut():
+func black_out():
 	blackedout = true
 	disable_hurt_boxes()
 	if is_on_floor():
@@ -612,7 +612,7 @@ func puke():
 	else:
 		animatedSprite.play("PukeRight")
 
-func quitGame():
+func quit_game():
 	var _ignore = get_tree().change_scene(mainmenupath)
 
 func _on_HurtBox_area_entered(_area):
@@ -622,7 +622,7 @@ func _on_HurtBox_area_entered(_area):
 		health -= 1
 		get_tree().call_group("HUD", "setHealth", health)
 		if health <= 0:
-			call_deferred("blackOut")
+			call_deferred("black_out")
 		else:
 			blinkflag = true
 			blinktimer = blinktimerwhite
@@ -639,9 +639,9 @@ func _on_AnimatedSprite_frame_changed():
 func _on_AnimatedSprite_animation_finished():
 	if state == LAND:
 		state = RUN
-	elif state == GETUP:
-		getUp()
-	elif state == TELEPORTV:
-		teleportProbe()
-	elif state == TELEPORTA:
-		call_deferred("teleportFinished")
+	elif state == GET_UP:
+		get_up()
+	elif state == TELEPORT_VANISH:
+		teleport_probe()
+	elif state == TELEPORT_APPEAR:
+		call_deferred("teleport_finished")

@@ -52,7 +52,7 @@ func _on_AnimatedSprite_animation_finished():
 		velocity.x = SPEED * -1
 		state = MOVE
 	elif state == DISPERSE:
-		get_tree().call_group("dude", "startAttack")
+		get_tree().call_group("dude", "start_attack")
 		queue_free()
 
 func _on_HitBox_body_entered(_body):
