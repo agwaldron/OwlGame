@@ -38,7 +38,7 @@ const IcePlatform = preload("res://src/Player/Spells/IcePlatform.tscn")
 const IceSpike = preload("res://src/Player/Spells/IceSpike.tscn")
 const Lightning = preload("res://src/Player/Spells/LightningBolt.tscn")
 const TeleportProbe = preload("res://src/Player/Spells/TeleportProbe.tscn")
-const mainmenupath = "res://src/Environment/Menus/MainMenu.tscn"
+const mainMenuPath = "res://src/Environment/Menus/MainMenu.tscn"
 
 onready var animatedSprite = $AnimatedSprite
 onready var airColBox = $AirCollisionShape
@@ -58,40 +58,40 @@ onready var runRightColBox = $RunRightCollisionShape
 onready var runRightHurtBox = $RunRightHurtBox/CollisionShape2D
 
 var health = 5
-var blackedout = false
+var blackedOut = false
 var immune = false
-var immune_duration = 75
-var immune_timer
+var immuneDuration = 75
+var immuneTimer
 var state = RUN
 var velocity = Vector2.ZERO
-var direction_vector = Vector2.RIGHT
+var directionVector = Vector2.RIGHT
 #var maxjumpduration = 40
 #var minjumpduration = 25
-var curjumptimer
-var jumpreleased = false
+var curJumpTimer
+var jumpReleased = false
 #var maxjumpspeed = 500
 #var jumpacceleration = 4500
 #var maxfallspeed = 650
 #var fallacceleration = 2500
 #var airhangtimeduration = 3
-var airhangtimetimer = 0
-var teleporttimer = 0
-var blinktimer
-var blinktimerwhite = 10
-var blinktimerreg = 30
-var blinkflag = false
-var cast_timer = 0
-var icearrowcooldown = 125
-var icearrowtimer = 0
-var icespikecooldown = 100
-var icespiketimer = 0
-var fireballchargesmax = 3
-var fireballcharges = fireballchargesmax
-var fireballrechargecooldown = 125
-var fireballrechargetimer = fireballrechargecooldown
-var iceplatformpos1 = Vector2(400, 575)
-var iceplatformpos2 = Vector2(600, 400)
-var iceplatformpos3 = Vector2(800, 575)
+var airHangTimeTimer = 0
+var teleportTimer = 0
+var blinkTimer
+var blinkTimerWhite = 10
+var blinkTimerReg = 30
+var blinkFlag = false
+var castTimer = 0
+var iceArrowCooldown = 125
+var iceArrowTimer = 0
+var iceSpikeCooldown = 100
+var iceSpikeTimer = 0
+var fireBallChargesMax = 3
+var fireBallCharges = fireBallChargesMax
+var fireBallRechargeCooldown = 125
+var fireBallRechargeTimer = fireBallRechargeCooldown
+var icePlatformPosition1 = Vector2(400, 575)
+var icePlatformPosition2 = Vector2(600, 400)
+var icePlatformPosition3 = Vector2(800, 575)
 
 var hurtBoxes
 var colBoxes
@@ -137,29 +137,29 @@ func _physics_process(delta):
 
 func run_cool_down_timers(delta):
 	if immune:
-		blinktimer -= (delta * 100)
-		if blinktimer <= 0:
-			if blinkflag:
-				blinkflag = false
-				blinktimer = blinktimerreg
+		blinkTimer -= (delta * 100)
+		if blinkTimer <= 0:
+			if blinkFlag:
+				blinkFlag = false
+				blinkTimer = blinkTimerReg
 				animatedSprite.material.set_shader_param("white", false)
 			else:
-				blinkflag = true
-				blinktimer = blinktimerwhite
+				blinkFlag = true
+				blinkTimer = blinkTimerWhite
 				animatedSprite.material.set_shader_param("white", true)
 
-		immune_timer -= (delta * 100)
-		if immune_timer <= 0:
+		immuneTimer -= (delta * 100)
+		if immuneTimer <= 0:
 			immune = false
 			animatedSprite.material.set_shader_param("white", false)
-	teleporttimer -= (delta * 100)
-	icearrowtimer -= (delta * 100)
-	icespiketimer -= (delta * 100)
-	if fireballcharges < fireballchargesmax:
-		fireballrechargetimer -= (delta * 100)
-		if fireballrechargetimer <= 0:
-			fireballcharges += 1
-			fireballrechargetimer = fireballrechargecooldown
+	teleportTimer -= (delta * 100)
+	iceArrowTimer -= (delta * 100)
+	iceSpikeTimer -= (delta * 100)
+	if fireBallCharges < fireBallChargesMax:
+		fireBallRechargeTimer -= (delta * 100)
+		if fireBallRechargeTimer <= 0:
+			fireBallCharges += 1
+			fireBallRechargeTimer = fireBallRechargeCooldown
 
 func run_state(delta):
 	var input_vector = Vector2.ZERO
@@ -167,7 +167,7 @@ func run_state(delta):
 	#input_vector = input_vector.normalized()
 
 	if input_vector != Vector2.ZERO:
-		direction_vector.x = input_vector.x
+		directionVector.x = input_vector.x
 		#velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
 		velocity = input_vector * HORIZONTAL_SPEED
 		play_running_animation()
@@ -181,19 +181,19 @@ func run_state(delta):
 	if not is_on_floor():
 		state = AIR_FALL
 
-	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
+	if Input.is_action_just_pressed("teleport") and teleportTimer <= 0:
 		teleport_action()
 
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		jump_action()
 
-	if Input.is_action_just_pressed("fireball") and fireballcharges > 0:
+	if Input.is_action_just_pressed("fireball") and fireBallCharges > 0:
 		cast_fire()
 
-	if Input.is_action_just_pressed("icespike") and is_on_floor() and icespiketimer <= 0:
+	if Input.is_action_just_pressed("icespike") and is_on_floor() and iceSpikeTimer <= 0:
 		cast_ice_spike()
 
-	if Input.is_action_just_pressed("icearrow") and is_on_floor() and icearrowtimer <= 0:
+	if Input.is_action_just_pressed("icearrow") and is_on_floor() and iceArrowTimer <= 0:
 		cast_ice_arrow()
 
 	if Input.is_action_just_pressed("lightning") and is_on_floor():
@@ -204,7 +204,7 @@ func air_rise_state(delta):
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	#input_vector = input_vector.normalized()
 	if input_vector != Vector2.ZERO:
-		direction_vector.x = input_vector.x
+		directionVector.x = input_vector.x
 		#velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
 		velocity.x = input_vector.x * HORIZONTAL_SPEED
 		play_air_rise_animation()
@@ -213,15 +213,15 @@ func air_rise_state(delta):
 		velocity.x = input_vector.x
 		play_air_rise_animation()
 
-	curjumptimer += (delta * 100)
-	if not jumpreleased:
-		if Input.is_action_just_released("jump") or curjumptimer >= MAX_JUMP_DURATION:
-			jumpreleased = true
+	curJumpTimer += (delta * 100)
+	if not jumpReleased:
+		if Input.is_action_just_released("jump") or curJumpTimer >= MAX_JUMP_DURATION:
+			jumpReleased = true
 
-	if jumpreleased and curjumptimer >= MIN_JUMP_DURATION:
+	if jumpReleased and curJumpTimer >= MIN_JUMP_DURATION:
 		if velocity.y >= 0:
 			velocity.y = 0
-			airhangtimetimer = 0
+			airHangTimeTimer = 0
 			state = HANG_TIME
 		else:
 			move(delta, true)
@@ -230,10 +230,10 @@ func air_rise_state(delta):
 		#velocity.y = max(velocity.y, (-1*maxjumpspeed))
 		move(delta, false)
 
-	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
+	if Input.is_action_just_pressed("teleport") and teleportTimer <= 0:
 		teleport_action()
 
-	if Input.is_action_just_pressed("fireball") and fireballcharges > 0:
+	if Input.is_action_just_pressed("fireball") and fireBallCharges > 0:
 		cast_fire()
 
 func hang_time_state(delta):
@@ -241,7 +241,7 @@ func hang_time_state(delta):
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	#input_vector = input_vector.normalized()
 	if input_vector != Vector2.ZERO:
-		direction_vector.x = input_vector.x
+		directionVector.x = input_vector.x
 		#velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
 		velocity.x = input_vector.x * HORIZONTAL_SPEED
 		play_air_fall_animation()
@@ -250,17 +250,17 @@ func hang_time_state(delta):
 		velocity.x = input_vector.x
 		play_air_fall_animation()
 
-	airhangtimetimer += (delta * 100)
-	if airhangtimetimer >= HANG_TIME_DURATION:
+	airHangTimeTimer += (delta * 100)
+	if airHangTimeTimer >= HANG_TIME_DURATION:
 		state = AIR_FALL
 		move(delta, true)
 	else:
 		move(delta, false)
 
-	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
+	if Input.is_action_just_pressed("teleport") and teleportTimer <= 0:
 		teleport_action()
 
-	if Input.is_action_just_pressed("fireball") and fireballcharges > 0:
+	if Input.is_action_just_pressed("fireball") and fireBallCharges > 0:
 		cast_fire()
 
 func air_fall_state(delta):
@@ -268,7 +268,7 @@ func air_fall_state(delta):
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	#input_vector = input_vector.normalized()
 	if input_vector != Vector2.ZERO:
-		direction_vector.x = input_vector.x
+		directionVector.x = input_vector.x
 		#velocity = velocity.move_toward(input_vector * MAX_RUN_SPEED, RUN_ACCELERATION * delta)
 		velocity.x = input_vector.x * HORIZONTAL_SPEED
 		play_air_fall_animation()
@@ -279,7 +279,7 @@ func air_fall_state(delta):
 
 	if is_on_floor():
 		state = LAND
-		if direction_vector.x < 0:
+		if directionVector.x < 0:
 			animatedSprite.play("LandLeft")
 		else:
 			animatedSprite.play("LandRight")
@@ -287,10 +287,10 @@ func air_fall_state(delta):
 	else:
 		move(delta, true)
 
-	if Input.is_action_just_pressed("teleport") and teleporttimer <= 0:
+	if Input.is_action_just_pressed("teleport") and teleportTimer <= 0:
 		teleport_action()
 
-	if Input.is_action_just_pressed("fireball") and fireballcharges > 0:
+	if Input.is_action_just_pressed("fireball") and fireBallCharges > 0:
 		cast_fire()
 
 func land_state(delta):
@@ -307,9 +307,9 @@ func free_fall_state(delta):
 		move(delta, true)
 
 func cast_fire_state(delta):
-	cast_timer -= (delta * 100)
-	if cast_timer <= 0:
-		cast_timer = 0
+	castTimer -= (delta * 100)
+	if castTimer <= 0:
+		castTimer = 0
 		if is_on_floor():
 			state = RUN
 	else:
@@ -327,15 +327,15 @@ func cast_ice_platform_state(delta):
 	move(delta, true)
 
 func cast_ice_spike_state(delta):
-	cast_timer -= (delta * 100)
-	if cast_timer <= 0:
-		cast_timer = 0
+	castTimer -= (delta * 100)
+	if castTimer <= 0:
+		castTimer = 0
 		state = RUN
 
 func cast_lightning_state(delta):
-	cast_timer -= (delta * 100)
-	if cast_timer <= 0:
-		cast_timer = 0
+	castTimer -= (delta * 100)
+	if castTimer <= 0:
+		castTimer = 0
 		state = RUN
 
 func teleport_action():
@@ -344,11 +344,11 @@ func teleport_action():
 	state = TELEPORT_VANISH
 
 func teleport_probe():
-	var teleportprobe = TeleportProbe.instance()
-	get_parent().add_child(teleportprobe)
-	teleportprobe.global_position = global_position
-	if direction_vector.x < 0:
-		teleportprobe.faceLeft()
+	var teleportProbe = TeleportProbe.instance()
+	get_parent().add_child(teleportProbe)
+	teleportProbe.global_position = global_position
+	if directionVector.x < 0:
+		teleportProbe.faceLeft()
 
 func teleport_move(pos):
 	global_position = pos
@@ -360,42 +360,42 @@ func teleport_appear(pos):
 	state = TELEPORT_APPEAR
 
 func teleport_finished():
-	teleporttimer = TELEPORT_COOLDOWN
+	teleportTimer = TELEPORT_COOLDOWN
 	if is_on_floor():
 		play_idle_animation()
 		state = RUN
 	else:
 		play_air_fall_animation()
-		airhangtimetimer = 0
+		airHangTimeTimer = 0
 		state = HANG_TIME
 
 func jump_action():
 	play_air_rise_animation()
-	jumpreleased = false
-	curjumptimer = 0
+	jumpReleased = false
+	curJumpTimer = 0
 	velocity.y = JUMP_SPEED
 	state = AIR_RISE
 
 func start_free_fall():
 	immune = true
-	immune_timer = immune_duration
+	immuneTimer = immuneDuration
 	velocity = Vector2.ZERO
 	play_free_fall_animation()
 	state = FREE_FALL
 
 func start_getting_up():
 	immune = true
-	immune_timer = immune_duration
+	immuneTimer = immuneDuration
 	velocity = Vector2.ZERO
 	play_getting_up_animation()
 	state = GET_UP
 
 func get_up():
-	if blackedout:
+	if blackedOut:
 		puke()
 	else:
 		play_idle_animation()
-		immune_timer = immune_duration
+		immuneTimer = immuneDuration
 		state = RUN
 
 func cast_fire():
@@ -403,15 +403,15 @@ func cast_fire():
 		velocity.x = 0
 		play_cast_animation()
 		state = CAST_FIRE
-	fireballcharges -= 1
+	fireBallCharges -= 1
 	var fireBall = FireBall.instance()
 	get_parent().add_child(fireBall)
 	fireBall.global_position = global_position
 	fireBall.global_position.y -= fireBall.spriteVerticalOffset
-	cast_timer = fireBall.CAST_DURATION
-	if direction_vector.x < 0:
+	castTimer = fireBall.CAST_DURATION
+	if directionVector.x < 0:
 		fireBall.global_position.x -= fireBall.spriteHorizontalOffset
-		fireBall.velocity.x = direction_vector.x * fireBall.SPEED
+		fireBall.velocity.x = directionVector.x * fireBall.SPEED
 		fireBall.animatedSprite.play("Left")
 	else:
 		fireBall.global_position.x += fireBall.spriteHorizontalOffset
@@ -419,13 +419,13 @@ func cast_fire():
 
 func cast_ice_arrow():
 	velocity = Vector2.ZERO
-	icearrowtimer = icearrowcooldown
+	iceArrowTimer = iceArrowCooldown
 	play_cast_animation()
 	var iceBow = IceBow.instance()
 	get_parent().add_child(iceBow)
 	iceBow.global_position = global_position
 	iceBow.global_position.y -= iceBow.spriteVerticalOffset
-	if direction_vector.x < 0:
+	if directionVector.x < 0:
 		iceBow.global_position.x -= iceBow.spriteHorizontalOffset
 		iceBow.face_left()
 	else:
@@ -445,28 +445,28 @@ func cast_ice_platform():
 	play_cast_animation()
 	state = CAST_ICE_PLATFORM
 
-	var iceplatform = IcePlatform.instance()
-	get_parent().add_child(iceplatform)
-	iceplatform.global_position = iceplatformpos1
-	iceplatform.playercom = true
+	var icePlatform = IcePlatform.instance()
+	get_parent().add_child(icePlatform)
+	icePlatform.global_position = icePlatformPosition1
+	icePlatform.playercom = true
 
-	iceplatform = IcePlatform.instance()
-	get_parent().add_child(iceplatform)
-	iceplatform.global_position = iceplatformpos2
+	icePlatform = IcePlatform.instance()
+	get_parent().add_child(icePlatform)
+	icePlatform.global_position = icePlatformPosition2
 
-	iceplatform = IcePlatform.instance()
-	get_parent().add_child(iceplatform)
-	iceplatform.global_position = iceplatformpos3
+	icePlatform = IcePlatform.instance()
+	get_parent().add_child(icePlatform)
+	icePlatform.global_position = icePlatformPosition3
 
 func cast_ice_spike():
 	velocity = Vector2.ZERO
-	icespiketimer = icespikecooldown
+	iceSpikeTimer = iceSpikeCooldown
 	play_cast_animation()
 	var iceSpike = IceSpike.instance()
 	get_parent().add_child(iceSpike)
-	cast_timer = iceSpike.CAST_DURATION
+	castTimer = iceSpike.CAST_DURATION
 	iceSpike.global_position = global_position
-	if direction_vector.x < 0:
+	if directionVector.x < 0:
 		iceSpike.global_position.x -= iceSpike.spriteHorizontalOffset
 		iceSpike.animatedSprite.play("Left")
 	else:
@@ -480,9 +480,9 @@ func cast_lightning():
 	play_cast_animation()
 	var lightning = Lightning.instance()
 	get_parent().add_child(lightning)
-	cast_timer = lightning.CAST_DURATION
+	castTimer = lightning.CAST_DURATION
 	lightning.global_position = global_position
-	if direction_vector.x < 0:
+	if directionVector.x < 0:
 		lightning.global_position.x -= lightning.spriteHorizontalOffset
 		lightning.animatedSprite.play("Left")
 	else:
@@ -501,7 +501,7 @@ func disable_hurt_boxes():
 func play_idle_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
-	if direction_vector.x < 0:
+	if directionVector.x < 0:
 		idleLeftColBox.disabled = false
 		idleLeftHurtBox.disabled = false
 		animatedSprite.play("IdleLeft")
@@ -513,7 +513,7 @@ func play_idle_animation():
 func play_running_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
-	if direction_vector.x < 0:
+	if directionVector.x < 0:
 		runLeftColBox.disabled = false
 		runLeftHurtBox.disabled = false
 		animatedSprite.play("RunLeft")
@@ -525,14 +525,14 @@ func play_running_animation():
 func play_teleport_vanish_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
-	if direction_vector.x < 0:
+	if directionVector.x < 0:
 		animatedSprite.play("TeleportVanishLeft")
 	else:
 		animatedSprite.play("TeleportVanishRight")
 	animatedSprite.set_frame(0)
 
 func play_teleport_appear_animation():
-	if direction_vector.x < 0:
+	if directionVector.x < 0:
 		animatedSprite.play("TeleportAppearLeft")
 	else:
 		animatedSprite.play("TeleportAppearRight")
@@ -543,7 +543,7 @@ func play_air_rise_animation():
 	disable_hurt_boxes()
 	airColBox.disabled = false
 	airHurtBox.disabled = false
-	if direction_vector.x < 0:
+	if directionVector.x < 0:
 		animatedSprite.play("JumpLeft")
 	else:
 		animatedSprite.play("JumpRight")
@@ -553,7 +553,7 @@ func play_air_fall_animation():
 	disable_hurt_boxes()
 	airColBox.disabled = false
 	airHurtBox.disabled = false
-	if direction_vector.x < 0:
+	if directionVector.x < 0:
 		animatedSprite.play("FallLeft")
 	else:
 		animatedSprite.play("FallRight")
@@ -562,7 +562,7 @@ func play_free_fall_animation():
 	disable_col_boxes()
 	disable_hurt_boxes()
 	freeFallColBox.disabled = false
-	if direction_vector.x < 0:
+	if directionVector.x < 0:
 		animatedSprite.play("FreeFallLeft")
 	else:
 		animatedSprite.play("FreeFallRight")
@@ -570,7 +570,7 @@ func play_free_fall_animation():
 func play_getting_up_animation():
 	disable_col_boxes()
 	disable_hurt_boxes()
-	if direction_vector.x < 0:
+	if directionVector.x < 0:
 		idleRightColBox.disabled = false
 		animatedSprite.play("GetUpLeft")
 	else:
@@ -580,7 +580,7 @@ func play_getting_up_animation():
 func play_cast_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
-	if direction_vector.x < 0:
+	if directionVector.x < 0:
 		castLeftColBox.disabled = false;
 		castLeftHurtBox.disabled = false;
 		animatedSprite.play("CastLeft")
@@ -597,7 +597,7 @@ func move(delta, grav):
 	get_tree().call_group("Enemies", "update_player_location", global_position)
 
 func black_out():
-	blackedout = true
+	blackedOut = true
 	disable_hurt_boxes()
 	if is_on_floor():
 		puke()
@@ -607,13 +607,13 @@ func black_out():
 func puke():
 	velocity = Vector2.ZERO
 	state = PUKE
-	if direction_vector.x < 0:
+	if directionVector.x < 0:
 		animatedSprite.play("PukeLeft")
 	else:
 		animatedSprite.play("PukeRight")
 
 func quit_game():
-	var _ignore = get_tree().change_scene(mainmenupath)
+	var _ignore = get_tree().change_scene(mainMenuPath)
 
 func _on_HurtBox_area_entered(_area):
 	if not immune:
@@ -624,8 +624,8 @@ func _on_HurtBox_area_entered(_area):
 		if health <= 0:
 			call_deferred("black_out")
 		else:
-			blinkflag = true
-			blinktimer = blinktimerwhite
+			blinkFlag = true
+			blinkTimer = blinkTimerWhite
 			animatedSprite.material.set_shader_param("white", true)
 			if is_on_floor():
 				call_deferred("start_getting_up")
