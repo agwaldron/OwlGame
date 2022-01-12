@@ -53,16 +53,16 @@ func throw_lemon():
 	var lemon = Lemon.instance()
 	get_parent().add_child(lemon)
 	lemon.global_position = global_position
-	lemon.global_position.x -= lemon.sprite_horizontal_offset
-	lemon.global_position.y -= lemon.sprite_vertical_offset
+	lemon.global_position.x -= lemon.spriteHorizontalOffset
+	lemon.global_position.y -= lemon.spriteVerticalOffset
 	lemon.velocity.x = lemon.HORIZONTAL_SPEED
 
 func blow_smoke():
 	var smokeCloud = SmokeCloud.instance()
 	get_parent().add_child(smokeCloud)
 	smokeCloud.global_position = global_position
-	smokeCloud.global_position.x -= smokeCloud.sprite_horizontal_offset
-	smokeCloud.global_position.y -= smokeCloud.sprite_vertical_offset
+	smokeCloud.global_position.x -= smokeCloud.spriteHorizontalOffset
+	smokeCloud.global_position.y -= smokeCloud.spriteVerticalOffset
 
 func enrage_flag():
 	if state == IDLE:

@@ -11,7 +11,7 @@ enum {
 onready var animatedSprite = $AnimatedSprite
 onready var hitBox = $HitBox/CollisionShape2D
 
-var sprite_horizontal_offset = 100
+var spriteHorizontalOffset = 100
 var velocity
 var state
 

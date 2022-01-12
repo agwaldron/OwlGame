@@ -4,7 +4,7 @@ export var CAST_DURATION = 50
 
 onready var animatedSprite = $AnimatedSprite
 onready var hitBox = $HitBox/CollisionShape2D
-onready var sprite_horizontal_offset = 50
+onready var spriteHorizontalOffset = 50
 onready var cast_timer = CAST_DURATION
 
 var shtr = false

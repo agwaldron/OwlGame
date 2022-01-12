@@ -4,8 +4,8 @@ export var HORIZONTAL_SPEED = -400
 
 onready var animatedSprite = $AnimatedSprite
 onready var hitBox = $HitBox/CollisionShape2D
-onready var sprite_horizontal_offset = 60
-onready var sprite_vertical_offset = 130
+onready var spriteHorizontalOffset = 60
+onready var spriteVerticalOffset = 130
 
 var bounces = 0
 var bouncespeed1 = 400

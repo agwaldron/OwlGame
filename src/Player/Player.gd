@@ -407,14 +407,14 @@ func cast_fire():
 	var fireBall = FireBall.instance()
 	get_parent().add_child(fireBall)
 	fireBall.global_position = global_position
-	fireBall.global_position.y -= fireBall.sprite_vertical_offset
+	fireBall.global_position.y -= fireBall.spriteVerticalOffset
 	cast_timer = fireBall.CAST_DURATION
 	if direction_vector.x < 0:
-		fireBall.global_position.x -= fireBall.sprite_horizontal_offset
+		fireBall.global_position.x -= fireBall.spriteHorizontalOffset
 		fireBall.velocity.x = direction_vector.x * fireBall.SPEED
 		fireBall.animatedSprite.play("Left")
 	else:
-		fireBall.global_position.x += fireBall.sprite_horizontal_offset
+		fireBall.global_position.x += fireBall.spriteHorizontalOffset
 		fireBall.animatedSprite.play("Right")
 
 func cast_ice_arrow():
@@ -424,12 +424,12 @@ func cast_ice_arrow():
 	var iceBow = IceBow.instance()
 	get_parent().add_child(iceBow)
 	iceBow.global_position = global_position
-	iceBow.global_position.y -= iceBow.sprite_vertical_offset
+	iceBow.global_position.y -= iceBow.spriteVerticalOffset
 	if direction_vector.x < 0:
-		iceBow.global_position.x -= iceBow.sprite_horizontal_offset
+		iceBow.global_position.x -= iceBow.spriteHorizontalOffset
 		iceBow.face_left()
 	else:
-		iceBow.global_position.x += iceBow.sprite_horizontal_offset
+		iceBow.global_position.x += iceBow.spriteHorizontalOffset
 		iceBow.face_right()
 	state = CAST_ICE_ARROW
 
@@ -467,10 +467,10 @@ func cast_ice_spike():
 	cast_timer = iceSpike.CAST_DURATION
 	iceSpike.global_position = global_position
 	if direction_vector.x < 0:
-		iceSpike.global_position.x -= iceSpike.sprite_horizontal_offset
+		iceSpike.global_position.x -= iceSpike.spriteHorizontalOffset
 		iceSpike.animatedSprite.play("Left")
 	else:
-		iceSpike.global_position.x += iceSpike.sprite_horizontal_offset
+		iceSpike.global_position.x += iceSpike.spriteHorizontalOffset
 		iceSpike.animatedSprite.play("Right")
 		iceSpike.left = false
 	state = CAST_ICE_SPIKE
@@ -483,10 +483,10 @@ func cast_lightning():
 	cast_timer = lightning.CAST_DURATION
 	lightning.global_position = global_position
 	if direction_vector.x < 0:
-		lightning.global_position.x -= lightning.sprite_horizontal_offset
+		lightning.global_position.x -= lightning.spriteHorizontalOffset
 		lightning.animatedSprite.play("Left")
 	else:
-		lightning.global_position.x += lightning.sprite_horizontal_offset
+		lightning.global_position.x += lightning.spriteHorizontalOffset
 		lightning.animatedSprite.play("Right")
 	state = CAST_LIGHTNING
 
