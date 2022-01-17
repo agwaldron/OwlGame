@@ -7,18 +7,18 @@ enum {
 }
 
 onready var animatedSprite = $AnimatedSprite
-onready var hitboxsmall = $HitBoxSmall/CollisionShape2D
-onready var hitboxmedium = $HitBoxMedium/CollisionShape2D
-onready var hitboxfull = $HitBoxFull/CollisionShape2D
+onready var hitBoxSmall = $HitBoxSmall/CollisionShape2D
+onready var hitBoxMedium = $HitBoxMedium/CollisionShape2D
+onready var hitBoxFull = $HitBoxFull/CollisionShape2D
 
 var state
-var horoffset = 120
-var vertoffset = 5
+var horizontalOffset = 120
+var verticalOffset = 5
 
 func _ready():
 	animatedSprite.play("Grow")
 	animatedSprite.set_frame(0)
-	hitboxsmall.disabled = false
+	hitBoxSmall.disabled = false
 	state = GROW
 
 func disperse():
@@ -28,23 +28,23 @@ func disperse():
 
 func _on_AnimatedSprite_frame_changed():
 	if state == GROW and animatedSprite.get_frame() == 2:
-		hitboxsmall.disabled = true
-		hitboxmedium.disabled = false
+		hitBoxSmall.disabled = true
+		hitBoxMedium.disabled = false
 	elif state == GROW and animatedSprite.get_frame() == 5:
-		hitboxmedium.disabled = true
-		hitboxfull.disabled = false
+		hitBoxMedium.disabled = true
+		hitBoxFull.disabled = false
 	elif state == DISPERSE and animatedSprite.get_frame() == 2:
-		hitboxfull.disabled = true
-		hitboxmedium.disabled = false
+		hitBoxFull.disabled = true
+		hitBoxMedium.disabled = false
 	elif state == DISPERSE and animatedSprite.get_frame() == 5:
-		hitboxmedium.disabled = true
-		hitboxsmall.disabled = false
+		hitBoxMedium.disabled = true
+		hitBoxSmall.disabled = false
 
 func _on_AnimatedSprite_animation_finished():
 	if state == GROW:
 		animatedSprite.play("Static")
-		get_tree().call_group("TheWitch", "cactusGuardUp")
+		get_tree().call_group("TheWitch", "cactus_guard_up")
 		state = STATIC
 	elif state == DISPERSE:
-		get_tree().call_group("TheWitch", "cactusFinished")
+		get_tree().call_group("TheWitch", "cactus_finished")
 		queue_free()
