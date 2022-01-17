@@ -113,7 +113,7 @@ func blue_attack():
 
 	paintBall = PaitBall.instance()
 	get_parent().add_child(paintBall)
-	paintBall.global_position = globalPosition
+	paintBall.global_position = global_position
 	paintBall.global_position.x -= blueOffsetX
 	paintBall.global_position.y -= blueOffsetY
 	paintBall.set_color("blue")
