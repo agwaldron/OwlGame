@@ -5,8 +5,8 @@ export var CAST_DURATION = 20
 
 onready var animatedSprite = $AnimatedSprite
 onready var hitBox = $HitBox/CollisionShape2D
-onready var sprite_vertical_offset = 40
-onready var sprite_horizontal_offset = 20
+onready var spriteVerticalOffset = 40
+onready var spriteHorizontalOffset = 20
 
 var velocity = Vector2(SPEED, 0)
 var col = false

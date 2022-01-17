@@ -45,8 +45,8 @@ func cast_witch_fire():
 	var witchFire = WitchFire.instance()
 	get_parent().add_child(witchFire)
 	witchFire.global_position = global_position
-	witchFire.global_position.y -= witchFire.sprite_vertical_offset
-	witchFire.global_position.x -= witchFire.sprite_horizontal_offset
+	witchFire.global_position.y -= witchFire.spriteVerticalOffset
+	witchFire.global_position.x -= witchFire.spriteHorizontalOffset
 	witchFire.velocity.x = witchFire.SPEED * -1
 	witchFire.animatedSprite.play("Left")
 	cast_timer = CAST_DURATION

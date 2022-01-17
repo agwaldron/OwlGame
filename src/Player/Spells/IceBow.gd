@@ -4,8 +4,8 @@ const IceArrow = preload("res://src/Player/Spells/IceArrow.tscn")
 
 onready var animatedSprite = $AnimatedSprite
 
-var sprite_horizontal_offset = 60
-var sprite_vertical_offset = 45
+var spriteHorizontalOffset = 60
+var spriteVerticalOffset = 45
 var leftDir
 
 func face_left():
