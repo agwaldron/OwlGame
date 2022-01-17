@@ -5,14 +5,14 @@ export var CAST_DURATION = 125
 onready var animatedSprite = $AnimatedSprite
 onready var boltHitBox = $Bolt/CollisionShape2D
 onready var spriteHorizontalOffset = 75
-onready var cast_timer = CAST_DURATION
+onready var castTimer = CAST_DURATION
 
 func _ready():
 	animatedSprite.set_frame(0)
 
 func _process(delta):
-	cast_timer -= (delta * 100)
-	if cast_timer <= 0:
+	castTimer -= (delta * 100)
+	if castTimer <= 0:
 		queue_free()
 
 func spell_interrupt():

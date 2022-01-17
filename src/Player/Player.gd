@@ -448,7 +448,7 @@ func cast_ice_platform():
 	var icePlatform = IcePlatform.instance()
 	get_parent().add_child(icePlatform)
 	icePlatform.global_position = icePlatformPosition1
-	icePlatform.playercom = true
+	icePlatform.playerCom = true
 
 	icePlatform = IcePlatform.instance()
 	get_parent().add_child(icePlatform)
