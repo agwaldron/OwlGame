@@ -9,10 +9,10 @@ export var FLY_BACK_LOW_HEIGHT = 500
 export var FLY_BACK_HIGH_HEIGHT = 200
 
 enum {
-	FLYBY,
-	BOMBDROP,
-	FLYBACKLOW,
-	FLYBACKHIGH
+	FLY_BY,
+	BOMB_DROP,
+	FLY_BACK_LOW,
+	FLY_BACK_HIGH
 }
 
 const Bomb = preload("res://src/Enemies/ThePilot/Bomb/Bomb.tscn")
@@ -29,13 +29,13 @@ var bombTwoReady
 var bombThreeReady
 var width
 
-var hitflashduration = 8
-var hitflashtimer = 0
-var hitflashflag = false
+var hitFlashDuration = 8
+var hitFlashTimer = 0
+var hitFlashFlag = false
 
 func _ready():
 	stats.health = 20
-	state = FLYBY
+	state = FLY_BY
 	animatedSprite.play("PlaneClose")
 	global_position.x = POS_TURN_BACK_POINT
 	global_position.y = FLY_BY_HEIGHT
@@ -46,16 +46,16 @@ func _ready():
 	width = get_viewport().size.x
 
 func _process(delta):
-	if hitflashflag:
+	if hitFlashFlag:
 		hit_flash_countdown(delta)
 	match state:
-		FLYBY:
+		FLY_BY:
 			flyBy(delta)
-		BOMBDROP:
+		BOMB_DROP:
 			bombDrop(delta)
-		FLYBACKLOW:
+		FLY_BACK_LOW:
 			flyBackLow(delta)
-		FLYBACKHIGH:
+		FLY_BACK_HIGH:
 			flyBackHigh(delta)
 
 func flyBy(_delta):
@@ -64,7 +64,7 @@ func flyBy(_delta):
 		animatedSprite.play("PlaneFar")
 		velocity.x = SPEED
 		global_position.y = FLY_BACK_HIGH_HEIGHT
-		state = FLYBACKHIGH
+		state = FLY_BACK_HIGH
 		hurtBox.disabled = true
 
 func bombDrop(_delta):
@@ -76,7 +76,7 @@ func bombDrop(_delta):
 		animatedSprite.play("PlaneFar")
 		velocity.x = SPEED
 		global_position.y = FLY_BACK_LOW_HEIGHT
-		state = FLYBACKLOW
+		state = FLY_BACK_LOW
 		hurtBox.disabled = true
 
 func flyBackLow(_delta):
@@ -85,7 +85,7 @@ func flyBackLow(_delta):
 		animatedSprite.play("PlaneClose")
 		velocity.x = SPEED * -1
 		global_position.y = FLY_BY_HEIGHT
-		state = FLYBY
+		state = FLY_BY
 		hurtBox.disabled = false
 
 func flyBackHigh(_delta):
@@ -94,7 +94,7 @@ func flyBackHigh(_delta):
 		animatedSprite.play("PlaneClose")
 		velocity.x = SPEED * -1
 		global_position.y = BOMB_DROP_HEIGHT
-		state = BOMBDROP
+		state = BOMB_DROP
 		hurtBox.disabled = false
 		bombOneReady = true
 		bombTwoReady = true
@@ -130,18 +130,18 @@ func checkForDropSite():
 		bombThreeReady = false
 
 func hit_flash_countdown(delta):
-	if hitflashtimer <= 0:
-		hitflashflag = false
+	if hitFlashTimer <= 0:
+		hitFlashFlag = false
 		animatedSprite.material.set_shader_param("white", false)
 	else:
-		hitflashtimer -= delta * 100
+		hitFlashTimer -= delta * 100
 
 func _on_HurtBox_area_entered(area):
 	var area_groups = area.get_groups()
 	for x in area_groups:
 		if x == "PlayerSpell":
-			hitflashtimer = hitflashduration
-			hitflashflag = true
+			hitFlashTimer = hitFlashDuration
+			hitFlashFlag = true
 			animatedSprite.material.set_shader_param("white", true)
 			stats.health -= area.damage
 
