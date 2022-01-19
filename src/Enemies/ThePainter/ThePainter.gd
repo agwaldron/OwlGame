@@ -23,30 +23,30 @@ var changeTimer
 var attackFlag
 var attackReady
 
-var hitflashduration = 8
-var hitflashtimer = 0
-var hitflashflag = false
+var hitFlashDuration = 8
+var hitFlashTimer = 0
+var hitFlashFlag = false
 
-var blue_horizontal_speed0 = -200
-var blue_horizontal_speed1 = -400
-var blue_horizontal_speed2 = -600
-var blue_horizontal_speed3 = -800
-var blue_vertical_speed0 = -900
-var blue_vertical_speed1 = -1100
-var blue_vertical_speed2 = -1300
-var blue_vertical_speed3 = -1500
-var blue_gravity = 2500
-var blue_offset_x = 50
-var blue_offset_y = 75
+var blueHorizontalSpeed0 = -200
+var blueHorizontalSpeed1 = -400
+var blueHorizontalSpeed2 = -600
+var blueHorizontalSpeed3 = -800
+var blueVerticalSpeed0 = -900
+var blueVerticalSpeed1 = -1100
+var blueVerticalSpeed2 = -1300
+var blueVerticalSpeed3 = -1500
+var blueGravity = 2500
+var blueOffsetX = 50
+var blueOffsetY = 75
 
-var red_vertical_speed = -1500
-var red_offset_x = 10
-var red_offset_y = 150
+var redVerticalSpeed = -1500
+var redOffsetX = 10
+var redOffsetY = 150
 
-var yellow_horizontal_speed = -600
-var yellow_vertical_speed = -500
-var yellow_offset_x = 50
-var yellow_offset_y = 75
+var yellowHorizontalSpeed = -600
+var yellowVerticalSpeed = -500
+var yellowOffsetX = 50
+var yellowOffsetY = 75
 
 func _ready():
 	stats.health = 20
@@ -56,7 +56,7 @@ func _ready():
 	changeTimer = CHANGE_DURATION
 
 func _process(delta):
-	if hitflashflag:
+	if hitFlashFlag:
 		hit_flash_countdown(delta)
 	if attackFlag:
 		attackTimer -= (delta * 100)
@@ -87,56 +87,56 @@ func blue_attack():
 	var paintBall = PaitBall.instance()
 	get_parent().add_child(paintBall)
 	paintBall.global_position = global_position
-	paintBall.global_position.x -= blue_offset_x
-	paintBall.global_position.y -= blue_offset_y
+	paintBall.global_position.x -= blueOffsetX
+	paintBall.global_position.y -= blueOffsetY
 	paintBall.set_color("blue")
-	paintBall.velocity = Vector2(blue_horizontal_speed0, blue_vertical_speed0)
-	paintBall.gravityAcceleration = blue_gravity
+	paintBall.velocity = Vector2(blueHorizontalSpeed0, blueVerticalSpeed0)
+	paintBall.gravityAcceleration = blueGravity
 
 	paintBall = PaitBall.instance()
 	get_parent().add_child(paintBall)
 	paintBall.global_position = global_position
-	paintBall.global_position.x -= blue_offset_x
-	paintBall.global_position.y -= blue_offset_y
+	paintBall.global_position.x -= blueOffsetX
+	paintBall.global_position.y -= blueOffsetY
 	paintBall.set_color("blue")
-	paintBall.velocity = Vector2(blue_horizontal_speed1, blue_vertical_speed1)
-	paintBall.gravityAcceleration = blue_gravity
+	paintBall.velocity = Vector2(blueHorizontalSpeed1, blueVerticalSpeed1)
+	paintBall.gravityAcceleration = blueGravity
 
 	paintBall = PaitBall.instance()
 	get_parent().add_child(paintBall)
 	paintBall.global_position = global_position
-	paintBall.global_position.x -= blue_offset_x
-	paintBall.global_position.y -= blue_offset_y
+	paintBall.global_position.x -= blueOffsetX
+	paintBall.global_position.y -= blueOffsetY
 	paintBall.set_color("blue")
-	paintBall.velocity = Vector2(blue_horizontal_speed2, blue_vertical_speed2)
-	paintBall.gravityAcceleration = blue_gravity
+	paintBall.velocity = Vector2(blueHorizontalSpeed2, blueVerticalSpeed2)
+	paintBall.gravityAcceleration = blueGravity
 
 	paintBall = PaitBall.instance()
 	get_parent().add_child(paintBall)
 	paintBall.global_position = global_position
-	paintBall.global_position.x -= blue_offset_x
-	paintBall.global_position.y -= blue_offset_y
+	paintBall.global_position.x -= blueOffsetX
+	paintBall.global_position.y -= blueOffsetY
 	paintBall.set_color("blue")
-	paintBall.velocity = Vector2(blue_horizontal_speed3, blue_vertical_speed3)
-	paintBall.gravityAcceleration = blue_gravity
+	paintBall.velocity = Vector2(blueHorizontalSpeed3, blueVerticalSpeed3)
+	paintBall.gravityAcceleration = blueGravity
 
 func red_attack():
 	var paintBlob = PaintBlob.instance()
 	get_parent().add_child(paintBlob)
 	paintBlob.global_position = global_position
-	paintBlob.global_position.x -= red_offset_x
-	paintBlob.global_position.y -= red_offset_y
+	paintBlob.global_position.x -= redOffsetX
+	paintBlob.global_position.y -= redOffsetY
 	paintBlob.set_color("red")
-	paintBlob.velocity = Vector2(0, red_vertical_speed)
+	paintBlob.velocity = Vector2(0, redVerticalSpeed)
 
 func yellow_attack():
 	var paintBlob = PaintBlob.instance()
 	get_parent().add_child(paintBlob)
 	paintBlob.global_position = global_position
-	paintBlob.global_position.x -= yellow_offset_x
-	paintBlob.global_position.y -= yellow_offset_y
+	paintBlob.global_position.x -= yellowOffsetX
+	paintBlob.global_position.y -= yellowOffsetY
 	paintBlob.set_color("yellow")
-	paintBlob.velocity = Vector2(yellow_horizontal_speed, yellow_vertical_speed)
+	paintBlob.velocity = Vector2(yellowHorizontalSpeed, yellowVerticalSpeed)
 
 func change_color():
 	match state:
@@ -175,18 +175,18 @@ func play_idle_animation():
 			animatedSprite.play("IdleYellow")
 
 func hit_flash_countdown(delta):
-	if hitflashtimer <= 0:
-		hitflashflag = false
+	if hitFlashTimer <= 0:
+		hitFlashFlag = false
 		animatedSprite.material.set_shader_param("white", false)
 	else:
-		hitflashtimer -= delta * 100
+		hitFlashTimer -= delta * 100
 
 func _on_HurtBox_area_entered(area):
 	var areaGroups = area.get_groups()
 	for x in areaGroups:
 		if x == "PlayerSpell":
-			hitflashtimer = hitflashduration
-			hitflashflag = true
+			hitFlashTimer = hitFlashDuration
+			hitFlashFlag = true
 			animatedSprite.material.set_shader_param("white", true)
 			stats.health -= area.damage
 

@@ -3,8 +3,8 @@ extends KinematicBody2D
 enum {
 	IDLE,
 	CACTUS,
-	FLYDOWN,
-	FLYUP,
+	FLY_DOWN,
+	FLY_UP,
 	WINE # temp
 }
 
@@ -17,138 +17,138 @@ onready var animatedSprite = $AnimatedSprite
 onready var stats = $EnemyStats
 
 var state
-var beespawns = 0
-var beevanishes = 0
-var beespercycle = 4
-var beecooldown = 750
-var beetimer
-var beepos1 = Vector2(250, 300)
-var beepos2 = Vector2(1050, 300)
-var attackcooldown = 300
-var attacktimer
-var maxcactusattacks = 3
-var numcactusattacks = 0
-var cactusready
-var cactusattackheight = 200
-var playerpos
-var wineready
-var groundheight = 700
-var flyheight = 400
-var flyspeed = 500
+var beeSpawns = 0
+var beeVanishes = 0
+var beesPerCycle = 4
+var beeCoolDown = 750
+var beeTimer
+var beePosition1 = Vector2(250, 300)
+var beePosition2 = Vector2(1050, 300)
+var attackCoolDown = 300
+var attackTimer
+var maxCactusAttacks = 3
+var numCactusAttacks = 0
+var cactusReady
+var cactusAttackHeight = 200
+var playerPosition
+var wineReady
+var groundHeight = 700
+var flyHeight = 400
+var flySpeed = 500
 var velocity = Vector2.ZERO
 
-var hitflashduration = 8
-var hitflashtimer = 0
-var hitflashflag = false
+var hitFlashDuration = 8
+var hitFlashTimer = 0
+var hitFlashFlag = false
 
 func _ready():
 	animatedSprite.play("Idle")
-	global_position.y = groundheight
+	global_position.y = groundHeight
 	stats.health = 20
-	beetimer = beecooldown
-	attacktimer = attackcooldown
+	beeTimer = beeCoolDown
+	attackTimer = attackCoolDown
 	state = IDLE
-	wineready = false
-	cactusready = false
+	wineReady = false
+	cactusReady = false
 
 func _process(delta):
-	if hitflashflag:
+	if hitFlashFlag:
 		hit_flash_countdown(delta)
-	beeSpawns(delta)
+	bee_spawns(delta)
 	match state:
 		IDLE:
-			attacktimer -= (delta * 100)
-			if attacktimer <= 0:
+			attackTimer -= (delta * 100)
+			if attackTimer <= 0:
 				attack()
 		CACTUS:
-			cactusState()
-		FLYDOWN:
-			flyDown(delta)
-		FLYUP:
-			flyUp(delta)
+			cactus_state()
+		FLY_DOWN:
+			fly_down(delta)
+		FLY_UP:
+			fly_up(delta)
 		WINE: # temp
-			castingWine(delta)
+			casting_wine(delta)
 
 func attack():
-	if wineready:
+	if wineReady:
 		get_tree().call_group("player", "cast_ice_platform")
-		state = FLYUP
+		state = FLY_UP
 		animatedSprite.play("FlyUp")
-		velocity.y = flyspeed * -1
+		velocity.y = flySpeed * -1
 	else:
 		state = CACTUS
 		animatedSprite.play("Cast")
 		animatedSprite.set_frame(0)
-		numcactusattacks = 0
-		cactusready = false
-		castCactusGuard()
+		numCactusAttacks = 0
+		cactusReady = false
+		cast_cactus_guard()
 
-func cactusState():
-	if cactusready:
+func cactus_state():
+	if cactusReady:
 		animatedSprite.play("Cast")
 		animatedSprite.set_frame(0)
-		castCactusAttack()
+		cast_cactus_attack()
 
-func flyUp(_delta):
-	if global_position.y <= flyheight:
+func fly_up(_delta):
+	if global_position.y <= flyHeight:
 		animatedSprite.play("Idle")
 		velocity.y = 0
-		castWine()
+		cast_wine()
 	else:
 		velocity = move_and_slide(velocity)
 
-func flyDown(_delta):
-	if global_position.y >= groundheight:
-		wineready = false
+func fly_down(_delta):
+	if global_position.y >= groundHeight:
+		wineReady = false
 		velocity.y = 0
 		state = IDLE
 		animatedSprite.play("Idle")
-		beespawns = 0
-		beevanishes = 0
-		attacktimer = attackcooldown
+		beeSpawns = 0
+		beeVanishes = 0
+		attackTimer = attackCoolDown
 	else:
 		velocity = move_and_slide(velocity)
 
-func beeSpawns(delta):
-	if beespawns < beespercycle:
-		beetimer -= (delta * 100)
-		if beetimer <= 0:
+func bee_spawns(delta):
+	if beeSpawns < beesPerCycle:
+		beeTimer -= (delta * 100)
+		if beeTimer <= 0:
 			var beeportal = BeePortal.instance()
 			get_parent().add_child(beeportal)
-			beeportal.global_position.x = beepos1.x
-			beeportal.global_position.y = beepos1.y
+			beeportal.global_position.x = beePosition1.x
+			beeportal.global_position.y = beePosition1.y
 			beeportal.z_index = z_index
 
 			beeportal = BeePortal.instance()
 			get_parent().add_child(beeportal)
-			beeportal.global_position.x = beepos2.x
-			beeportal.global_position.y = beepos2.y
+			beeportal.global_position.x = beePosition2.x
+			beeportal.global_position.y = beePosition2.y
 			beeportal.z_index = z_index
 
-			beespawns += 2
-			beetimer = beecooldown
+			beeSpawns += 2
+			beeTimer = beeCoolDown
 
-func castCactusGuard():
+func cast_cactus_guard():
 	var cactusGuard = CactusGuard.instance()
 	get_parent().add_child(cactusGuard)
 	cactusGuard.global_position = global_position
-	cactusGuard.global_position.x -= cactusGuard.horoffset
-	cactusGuard.global_position.y += cactusGuard.vertoffset
+	cactusGuard.global_position.x -= cactusGuard.horizontalOffset
+	cactusGuard.global_position.y += cactusGuard.verticalOffset
 	cactusGuard.z_index = z_index
 
-func castCactusAttack():
+func cast_cactus_attack():
 	var cactusAttack = CactusAttack.instance()
 	get_parent().add_child(cactusAttack)
-	cactusAttack.playerpos = playerpos
-	cactusAttack.global_position.x = playerpos.x
-	cactusAttack.global_position.y = cactusattackheight
-	cactusready = false
+	cactusAttack.playerPosition = playerPosition
+	cactusAttack.global_position.x = playerPosition.x
+	cactusAttack.global_position.y = cactusAttackHeight
+	cactusReady = false
 
 # temp
-func castingWine(_delta):
+func casting_wine(_delta):
 	pass
 
-func castWine():
+func cast_wine():
 	animatedSprite.play("Cast")
 	animatedSprite.set_frame(0)
 	state = WINE
@@ -156,51 +156,51 @@ func castWine():
 	var wineBottle = WineBottle.instance()
 	get_parent().add_child(wineBottle)
 	wineBottle.global_position = global_position
-	wineBottle.global_position.x -= wineBottle.horoffset
-	wineBottle.global_position.y += wineBottle.vertoffset
+	wineBottle.global_position.x -= wineBottle.horizontalOffset
+	wineBottle.global_position.y += wineBottle.verticalOffset
 	wineBottle.z_index = z_index
 
-func cactusSmashed():
-	numcactusattacks += 1
-	if numcactusattacks < maxcactusattacks:
-		cactusready = true
+func cactus_smashed():
+	numCactusAttacks += 1
+	if numCactusAttacks < maxCactusAttacks:
+		cactusReady = true
 	else:
 		get_tree().call_group("cactusguard", "disperse")
 
-func cactusGuardUp():
-	cactusready = true
+func cactus_guard_up():
+	cactusReady = true
 
-func beeVanish():
-	beevanishes += 1
-	if beevanishes == beespercycle:
-		wineready = true
+func bee_vanish():
+	beeVanishes += 1
+	if beeVanishes == beesPerCycle:
+		wineReady = true
 
-func cactusFinished():
+func cactus_finished():
 	state = IDLE
-	attacktimer = attackcooldown
+	attackTimer = attackCoolDown
 
-func wineFinished():
-	state = FLYDOWN
+func wine_finished():
+	state = FLY_DOWN
 	animatedSprite.play("FlyDown")
-	velocity.y = flyspeed
+	velocity.y = flySpeed
 	get_tree().call_group("player", "disperse_ice_platform")
 
 func update_player_location(pos):
-	playerpos = pos
+	playerPosition = pos
 
 func hit_flash_countdown(delta):
-	if hitflashtimer <= 0:
-		hitflashflag = false
+	if hitFlashTimer <= 0:
+		hitFlashFlag = false
 		animatedSprite.material.set_shader_param("white", false)
 	else:
-		hitflashtimer -= delta * 100
+		hitFlashTimer -= delta * 100
 
 func _on_HurtBox_area_entered(area):
 	var areaGroups = area.get_groups()
 	for x in areaGroups:
 		if x == "PlayerSpell":
-			hitflashtimer = hitflashduration
-			hitflashflag = true
+			hitFlashTimer = hitFlashDuration
+			hitFlashFlag = true
 			animatedSprite.material.set_shader_param("white", true)
 			stats.health -= area.damage
 

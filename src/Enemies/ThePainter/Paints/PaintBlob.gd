@@ -42,9 +42,9 @@ var redRowFive = [
 ]
 
 var horizontalCenter
-var yellow_rad_offset = 25
-var yellow_outer_speed = 800
-var yellow_inner_speed = 400
+var yellowRadiusOffset = 25
+var yellowOuterSpeed = 800
+var yellowInnerSpeed = 400
 var yellowBlobsOuter = [
 	[0.0, -1.0],
 	[sqrt(2.0)/2.0, -sqrt(2.0)/2.0],
@@ -132,18 +132,18 @@ func create_yellow_blobs():
 	for pb in yellowBlobsOuter:
 		paintBall = PaintBall.instance()
 		get_parent().add_child(paintBall)
-		paintBall.global_position.x = global_position.x + (pb[0] * yellow_rad_offset)
-		paintBall.global_position.y = global_position.y + (pb[1] * yellow_rad_offset)
+		paintBall.global_position.x = global_position.x + (pb[0] * yellowRadiusOffset)
+		paintBall.global_position.y = global_position.y + (pb[1] * yellowRadiusOffset)
 		paintBall.set_color("yellow")
-		paintBall.velocity = Vector2(pb[0]*yellow_outer_speed, pb[1]*yellow_outer_speed)
+		paintBall.velocity = Vector2(pb[0]*yellowOuterSpeed, pb[1]*yellowOuterSpeed)
 
 	for pb in yellowBlobsInner:
 		paintBall = PaintBall.instance()
 		get_parent().add_child(paintBall)
-		paintBall.global_position.x = global_position.x + (pb[0] * yellow_rad_offset)
-		paintBall.global_position.y = global_position.y + (pb[1] * yellow_rad_offset)
+		paintBall.global_position.x = global_position.x + (pb[0] * yellowRadiusOffset)
+		paintBall.global_position.y = global_position.y + (pb[1] * yellowRadiusOffset)
 		paintBall.set_color("yellow")
-		paintBall.velocity = Vector2(pb[0]*yellow_inner_speed, pb[1]*yellow_inner_speed)
+		paintBall.velocity = Vector2(pb[0]*yellowInnerSpeed, pb[1]*yellowInnerSpeed)
 
 func set_color(col):
 	match col:

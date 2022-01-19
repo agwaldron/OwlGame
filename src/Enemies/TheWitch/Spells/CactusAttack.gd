@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 enum {
 	TRACKING,
-	PULLBACK,
+	PULL_BACK,
 	FALLING,
 	SHATTERING
 }
@@ -12,12 +12,12 @@ onready var hitBox = $HitBox/CollisionShape2D
 
 var state
 var velocity = Vector2.ZERO
-var trackspeed = 4000
-var tracktimer = 400
-var pullbackspeed = 700
-var pullbacktimer = 10
-var fallspeed = 1000
-var playerpos
+var trackSpeed = 4000
+var trackTimer = 400
+var pullBackSpeed = 700
+var pullBackTimer = 10
+var fallSpeed = 1000
+var playerPosition
 var target
 var timer
 
@@ -25,39 +25,39 @@ func _ready():
 	animatedSprite.play("Grow")
 	animatedSprite.set_frame(0)
 	state = TRACKING
-	timer = tracktimer
+	timer = trackTimer
 
 func _process(delta):
 	if state == TRACKING:
-		trackPlayer(delta)
-	elif state == PULLBACK:
-		pullBack(delta)
+		track_player(delta)
+	elif state == PULL_BACK:
+		pull_back(delta)
 	velocity = move_and_slide(velocity)
 
 func update_player_location(pos):
-	playerpos = pos
+	playerPosition = pos
 
-func trackPlayer(delta):
+func track_player(delta):
 	timer -= (delta * 100)
 	if timer <= 0:
-		state = PULLBACK
+		state = PULL_BACK
 		velocity.x = 0
-		velocity.y = pullbackspeed * -1
-		timer = pullbacktimer
+		velocity.y = pullBackSpeed * -1
+		timer = pullBackTimer
 		animatedSprite.play("Spin")
 	else:
-		target = playerpos
-		velocity = position.direction_to(target) * trackspeed
+		target = playerPosition
+		velocity = position.direction_to(target) * trackSpeed
 		velocity.y = 0
 
-func pullBack(delta):
+func pull_back(delta):
 	timer -= (delta * 100)
 	if timer <= 0:
 		fall()
 
 func fall():
 	state = FALLING
-	velocity.y = fallspeed
+	velocity.y = fallSpeed
 
 func shatter():
 	velocity = Vector2.ZERO
@@ -69,7 +69,7 @@ func _on_AnimatedSprite_animation_finished():
 	if state == TRACKING:
 		animatedSprite.play("Static")
 	elif state == SHATTERING:
-		get_tree().call_group("TheWitch", "cactusSmashed")
+		get_tree().call_group("TheWitch", "cactus_smashed")
 		queue_free()
 
 func _on_HitBox_body_entered(_body):

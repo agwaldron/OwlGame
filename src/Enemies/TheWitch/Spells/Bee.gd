@@ -27,9 +27,9 @@ func _process(_delta):
 			velocity.y = 0
 		if position.distance_to(target) > 5:
 			velocity = move_and_slide(velocity)
-		checkTurn()
+		check_turn()
 
-func checkTurn():
+func check_turn():
 	if facingLeft and velocity.x > 0:
 		turn()
 	elif not facingLeft and velocity.x < 0:
@@ -48,7 +48,7 @@ func update_player_location(pos):
 	target = pos
 
 func vanish():
-	get_tree().call_group("TheWitch", "beeVanish")
+	get_tree().call_group("TheWitch", "bee_vanish")
 	vanishing = true
 	if facingLeft:
 		animatedSprite.play("VanishLeft")

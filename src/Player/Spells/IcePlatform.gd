@@ -10,13 +10,13 @@ onready var animatedSprite = $AnimatedSprite
 onready var colShape = $CollisionShape2D
 
 var state
-var playercom
+var playerCom
 
 func _ready():
 	state = SUMMON
 	animatedSprite.play("Summon")
 	animatedSprite.set_frame(0)
-	playercom = false
+	playerCom = false
 
 func shatterPlatform():
 	state = SHATTER
@@ -28,7 +28,7 @@ func _on_AnimatedSprite_animation_finished():
 	if state == SUMMON:
 		state = STABLE
 		colShape.disabled = false
-		if playercom:
+		if playerCom:
 			get_tree().call_group("player", "ice_platform_summoned")
 	elif state == SHATTER:
 		queue_free()
