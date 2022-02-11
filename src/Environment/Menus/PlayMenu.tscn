@@ -108,6 +108,7 @@ margin_bottom = 524.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = ExtResource( 8 )
+
 [connection signal="pressed" from="CenterContainer/HBoxContainer/VBoxContainer/TutorialButton" to="." method="_on_TutorialButton_pressed"]
 [connection signal="pressed" from="CenterContainer/HBoxContainer/VBoxContainer/ArchaeologistButton" to="." method="_on_ArchaeologistButton_pressed"]
 [connection signal="pressed" from="CenterContainer/HBoxContainer/VBoxContainer/DudeButton" to="." method="_on_DudeButton_pressed"]
