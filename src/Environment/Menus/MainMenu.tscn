@@ -51,4 +51,5 @@ margin_top = 396.0
 margin_right = 128.0
 margin_bottom = 524.0
 texture_normal = ExtResource( 3 )
+
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Play" to="." method="_on_Play_pressed"]
