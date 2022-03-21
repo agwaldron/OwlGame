@@ -33,8 +33,11 @@ position = Vector2( 253.433, 703.873 )
 
 [node name="HUD" parent="." instance=ExtResource( 6 )]
 
-[node name="PauseMenu" parent="." instance=ExtResource( 8 )]
-margin_left = 433.356
-margin_top = 200.0
-margin_right = 833.356
-margin_bottom = 500.0
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 128
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource( 8 )]
+margin_left = -206.644
+margin_top = -175.0
+margin_right = 193.356
+margin_bottom = 125.0

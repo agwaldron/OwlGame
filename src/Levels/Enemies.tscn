@@ -57,8 +57,11 @@ remote_path = NodePath("../../Camera2D")
 
 [node name="HUD" parent="." instance=ExtResource( 5 )]
 
-[node name="PauseMenu" parent="." instance=ExtResource( 8 )]
-margin_left = 441.82
-margin_top = 200.0
-margin_right = 841.82
-margin_bottom = 500.0
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 128
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource( 8 )]
+margin_left = -198.18
+margin_top = -175.0
+margin_right = 201.82
+margin_bottom = 125.0

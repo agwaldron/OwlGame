@@ -38,7 +38,6 @@ const IcePlatform = preload("res://src/Player/Spells/IcePlatform.tscn")
 const IceSpike = preload("res://src/Player/Spells/IceSpike.tscn")
 const Lightning = preload("res://src/Player/Spells/LightningBolt.tscn")
 const TeleportProbe = preload("res://src/Player/Spells/TeleportProbe.tscn")
-const mainMenuPath = "res://src/Environment/Menus/MainMenu.tscn"
 
 onready var animatedSprite = $AnimatedSprite
 onready var airColBox = $AirCollisionShape
