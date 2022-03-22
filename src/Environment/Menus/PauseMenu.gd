@@ -2,8 +2,12 @@ extends MarginContainer
 
 const mainMenuPath = "res://src/Environment/Menus/MainMenu.tscn"
 
+onready var continueButton = $CenterContainer/VBoxContainer/ContinueButton
+onready var quitButton = $CenterContainer/VBoxContainer/QuitButton
+
 func _ready():
 	visible = false
+	continueButton.material.set_shader_param("selected", true)
 
 func _process(_delta):
 	if Input.is_action_just_pressed("pause_play"):
