@@ -38,7 +38,6 @@ const IcePlatform = preload("res://src/Player/Spells/IcePlatform.tscn")
 const IceSpike = preload("res://src/Player/Spells/IceSpike.tscn")
 const Lightning = preload("res://src/Player/Spells/LightningBolt.tscn")
 const TeleportProbe = preload("res://src/Player/Spells/TeleportProbe.tscn")
-const mainMenuPath = "res://src/Environment/Menus/MainMenu.tscn"
 
 onready var animatedSprite = $AnimatedSprite
 onready var airColBox = $AirCollisionShape
@@ -108,8 +107,6 @@ func _ready():
 	#animatedSprite.material.set_shader_param("white", true)
 
 func _physics_process(delta):
-	if Input.is_action_just_pressed("quit"):
-		quit_game()
 	run_cool_down_timers(delta)
 	match state:
 		RUN:
@@ -611,9 +608,6 @@ func puke():
 		animatedSprite.play("PukeLeft")
 	else:
 		animatedSprite.play("PukeRight")
-
-func quit_game():
-	var _ignore = get_tree().change_scene(mainMenuPath)
 
 func _on_HurtBox_area_entered(_area):
 	if not immune:
