@@ -8,7 +8,8 @@
 [ext_resource path="res://src/Environment/HUD/HUD.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/Enemies/TheDude/TheDude.tscn" type="PackedScene" id=7]
 [ext_resource path="res://src/Enemies/TheDude/HisDude/HisDude.tscn" type="PackedScene" id=8]
-[ext_resource path="res://src/Environment/Menus/PauseMenu.tscn" type="PackedScene" id=9]
+[ext_resource path="res://src/Environment/Menus/PauseMenu/PauseMenu.tscn" type="PackedScene" id=9]
+
 
 [node name="Node2D" type="Node2D"]
 

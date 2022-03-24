@@ -7,7 +7,7 @@ const musicianArenaPath = "res://src/Levels/TheMusicianArena.tscn"
 const painterArenaPath = "res://src/Levels/ThePainterArena.tscn"
 const pilotArenaPath = "res://src/Levels/ThePilotArena.tscn"
 const witchArenaPath = "res://src/Levels/TheWitchArena.tscn"
-const mainMenuPath = "res://src/Environment/Menus/MainMenu.tscn"
+const mainMenuPath = "res://src/Environment/Menus/MainMenu/MainMenu.tscn"
 
 onready var tutorialButton = $CenterContainer/HBoxContainer/VBoxContainer/TutorialButton
 onready var archaeologistButton = $CenterContainer/HBoxContainer/VBoxContainer/ArchaeologistButton

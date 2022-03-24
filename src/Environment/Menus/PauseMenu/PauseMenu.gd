@@ -1,6 +1,6 @@
 extends MarginContainer
 
-const mainMenuPath = "res://src/Environment/Menus/MainMenu.tscn"
+const mainMenuPath = "res://src/Environment/Menus/MainMenu/MainMenu.tscn"
 
 onready var continueButton = $CenterContainer/VBoxContainer/ContinueButton
 onready var quitButton = $CenterContainer/VBoxContainer/QuitButton

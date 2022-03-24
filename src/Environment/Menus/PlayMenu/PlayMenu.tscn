@@ -8,7 +8,7 @@
 [ext_resource path="res://Assets/Menus/PlayMenu/WitchButton.png" type="Texture" id=6]
 [ext_resource path="res://Assets/Menus/PlayMenu/PilotButton.png" type="Texture" id=7]
 [ext_resource path="res://Assets/Menus/PlayMenu/BackButton.png" type="Texture" id=8]
-[ext_resource path="res://src/Environment/Menus/PlayMenu.gd" type="Script" id=9]
+[ext_resource path="res://src/Environment/Menus/PlayMenu/PlayMenu.gd" type="Script" id=9]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
