@@ -8,7 +8,7 @@ func _ready():
 	self.material.set_shader_param("selected", true)
 	selected = true
 
-func _process(delta):
+func _process(_delta):
 	if selected and Input.is_action_just_pressed("ui_accept"):
 		_on_Play_pressed()
 
