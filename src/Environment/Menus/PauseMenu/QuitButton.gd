@@ -14,7 +14,10 @@ func select():
 
 func unselect():
 	selected = false
-	self.material.set_shader_param("selected", true)
+	self.material.set_shader_param("selected", false)
+
+func is_selected():
+	return selected
 
 func _on_QuitButton_pressed():
 	get_tree().paused = false
