@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://src/Environment/Menus/MainMenu/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Menus/MainMenu/CreditsButton.png" type="Texture" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://Assets/Menus/MainMenu/PlayButton.png" type="Texture" id=4]
 [ext_resource path="res://Assets/Menus/MainMenu/Title.png" type="Texture" id=5]
 [ext_resource path="res://src/Environment/Menus/MainMenu/Play.gd" type="Script" id=6]
+[ext_resource path="res://src/Environment/Menus/MainMenu/Exit.gd" type="Script" id=7]
+[ext_resource path="res://Assets/Menus/MainMenu/ExitButton.png" type="Texture" id=8]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -86,9 +88,9 @@ margin_bottom = 750.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
 margin_left = 576.0
-margin_top = 113.0
+margin_top = 47.0
 margin_right = 704.0
-margin_bottom = 637.0
+margin_bottom = 703.0
 
 [node name="Title" type="TextureRect" parent="CenterContainer/VBoxContainer"]
 margin_right = 128.0
@@ -117,4 +119,12 @@ margin_right = 128.0
 margin_bottom = 524.0
 texture_normal = ExtResource( 2 )
 
+[node name="Exit" type="TextureButton" parent="CenterContainer/VBoxContainer"]
+margin_top = 528.0
+margin_right = 128.0
+margin_bottom = 656.0
+texture_normal = ExtResource( 8 )
+script = ExtResource( 7 )
+
 [connection signal="pressed" from="CenterContainer/VBoxContainer/Play" to="CenterContainer/VBoxContainer/Play" method="_on_Play_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Exit" to="CenterContainer/VBoxContainer/Exit" method="_on_Exit_pressed"]
