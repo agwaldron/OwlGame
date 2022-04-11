@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://src/Environment/Menus/MainMenu/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Menus/MainMenu/CreditsButton.png" type="Texture" id=2]
@@ -69,6 +69,26 @@ void fragment(){
 shader = SubResource( 5 )
 shader_param/selected = null
 
+[sub_resource type="Shader" id=7]
+code = "shader_type canvas_item;
+
+uniform bool selected;
+
+void fragment(){
+	vec4 color = texture(TEXTURE, UV);
+
+	if(selected){
+		COLOR = vec4(0.31, 0.59, 0.86, color.a)
+	}else{
+		COLOR = color;
+	}
+}
+"
+
+[sub_resource type="ShaderMaterial" id=8]
+shader = SubResource( 7 )
+shader_param/selected = null
+
 [node name="MainMenu" type="MarginContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -120,6 +140,7 @@ margin_bottom = 524.0
 texture_normal = ExtResource( 2 )
 
 [node name="Exit" type="TextureButton" parent="CenterContainer/VBoxContainer"]
+material = SubResource( 8 )
 margin_top = 528.0
 margin_right = 128.0
 margin_bottom = 656.0
