@@ -6,7 +6,7 @@ var fading = false
 var transparency = 0.0
 var fadespeed = 1.5
 var mainmenutimer = 1.25
-var mainmenupath = "res://src/Environment/Menus/MainMenu.tscn"
+var mainmenupath = "res://src/Environment/Menus/MainMenu/MainMenu.tscn"
 
 func _process(delta):
 	if fading:
