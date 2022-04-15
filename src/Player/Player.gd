@@ -51,10 +51,12 @@ onready var idleLeftColBox = $IdelLeftCollisionShape
 onready var idleLeftHurtBox = $IdleLeftHurtBox/CollisionShape2D
 onready var idleRightColBox = $IdleRightCollisionShape
 onready var idleRightHurtBox = $IdleRightHurtBox/CollisionShape2D
-onready var runLeftColBox = $RunLeftCollisionShape
-onready var runLeftHurtBox = $RunLeftHurtBox/CollisionShape2D
-onready var runRightColBox = $RunRightCollisionShape
-onready var runRightHurtBox = $RunRightHurtBox/CollisionShape2D
+# onready var runLeftColBox = $RunLeftCollisionShape
+# onready var runLeftHurtBox = $RunLeftHurtBox/CollisionShape2D
+# onready var runRightColBox = $RunRightCollisionShape
+# onready var runRightHurtBox = $RunRightHurtBox/CollisionShape2D
+onready var runColBox = $RunCollisionShape
+onready var runHurtBox = $RunHurtBox/CollisionShape2D
 
 var health = 5
 var blackedOut = false
@@ -97,9 +99,9 @@ var colBoxes
 
 func _ready():
 	colBoxes = [airColBox, castLeftColBox, castRightColBox, freeFallColBox,
-				idleLeftColBox, idleRightColBox, runLeftColBox, runRightColBox]
+				idleLeftColBox, idleRightColBox, runColBox]
 	hurtBoxes = [airHurtBox, castLeftHurtBox, castRightHurtBox,
-				idleLeftHurtBox, idleRightHurtBox, runLeftHurtBox, runRightHurtBox]
+				idleLeftHurtBox, idleRightHurtBox, runHurtBox]
 	idleRightColBox.disabled = false
 	idleRightHurtBox.disabled = false
 	get_tree().call_group("HUD", "setMaxHealth", health)
@@ -509,13 +511,11 @@ func play_idle_animation():
 func play_running_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
+	runColBox.disabled = false
+	runHurtBox.disabled = false
 	if directionVector.x < 0:
-		runLeftColBox.disabled = false
-		runLeftHurtBox.disabled = false
 		animatedSprite.play("RunLeft")
 	else:
-		runRightColBox.disabled = false
-		runRightHurtBox.disabled = false
 		animatedSprite.play("RunRight")
 
 func play_teleport_vanish_animation():
