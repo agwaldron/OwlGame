@@ -104,7 +104,6 @@ func _ready():
 	idleRightHurtBox.disabled = false
 	get_tree().call_group("HUD", "setMaxHealth", health)
 	z_index = 1
-	#animatedSprite.material.set_shader_param("white", true)
 
 func _physics_process(delta):
 	run_cool_down_timers(delta)

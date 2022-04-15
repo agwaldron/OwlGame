@@ -7,7 +7,8 @@
 [ext_resource path="res://src/Environment/Camera.gd" type="Script" id=5]
 [ext_resource path="res://src/Player/Player.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/Environment/HUD/HUD.tscn" type="PackedScene" id=7]
-[ext_resource path="res://src/Environment/Menus/PauseMenu.tscn" type="PackedScene" id=8]
+[ext_resource path="res://src/Environment/Menus/PauseMenu/PauseMenu.tscn" type="PackedScene" id=8]
+
 
 [node name="TheArchaeologistArena" type="Node2D"]
 
