@@ -140,16 +140,16 @@ func run_cool_down_timers(delta):
 			if blinkFlag:
 				blinkFlag = false
 				blinkTimer = blinkTimerReg
-				animatedSprite.material.set_shader_param("white", false)
 			else:
 				blinkFlag = true
 				blinkTimer = blinkTimerWhite
-				animatedSprite.material.set_shader_param("white", true)
 
 		immuneTimer -= (delta * 100)
 		if immuneTimer <= 0:
 			immune = false
-			animatedSprite.material.set_shader_param("white", false)
+			blinkFlag = false
+		animatedSprite.immune_flash(blinkFlag)
+
 	teleportTimer -= (delta * 100)
 	iceArrowTimer -= (delta * 100)
 	iceSpikeTimer -= (delta * 100)
@@ -277,10 +277,7 @@ func air_fall_state(delta):
 
 	if is_on_floor():
 		state = LAND
-		if directionVector.x < 0:
-			animatedSprite.play("LandLeft")
-		else:
-			animatedSprite.play("LandRight")
+		animatedSprite.land(directionVector.x < 0)
 		animatedSprite.set_frame(0)
 	else:
 		move(delta, true)
@@ -502,36 +499,26 @@ func play_idle_animation():
 	if directionVector.x < 0:
 		idleLeftColBox.disabled = false
 		idleLeftHurtBox.disabled = false
-		animatedSprite.play("IdleLeft")
 	else:
 		idleRightColBox.disabled = false
 		idleRightHurtBox.disabled = false
-		animatedSprite.play("IdleRight")
+	animatedSprite.idle(directionVector.x < 0)
 
 func play_running_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
 	runColBox.disabled = false
 	runHurtBox.disabled = false
-	if directionVector.x < 0:
-		animatedSprite.play("RunLeft")
-	else:
-		animatedSprite.play("RunRight")
+	animatedSprite.run(directionVector.x < 0)
 
 func play_teleport_vanish_animation():
 	disable_hurt_boxes()
 	disable_col_boxes()
-	if directionVector.x < 0:
-		animatedSprite.play("TeleportVanishLeft")
-	else:
-		animatedSprite.play("TeleportVanishRight")
+	animatedSprite.teleport_vanish(directionVector.x < 0)
 	animatedSprite.set_frame(0)
 
 func play_teleport_appear_animation():
-	if directionVector.x < 0:
-		animatedSprite.play("TeleportAppearLeft")
-	else:
-		animatedSprite.play("TeleportAppearRight")
+	animatedSprite.teleport_appear(directionVector.x < 0)
 	animatedSprite.set_frame(0)
 
 func play_air_rise_animation():
@@ -539,39 +526,29 @@ func play_air_rise_animation():
 	disable_hurt_boxes()
 	airColBox.disabled = false
 	airHurtBox.disabled = false
-	if directionVector.x < 0:
-		animatedSprite.play("JumpLeft")
-	else:
-		animatedSprite.play("JumpRight")
+	animatedSprite.jump(directionVector.x < 0)
 
 func play_air_fall_animation():
 	disable_col_boxes()
 	disable_hurt_boxes()
 	airColBox.disabled = false
 	airHurtBox.disabled = false
-	if directionVector.x < 0:
-		animatedSprite.play("FallLeft")
-	else:
-		animatedSprite.play("FallRight")
+	animatedSprite.fall(directionVector.x < 0)
 
 func play_free_fall_animation():
 	disable_col_boxes()
 	disable_hurt_boxes()
 	freeFallColBox.disabled = false
-	if directionVector.x < 0:
-		animatedSprite.play("FreeFallLeft")
-	else:
-		animatedSprite.play("FreeFallRight")
+	animatedSprite.free_fall(directionVector.x < 0)
 
 func play_getting_up_animation():
 	disable_col_boxes()
 	disable_hurt_boxes()
 	if directionVector.x < 0:
 		idleRightColBox.disabled = false
-		animatedSprite.play("GetUpLeft")
 	else:
 		idleRightColBox.disabled = false
-		animatedSprite.play("GetUpRight")
+	animatedSprite.get_up(directionVector.x < 0)
 
 func play_cast_animation():
 	disable_hurt_boxes()
@@ -579,11 +556,10 @@ func play_cast_animation():
 	if directionVector.x < 0:
 		castLeftColBox.disabled = false;
 		castLeftHurtBox.disabled = false;
-		animatedSprite.play("CastLeft")
 	else:
 		castRightColBox.disabled = false;
 		castRightHurtBox.disabled = false;
-		animatedSprite.play("CastRight")
+	animatedSprite.cast(directionVector.x < 0)
 
 func move(delta, grav):
 	if grav:
@@ -603,10 +579,7 @@ func black_out():
 func puke():
 	velocity = Vector2.ZERO
 	state = PUKE
-	if directionVector.x < 0:
-		animatedSprite.play("PukeLeft")
-	else:
-		animatedSprite.play("PukeRight")
+	animatedSprite.puke(directionVector.x < 0)
 
 func _on_HurtBox_area_entered(_area):
 	if not immune:
@@ -619,7 +592,7 @@ func _on_HurtBox_area_entered(_area):
 		else:
 			blinkFlag = true
 			blinkTimer = blinkTimerWhite
-			animatedSprite.material.set_shader_param("white", true)
+			animatedSprite.immune_flash(blinkFlag)
 			if is_on_floor():
 				call_deferred("start_getting_up")
 			else:
