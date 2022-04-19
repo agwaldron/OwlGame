@@ -93,17 +93,14 @@ var fireBallRechargeTimer = fireBallRechargeCooldown
 var icePlatformPosition1 = Vector2(400, 575)
 var icePlatformPosition2 = Vector2(600, 400)
 var icePlatformPosition3 = Vector2(800, 575)
-
-var hurtBoxes
-var colBoxes
+var activeCollisionBox
+var activeHurtBox
 
 func _ready():
-	colBoxes = [airColBox, castLeftColBox, castRightColBox, freeFallColBox,
-				idleLeftColBox, idleRightColBox, runColBox]
-	hurtBoxes = [airHurtBox, castLeftHurtBox, castRightHurtBox,
-				idleLeftHurtBox, idleRightHurtBox, runHurtBox]
 	idleRightColBox.disabled = false
 	idleRightHurtBox.disabled = false
+	activeCollisionBox = idleRightColBox
+	activeHurtBox = idleRightHurtBox
 	get_tree().call_group("HUD", "setMaxHealth", health)
 	z_index = 1
 
@@ -485,35 +482,33 @@ func cast_lightning():
 		lightning.animatedSprite.play("Right")
 	state = CAST_LIGHTNING
 
-func disable_col_boxes():
-	for x in colBoxes:
-		x.disabled = true
+func activate_collision_box(collisionBox):
+	activeCollisionBox.disabled = true
+	collisionBox.disabled = false
+	activeCollisionBox = collisionBox
 
-func disable_hurt_boxes():
-	for x in hurtBoxes:
-		x.disabled = true
+func activate_hurt_box(hurtBox):
+	activeHurtBox.disabled = true
+	hurtBox.disabled = false
+	activeHurtBox = hurtBox
 
 func play_idle_animation():
-	disable_hurt_boxes()
-	disable_col_boxes()
 	if directionVector.x < 0:
-		idleLeftColBox.disabled = false
-		idleLeftHurtBox.disabled = false
+		activate_collision_box(idleLeftColBox)
+		activate_hurt_box(idleLeftHurtBox)
 	else:
-		idleRightColBox.disabled = false
-		idleRightHurtBox.disabled = false
+		activate_collision_box(idleRightColBox)
+		activate_hurt_box(idleRightHurtBox)
 	animatedSprite.idle(directionVector.x < 0)
 
 func play_running_animation():
-	disable_hurt_boxes()
-	disable_col_boxes()
-	runColBox.disabled = false
-	runHurtBox.disabled = false
+	activate_collision_box(runColBox)
+	activate_hurt_box(runHurtBox)
 	animatedSprite.run(directionVector.x < 0)
 
 func play_teleport_vanish_animation():
-	disable_hurt_boxes()
-	disable_col_boxes()
+	activeCollisionBox.disabled = true
+	activeHurtBox.disabled = true
 	animatedSprite.teleport_vanish(directionVector.x < 0)
 	animatedSprite.set_frame(0)
 
@@ -522,43 +517,36 @@ func play_teleport_appear_animation():
 	animatedSprite.set_frame(0)
 
 func play_air_rise_animation():
-	disable_col_boxes()
-	disable_hurt_boxes()
-	airColBox.disabled = false
-	airHurtBox.disabled = false
+	activate_collision_box(airColBox)
+	activate_hurt_box(airHurtBox)
 	animatedSprite.jump(directionVector.x < 0)
 
 func play_air_fall_animation():
-	disable_col_boxes()
-	disable_hurt_boxes()
 	airColBox.disabled = false
 	airHurtBox.disabled = false
+	activate_collision_box(airColBox)
+	activate_hurt_box(airHurtBox)
 	animatedSprite.fall(directionVector.x < 0)
 
 func play_free_fall_animation():
-	disable_col_boxes()
-	disable_hurt_boxes()
-	freeFallColBox.disabled = false
+	activate_collision_box(freeFallColBox)
 	animatedSprite.free_fall(directionVector.x < 0)
 
 func play_getting_up_animation():
-	disable_col_boxes()
-	disable_hurt_boxes()
+	activeHurtBox.disabled = true
 	if directionVector.x < 0:
-		idleRightColBox.disabled = false
+		activate_collision_box(idleLeftColBox)
 	else:
-		idleRightColBox.disabled = false
+		activate_collision_box(idleRightColBox)
 	animatedSprite.get_up(directionVector.x < 0)
 
 func play_cast_animation():
-	disable_hurt_boxes()
-	disable_col_boxes()
 	if directionVector.x < 0:
-		castLeftColBox.disabled = false;
-		castLeftHurtBox.disabled = false;
+		activate_collision_box(castLeftColBox)
+		activate_hurt_box(castLeftHurtBox)
 	else:
-		castRightColBox.disabled = false;
-		castRightHurtBox.disabled = false;
+		activate_collision_box(castRightColBox)
+		activate_hurt_box(castRightColBox)
 	animatedSprite.cast(directionVector.x < 0)
 
 func move(delta, grav):
@@ -570,7 +558,7 @@ func move(delta, grav):
 
 func black_out():
 	blackedOut = true
-	disable_hurt_boxes()
+	activeHurtBox.disabled = true
 	if is_on_floor():
 		puke()
 	else:
