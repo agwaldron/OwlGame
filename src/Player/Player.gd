@@ -51,10 +51,6 @@ onready var idleLeftColBox = $IdelLeftCollisionShape
 onready var idleLeftHurtBox = $IdleLeftHurtBox/CollisionShape2D
 onready var idleRightColBox = $IdleRightCollisionShape
 onready var idleRightHurtBox = $IdleRightHurtBox/CollisionShape2D
-# onready var runLeftColBox = $RunLeftCollisionShape
-# onready var runLeftHurtBox = $RunLeftHurtBox/CollisionShape2D
-# onready var runRightColBox = $RunRightCollisionShape
-# onready var runRightHurtBox = $RunRightHurtBox/CollisionShape2D
 onready var runColBox = $RunCollisionShape
 onready var runHurtBox = $RunHurtBox/CollisionShape2D
 
@@ -97,10 +93,8 @@ var activeCollisionBox
 var activeHurtBox
 
 func _ready():
-	idleRightColBox.disabled = false
-	idleRightHurtBox.disabled = false
-	activeCollisionBox = idleRightColBox
-	activeHurtBox = idleRightHurtBox
+	activate_collision_box(idleRightColBox)
+	activate_hurt_box(idleRightHurtBox)
 	get_tree().call_group("HUD", "setMaxHealth", health)
 	z_index = 1
 
@@ -483,12 +477,14 @@ func cast_lightning():
 	state = CAST_LIGHTNING
 
 func activate_collision_box(collisionBox):
-	activeCollisionBox.disabled = true
+	if activeCollisionBox:
+		activeCollisionBox.disabled = true
 	collisionBox.disabled = false
 	activeCollisionBox = collisionBox
 
 func activate_hurt_box(hurtBox):
-	activeHurtBox.disabled = true
+	if activeHurtBox:
+		activeHurtBox.disabled = true
 	hurtBox.disabled = false
 	activeHurtBox = hurtBox
 
@@ -522,13 +518,12 @@ func play_air_rise_animation():
 	animatedSprite.jump(directionVector.x < 0)
 
 func play_air_fall_animation():
-	airColBox.disabled = false
-	airHurtBox.disabled = false
 	activate_collision_box(airColBox)
 	activate_hurt_box(airHurtBox)
 	animatedSprite.fall(directionVector.x < 0)
 
 func play_free_fall_animation():
+	activeHurtBox.disabled = true
 	activate_collision_box(freeFallColBox)
 	animatedSprite.free_fall(directionVector.x < 0)
 
