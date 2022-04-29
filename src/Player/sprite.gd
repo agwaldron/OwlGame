@@ -75,12 +75,12 @@ func teleport_vanish(facingLeft):
 func _on_AnimatedSprite_frame_changed():
 	var animationPlaying = get_animation()
 	if (animationPlaying == "PukeLeft" or animationPlaying == "PukeRight") and get_frame() == 4:
-		get_tree().call_group("HUD", "gameOver")
+		get_tree().call_group("HUD", "game_over")
 
 func _on_AnimatedSprite_animation_finished():
 	match get_animation():
 		"LandLeft", "LandRight":
-			get_tree().call_group("player", "ice_arrow_released")
+			get_tree().call_group("player", "can_run")
 		"GetUpLeft", "GetUpRight":
 			get_tree().call_group("player", "get_up")
 		"TeleportVanishLeft", "TeleportVanishRight":

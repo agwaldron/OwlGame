@@ -95,7 +95,7 @@ var activeHurtBox
 func _ready():
 	activate_collision_box(idleRightColBox)
 	activate_hurt_box(idleRightHurtBox)
-	get_tree().call_group("HUD", "setMaxHealth", health)
+	get_tree().call_group("HUD", "set_max_health", health)
 	z_index = 1
 
 func _physics_process(delta):
@@ -300,9 +300,6 @@ func cast_fire_state(delta):
 			state = RUN
 	else:
 		move(delta, true)
-
-func ice_arrow_released():
-	state = RUN
 
 func cast_ice_arrow_state(_delta):
 	if Input.is_action_just_released("icearrow"):
@@ -544,6 +541,9 @@ func play_cast_animation():
 		activate_hurt_box(castRightColBox)
 	animatedSprite.cast(directionVector.x < 0)
 
+func can_run():
+	state = RUN
+
 func move(delta, grav):
 	if grav:
 		velocity.y += GRAV_ACCELERATION * delta
@@ -569,7 +569,7 @@ func _on_HurtBox_area_entered(_area):
 		get_tree().call_group("ConcentrationSpell", "spell_interrupt")
 		get_tree().call_group("camera", "player_hit")
 		health -= 1
-		get_tree().call_group("HUD", "setHealth", health)
+		get_tree().call_group("HUD", "set_health", health)
 		if health <= 0:
 			call_deferred("black_out")
 		else:
