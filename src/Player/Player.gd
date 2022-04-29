@@ -580,17 +580,3 @@ func _on_HurtBox_area_entered(_area):
 				call_deferred("start_getting_up")
 			else:
 				call_deferred("start_free_fall")
-
-func _on_AnimatedSprite_frame_changed():
-	if state == PUKE and animatedSprite.get_frame() == 4:
-		get_tree().call_group("HUD", "gameOver")
-
-func _on_AnimatedSprite_animation_finished():
-	if state == LAND:
-		state = RUN
-	elif state == GET_UP:
-		get_up()
-	elif state == TELEPORT_VANISH:
-		teleport_probe()
-	elif state == TELEPORT_APPEAR:
-		call_deferred("teleport_finished")
