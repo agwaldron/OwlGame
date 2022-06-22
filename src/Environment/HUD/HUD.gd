@@ -1,16 +1,16 @@
 extends CanvasLayer
 
-onready var gameoverscreen = $GameOver
-onready var heartsdisplay = $MarginContainer/VBoxContainer/HBoxContainer/HeartsDisplay
-onready var cooldowndisplay = $MarginContainer/VBoxContainer/CoolDowns
+onready var gameOverScreen = $GameOver
+onready var heartsDisplay = $MarginContainer/VBoxContainer/HBoxContainer/HeartsDisplay
+onready var coolDownDisplay = $MarginContainer/VBoxContainer/CoolDowns
 
-func gameOver():
-	heartsdisplay.visible = false
-	cooldowndisplay.visible = false
-	gameoverscreen.fadeIn()
+func game_over():
+	heartsDisplay.visible = false
+	coolDownDisplay.visible = false
+	gameOverScreen.fade_in()
 
-func setMaxHealth(val):
-	heartsdisplay.setMax(val)
+func set_max_health(val):
+	heartsDisplay.set_max(val)
 
-func setHealth(val):
-	heartsdisplay.setHealth(val)
+func set_health(val):
+	heartsDisplay.set_health(val)

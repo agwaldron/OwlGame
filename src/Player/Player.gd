@@ -51,10 +51,8 @@ onready var idleLeftColBox = $IdelLeftCollisionShape
 onready var idleLeftHurtBox = $IdleLeftHurtBox/CollisionShape2D
 onready var idleRightColBox = $IdleRightCollisionShape
 onready var idleRightHurtBox = $IdleRightHurtBox/CollisionShape2D
-onready var runLeftColBox = $RunLeftCollisionShape
-onready var runLeftHurtBox = $RunLeftHurtBox/CollisionShape2D
-onready var runRightColBox = $RunRightCollisionShape
-onready var runRightHurtBox = $RunRightHurtBox/CollisionShape2D
+onready var runColBox = $RunCollisionShape
+onready var runHurtBox = $RunHurtBox/CollisionShape2D
 
 var health = 5
 var blackedOut = false
@@ -91,18 +89,13 @@ var fireBallRechargeTimer = fireBallRechargeCooldown
 var icePlatformPosition1 = Vector2(400, 575)
 var icePlatformPosition2 = Vector2(600, 400)
 var icePlatformPosition3 = Vector2(800, 575)
-
-var hurtBoxes
-var colBoxes
+var activeCollisionBox
+var activeHurtBox
 
 func _ready():
-	colBoxes = [airColBox, castLeftColBox, castRightColBox, freeFallColBox,
-				idleLeftColBox, idleRightColBox, runLeftColBox, runRightColBox]
-	hurtBoxes = [airHurtBox, castLeftHurtBox, castRightHurtBox,
-				idleLeftHurtBox, idleRightHurtBox, runLeftHurtBox, runRightHurtBox]
-	idleRightColBox.disabled = false
-	idleRightHurtBox.disabled = false
-	get_tree().call_group("HUD", "setMaxHealth", health)
+	activate_collision_box(idleRightColBox)
+	activate_hurt_box(idleRightHurtBox)
+	get_tree().call_group("HUD", "set_max_health", health)
 	z_index = 1
 
 func _physics_process(delta):
@@ -138,16 +131,16 @@ func run_cool_down_timers(delta):
 			if blinkFlag:
 				blinkFlag = false
 				blinkTimer = blinkTimerReg
-				animatedSprite.material.set_shader_param("white", false)
 			else:
 				blinkFlag = true
 				blinkTimer = blinkTimerWhite
-				animatedSprite.material.set_shader_param("white", true)
 
 		immuneTimer -= (delta * 100)
 		if immuneTimer <= 0:
 			immune = false
-			animatedSprite.material.set_shader_param("white", false)
+			blinkFlag = false
+		animatedSprite.immune_flash(blinkFlag)
+
 	teleportTimer -= (delta * 100)
 	iceArrowTimer -= (delta * 100)
 	iceSpikeTimer -= (delta * 100)
@@ -275,10 +268,7 @@ func air_fall_state(delta):
 
 	if is_on_floor():
 		state = LAND
-		if directionVector.x < 0:
-			animatedSprite.play("LandLeft")
-		else:
-			animatedSprite.play("LandRight")
+		animatedSprite.land(directionVector.x < 0)
 		animatedSprite.set_frame(0)
 	else:
 		move(delta, true)
@@ -310,9 +300,6 @@ func cast_fire_state(delta):
 			state = RUN
 	else:
 		move(delta, true)
-
-func ice_arrow_released():
-	state = RUN
 
 func cast_ice_arrow_state(_delta):
 	if Input.is_action_just_released("icearrow"):
@@ -486,104 +473,76 @@ func cast_lightning():
 		lightning.animatedSprite.play("Right")
 	state = CAST_LIGHTNING
 
-func disable_col_boxes():
-	for x in colBoxes:
-		x.disabled = true
+func activate_collision_box(collisionBox):
+	if activeCollisionBox:
+		activeCollisionBox.disabled = true
+	collisionBox.disabled = false
+	activeCollisionBox = collisionBox
 
-func disable_hurt_boxes():
-	for x in hurtBoxes:
-		x.disabled = true
+func activate_hurt_box(hurtBox):
+	if activeHurtBox:
+		activeHurtBox.disabled = true
+	hurtBox.disabled = false
+	activeHurtBox = hurtBox
 
 func play_idle_animation():
-	disable_hurt_boxes()
-	disable_col_boxes()
 	if directionVector.x < 0:
-		idleLeftColBox.disabled = false
-		idleLeftHurtBox.disabled = false
-		animatedSprite.play("IdleLeft")
+		activate_collision_box(idleLeftColBox)
+		activate_hurt_box(idleLeftHurtBox)
 	else:
-		idleRightColBox.disabled = false
-		idleRightHurtBox.disabled = false
-		animatedSprite.play("IdleRight")
+		activate_collision_box(idleRightColBox)
+		activate_hurt_box(idleRightHurtBox)
+	animatedSprite.idle(directionVector.x < 0)
 
 func play_running_animation():
-	disable_hurt_boxes()
-	disable_col_boxes()
-	if directionVector.x < 0:
-		runLeftColBox.disabled = false
-		runLeftHurtBox.disabled = false
-		animatedSprite.play("RunLeft")
-	else:
-		runRightColBox.disabled = false
-		runRightHurtBox.disabled = false
-		animatedSprite.play("RunRight")
+	activate_collision_box(runColBox)
+	activate_hurt_box(runHurtBox)
+	animatedSprite.run(directionVector.x < 0)
 
 func play_teleport_vanish_animation():
-	disable_hurt_boxes()
-	disable_col_boxes()
-	if directionVector.x < 0:
-		animatedSprite.play("TeleportVanishLeft")
-	else:
-		animatedSprite.play("TeleportVanishRight")
+	activeCollisionBox.disabled = true
+	activeHurtBox.disabled = true
+	animatedSprite.teleport_vanish(directionVector.x < 0)
 	animatedSprite.set_frame(0)
 
 func play_teleport_appear_animation():
-	if directionVector.x < 0:
-		animatedSprite.play("TeleportAppearLeft")
-	else:
-		animatedSprite.play("TeleportAppearRight")
+	animatedSprite.teleport_appear(directionVector.x < 0)
 	animatedSprite.set_frame(0)
 
 func play_air_rise_animation():
-	disable_col_boxes()
-	disable_hurt_boxes()
-	airColBox.disabled = false
-	airHurtBox.disabled = false
-	if directionVector.x < 0:
-		animatedSprite.play("JumpLeft")
-	else:
-		animatedSprite.play("JumpRight")
+	activate_collision_box(airColBox)
+	activate_hurt_box(airHurtBox)
+	animatedSprite.jump(directionVector.x < 0)
 
 func play_air_fall_animation():
-	disable_col_boxes()
-	disable_hurt_boxes()
-	airColBox.disabled = false
-	airHurtBox.disabled = false
-	if directionVector.x < 0:
-		animatedSprite.play("FallLeft")
-	else:
-		animatedSprite.play("FallRight")
+	activate_collision_box(airColBox)
+	activate_hurt_box(airHurtBox)
+	animatedSprite.fall(directionVector.x < 0)
 
 func play_free_fall_animation():
-	disable_col_boxes()
-	disable_hurt_boxes()
-	freeFallColBox.disabled = false
-	if directionVector.x < 0:
-		animatedSprite.play("FreeFallLeft")
-	else:
-		animatedSprite.play("FreeFallRight")
+	activeHurtBox.disabled = true
+	activate_collision_box(freeFallColBox)
+	animatedSprite.free_fall(directionVector.x < 0)
 
 func play_getting_up_animation():
-	disable_col_boxes()
-	disable_hurt_boxes()
+	activeHurtBox.disabled = true
 	if directionVector.x < 0:
-		idleRightColBox.disabled = false
-		animatedSprite.play("GetUpLeft")
+		activate_collision_box(idleLeftColBox)
 	else:
-		idleRightColBox.disabled = false
-		animatedSprite.play("GetUpRight")
+		activate_collision_box(idleRightColBox)
+	animatedSprite.get_up(directionVector.x < 0)
 
 func play_cast_animation():
-	disable_hurt_boxes()
-	disable_col_boxes()
 	if directionVector.x < 0:
-		castLeftColBox.disabled = false;
-		castLeftHurtBox.disabled = false;
-		animatedSprite.play("CastLeft")
+		activate_collision_box(castLeftColBox)
+		activate_hurt_box(castLeftHurtBox)
 	else:
-		castRightColBox.disabled = false;
-		castRightHurtBox.disabled = false;
-		animatedSprite.play("CastRight")
+		activate_collision_box(castRightColBox)
+		activate_hurt_box(castRightColBox)
+	animatedSprite.cast(directionVector.x < 0)
+
+func can_run():
+	state = RUN
 
 func move(delta, grav):
 	if grav:
@@ -594,7 +553,7 @@ func move(delta, grav):
 
 func black_out():
 	blackedOut = true
-	disable_hurt_boxes()
+	activeHurtBox.disabled = true
 	if is_on_floor():
 		puke()
 	else:
@@ -603,38 +562,21 @@ func black_out():
 func puke():
 	velocity = Vector2.ZERO
 	state = PUKE
-	if directionVector.x < 0:
-		animatedSprite.play("PukeLeft")
-	else:
-		animatedSprite.play("PukeRight")
+	animatedSprite.puke(directionVector.x < 0)
 
 func _on_HurtBox_area_entered(_area):
 	if not immune:
 		get_tree().call_group("ConcentrationSpell", "spell_interrupt")
 		get_tree().call_group("camera", "player_hit")
 		health -= 1
-		get_tree().call_group("HUD", "setHealth", health)
+		get_tree().call_group("HUD", "set_health", health)
 		if health <= 0:
 			call_deferred("black_out")
 		else:
 			blinkFlag = true
 			blinkTimer = blinkTimerWhite
-			animatedSprite.material.set_shader_param("white", true)
+			animatedSprite.immune_flash(blinkFlag)
 			if is_on_floor():
 				call_deferred("start_getting_up")
 			else:
 				call_deferred("start_free_fall")
-
-func _on_AnimatedSprite_frame_changed():
-	if state == PUKE and animatedSprite.get_frame() == 4:
-		get_tree().call_group("HUD", "gameOver")
-
-func _on_AnimatedSprite_animation_finished():
-	if state == LAND:
-		state = RUN
-	elif state == GET_UP:
-		get_up()
-	elif state == TELEPORT_VANISH:
-		teleport_probe()
-	elif state == TELEPORT_APPEAR:
-		call_deferred("teleport_finished")

@@ -1,21 +1,21 @@
 extends CenterContainer
 
-onready var emptyheartdisplay = $EmptyHeartDisplay
-onready var fullheartdisplay = $FullHeartDisplay
+onready var emptyHeartDisplay = $EmptyHeartDisplay
+onready var fullHeartDisplay = $FullHeartDisplay
 
-var maxhealth
+var maxHealth
 var health
-var spritewidth = 64
+var spriteWidth = 64
 
 func _process(_delta):
-	fullheartdisplay.rect_size.x = health * spritewidth
-	emptyheartdisplay.rect_size.x = maxhealth * spritewidth
+	fullHeartDisplay.rect_size.x = health * spriteWidth
+	emptyHeartDisplay.rect_size.x = maxHealth * spriteWidth
 
-func setMax(val):
-	maxhealth = val
-	health = maxhealth
+func set_max(val):
+	maxHealth = val
+	health = maxHealth
 
-func setHealth(val):
+func set_health(val):
 	health = val
 	if health == 0:
-		fullheartdisplay.visible = false
+		fullHeartDisplay.visible = false

@@ -30,7 +30,7 @@ func _on_AnimatedSprite_frame_changed():
 			iceArrow.velocity.x = iceArrow.SPEED * -1
 			iceArrow.leftDir = true
 			iceArrow.animatedSprite.play("FlyLeft")
-		get_tree().call_group("player", "ice_arrow_released")
+		get_tree().call_group("player", "can_run")
 
 func _on_AnimatedSprite_animation_finished():
 	queue_free()
